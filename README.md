@@ -2,10 +2,9 @@
 
 A personal portfolio website with an integrated blog system, built as coursework for ECS417U (Web Technologies) and doubling as my personal portfolio site.
 
-<!-- 📸 Add screenshots here once available, e.g.:
-![Homepage](images/screenshot-home.png)
-![Blog](images/screenshot-blog.png)
--->
+![Homepage](images/homepage.png)
+![Skills](images/skills.png)
+![Blog](images/blog.png)
 
 ## About
 
