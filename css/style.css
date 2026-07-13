@@ -1,0 +1,670 @@
+:root {
+
+    /* main page colours */
+    --bg-main: #120b20;
+
+    /* card background */
+    --card-bg: #16161b;
+
+    /* navigation bar background */
+    --nav-bg: #16161b;
+
+    /* text colours */
+    --text-main: #FFFFFF;
+
+    /* secondary text colour for less important information */
+    --text-secondary: #B6B7C3;
+
+    /* accent colours for highlights and interactive elements */
+    --accent: #8B5CF6;
+
+    /* lighter accent colour for hover states and emphasis. The 0.2 is opacity */
+    --accent-light: rgba(139, 92, 246, 0.2);
+    --accent-lighter: rgba(139, 92, 246, 0.1);
+
+    /* darker accent colour for hover states and emphasis */
+    --accent-dark: #7C3AED;
+
+    /* border colour for cards and sections */
+    --border: #2F3245;
+
+}
+
+
+body {
+    font-family: sans-serif, "Roboto Condensed";
+    background: var(--bg-main);
+    color: var(--text-main);
+
+    background-image: radial-gradient(#1f2140 0.08rem, transparent 0.08rem);
+    background-size: 2.5rem 2.5rem;
+}
+
+
+
+/* =====================
+   BENTO GRID LAYOUT
+   ===================== */
+
+main {
+    padding: 2.5rem 2.5rem 4rem;
+}
+
+/*
+  Grid columns: 3 equal columns
+  Grid rows:
+    row1 = name/about row (fixed height)
+    row2 = hobbies/portrait/skills upper half
+    row3 = hobbies/portrait/skills lower half + location
+  
+  Column mapping:
+    col 1 = left
+    col 2 = centre
+    col 3 = right
+*/
+
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* 
+      Row 1: name & about cards (shorter)
+      Row 2 & 3: hobbies/portrait/skills — portrait spans both rows 
+      Row 3 bottom: shared with location card
+    */
+    grid-template-rows:
+        10rem   /* row 1: name + about */
+        1fr     /* row 2: portrait + hobbies top + skills top */
+        0.1fr;  /* row 3: location + hobbies bottom + skills bottom */
+    gap: 1rem;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+/* ---- Card base ---- */
+.card {
+    background: var(--card-bg);
+    border: 0.06rem solid var(--border);
+    border-radius: 1.2rem;
+    padding: 1.8rem;
+    overflow: hidden;
+    position: relative;
+    transition: border-color 0.3s;
+}
+
+.card:hover {
+    border-color: var(--accent);
+}
+
+
+/* ---- Top-left: Name card ---- */
+/* col 1, row 1 */
+.card--name {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    /*horizonally centres */
+    justify-content: center;
+    gap: 0.8rem;
+}
+
+/* Style for the name and title in the *name* card */
+.card__name {
+    font-family: "Roboto Condensed", sans-serif;
+    font-weight: 900;
+    font-size: 2.8rem;
+    /*Decreases space between letters to make it more compact and impactful */
+    line-height: 1;
+    color: var(--text-main);
+    text-align: center;
+    /* purple underline accent */
+    padding-bottom: 0.3rem;
+    border-bottom: 0.18rem solid var(--accent);
+    /* Makes the title only take up as much space as its content, 
+    so the purple underline is tight */
+    
+}
+/* For the Bsc Computer Science title below the name */
+.card__title {
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    color: var(--text-secondary);
+    font-weight: 600;
+    text-align: center;
+}
+
+
+/* ---- Top-middle + right: About card ---- */
+/* col 2-3, row 1 */
+.card--about {
+    /* Spans both middle and right columns */
+    grid-column: 2 / 4;
+    grid-row: 1;
+}
+
+
+/* ---- Middle-left: Hobbies card ---- */
+/* col 1, rows 2-3 */
+.card--hobbies {
+    grid-column: 1;
+    grid-row: 2 / 4;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.card__hobbies-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    flex: 1;
+}
+
+.card__hobby-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1rem;
+    border-radius: 0.8rem;
+    background: var(--card-bg);
+    border-left: 0.2rem solid var(--accent);
+    border-top: 0.06rem solid var(--border);
+    border-right: 0.06rem solid var(--border);
+    border-bottom: 0.06rem solid var(--border);
+    flex: 1;
+    box-sizing: border-box;
+    transition: border-left-color 0.3s, background 0.3s;
+}
+
+.card__hobby-item:hover {
+    background: var(--accent-lighter);
+    border-left-color: var(--accent-dark);
+}
+
+.card__hobby-number {
+    font-family: "Roboto Condensed", sans-serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--accent);
+    opacity: 0.4;
+    flex-shrink: 0;
+    line-height: 1;
+    transition: opacity 0.3s;
+}
+
+.card__hobby-item:hover .card__hobby-number {
+    opacity: 1;
+}
+
+.card__hobby-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.card__hobby-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.card__hobby-detail {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+/* Section title style for ALL cards */
+.card__section-title {
+    font-family: "Roboto Condensed", sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-main);
+    /* purple underline accent */
+    padding-bottom: 0.5rem;
+    border-bottom: 0.18rem solid var(--accent);
+    /* Makes the title only take up as much space as its content, 
+    so the purple underline is tight */
+    display: inline-block;
+    margin-bottom: 0.2rem;
+}
+
+.card__body {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+}
+
+.card__body strong {
+    color: var(--text-main);
+    font-weight: 700;
+}
+
+.card__body--bottom {
+    margin-top: auto;
+}
+
+
+/* ---- Centre: Portrait card ---- */
+/* col 2, row 2 */
+.card--portrait {
+    grid-column: 2;
+    grid-row: 2;
+    padding: 0;
+    /* When cropped we dont see the stuff outside boundries */
+    overflow: hidden;
+    max-height: 25rem
+}
+
+/* Ensure the image fills the card and maintains aspect ratio */
+.card__portrait-figure {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+.card__portrait-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: middle center;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.card--portrait:hover .card__portrait-img {
+    transform: scale(1.03);
+}
+
+
+/* ---- Middle-right: Contact card ---- */
+/* col 3, rows 2-3 */
+/* ---- Middle-right: Contact card ---- */
+/* col 3, rows 2-3 */
+/* ---- Middle-right: Contact card ---- */
+.card--contact {
+    grid-column: 3;
+    grid-row: 2 / 4;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.card__contact-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    flex: 1;
+}
+
+.card__contact-item {
+    display: flex;
+    flex: 1;
+}
+
+.card__contact-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 1rem;
+    background: var(--accent-lighter);
+    border: 0.06rem solid var(--border);
+    border-radius: 0.8rem;
+    text-decoration: none;
+    transition: background 0.3s, border-color 0.3s, transform 0.2s;
+    flex: 1;
+    box-sizing: border-box;
+}
+.card__contact-link:hover {
+    background: var(--accent-light);
+    border-color: var(--accent);
+    transform: translateX(4px);
+}
+
+.card__contact-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    background: var(--accent-light);
+    border-radius: 0.6rem;
+    flex-shrink: 0;
+    color: var(--accent);
+    transition: background 0.3s;
+}
+
+.card__contact-icon svg {
+    width: 1.1rem;
+    height: 1.1rem;
+}
+
+.card__contact-link:hover .card__contact-icon {
+    background: var(--accent);
+    color: #fff;
+}
+
+.card__contact-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+}
+
+.card__contact-label {
+    font-size: 1.0rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.card__contact-value {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.3s;
+}
+
+.card__contact-link:hover .card__contact-value {
+    color: var(--text-main);
+}
+
+/* The "open to connect" status text at the bottom of the contact card */
+.card__status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    color: #4ade80;
+    font-weight: 600;
+    margin-top: auto;
+}
+
+
+
+/*dot on skills page for "currently learning" */
+.card__status-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    background: #4ade80;
+    border-radius: 50%;
+    flex-shrink: 0;
+    /* subtle pulse animation */
+    animation: pulse 1.75s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+}
+
+
+/* ---- Bottom-centre: Location card ---- */
+/* col 2, row 3 — sits below portrait */
+.card--location {
+    grid-column: 2;
+    grid-row: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    background-size: 1.5rem 1.5rem;
+    min-height: 5rem;
+}
+
+.card__location-name {
+    font-family: "Roboto Condensed", sans-serif;
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    color: var(--text-main);
+    line-height: 1;
+    margin-top: auto;
+}
+
+/*The coordinates text below the location name in the location card */
+.card__coords {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.05em;
+}
+
+/*The GMT timezone text below the coordinates in the location card */
+.card__timezone {
+    font-size: 0.8rem;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+
+/* =====================
+   RESPONSIVE
+   ===================== */
+
+
+/* On medium screens, switch to a 2-column layout 
+and rearrange cards for better fit */
+@media (max-width: 900px) {
+    .bento-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+    }
+
+    .card--name { grid-column: 1; grid-row: auto; }
+    .card--about { grid-column: 1 / 3; grid-row: auto; }
+    .card--hobbies { grid-column: 1; grid-row: auto; }
+    .card--portrait { grid-column: 2; grid-row: auto; }
+    .card--contact { grid-column: 1 / 3; grid-row: auto; }
+    .card--location { grid-column: 1 / 3; grid-row: auto; }
+}
+
+
+/*changes the layout to a single column on smaller screens, 
+stacking all cards vertically 
+for better readability and usability on mobile devices. */
+@media (max-width: 580px) {
+    main { padding: 1rem 1rem 3rem; }
+
+    .bento-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card--about,
+    .card--contact,
+    .card--location,
+    .card--portrait,
+    .card--hobbies { grid-column: 1; }
+}
+
+
+
+/* =====================
+   LOGIN PAGE
+   ===================== */
+
+.login-page {
+    display: block;
+}
+
+.login-main {
+    width: 100%;
+    padding: 4rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    background: var(--card-bg);
+    border: 0.06rem solid var(--border);
+    border-radius: 1.2rem;
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* ---- Header ---- */
+.login-card__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.login-card__title {
+    font-family: "Roboto Condensed", sans-serif;
+    font-weight: 900;
+    font-size: 2.8rem;
+    line-height: 1;
+    color: var(--text-main);
+}
+
+.login-card__subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.04em;
+}
+
+/* ---- Form ---- */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.login-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    position: relative;
+}
+
+.login-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+}
+
+.login-input {
+    background: var(--bg-main);
+    border: 0.06rem solid var(--border);
+    border-radius: 0.8rem;
+    padding: 0.85rem 1rem;
+    color: var(--text-main);
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.login-input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.5;
+}
+
+.login-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 0.15rem var(--accent-lighter);
+}
+
+/* ---- Error messages ---- */
+/*
+  The error span is always in the DOM but hidden by default.
+  We show it only after the user has interacted with the field
+  (using :not(:placeholder-shown) to detect touched state)
+  AND the input is invalid.
+*/
+
+
+/* ---- Submit button ---- */
+.login-btn-submit {
+    margin-top: 0.4rem;
+    padding: 0.95rem;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-family: "Roboto Condensed", sans-serif;
+    letter-spacing: 0.08em;
+    border: none;
+    border-radius: 0.8rem;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.15s;
+    width: 100%;
+}
+
+.login-btn-submit:hover {
+    background: var(--accent-dark);
+}
+
+.login-btn-submit:active {
+    transform: scale(0.98);
+}
+
+/* ---- Back link ---- */
+.login-card__back {
+    text-align: center;
+}
+
+.login-back-link {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.login-back-link:hover {
+    color: var(--accent);
+}
+
+/* =====================
+   LOGIN ERROR MESSAGE
+   ===================== */
+
+.login-error {
+    background: rgba(248, 113, 113, 0.15);
+    border: 0.15rem solid #f87171;
+    border-radius: 1rem;
+    padding: 1.5rem 1.5rem;
+    color: #ff6b6b;
+    font-size: 1.1rem;
+    font-weight: 800;
+    font-family: "Roboto Condensed", sans-serif;
+    text-align: center;
+    letter-spacing: 0.02em;
+    margin-bottom: 1.5rem;
+}
+
+/* When an error is present on the login page, highlight all inputs red */
+.login-error ~ form .login-input,
+.has-error .login-input {
+    border-color: #f87171 !important;
+    border-width: 0.12rem !important;
+    box-shadow: 0 0 0 0.2rem rgba(248, 113, 113, 0.2) !important;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 580px) {
+    .login-card {
+        padding: 2rem 1.2rem;
+    }
+
+    .login-card__title {
+        font-size: 2.2rem;
+    }
+}

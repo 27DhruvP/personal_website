@@ -1,0 +1,234 @@
+/* =====================
+   HEADER & NAV
+   ===================== */
+
+header {
+    display: flex;
+    /* vertically center nav and login button */
+    justify-content: center;
+    /* Items (the pill) sit in the middle vertically*/
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    /*top / side */
+    padding: 0 2.5rem;
+    /* For the login button to be able to position itself absolute relative to the header */
+    position: relative;
+}
+
+.navbar,
+.login-btn {
+    background: var(--card-bg);
+    padding: 0.6rem;
+    border-radius: 3rem;
+    border: 0.06rem solid var(--border);
+}
+
+.navbar ul {
+    display: flex;
+    gap: 0.7rem;
+}
+
+.navbar a {
+    display: block;
+    padding: 0.8rem 1.8rem;
+    color: var(--text-secondary);
+    border-radius: 2rem;
+    font-weight: 700;
+    transition: 0.3s;
+}
+
+.navbar a:hover {
+    color: var(--text-main);
+    background: var(--accent-lighter);
+}
+
+.navbar a.active {
+    background: var(--accent-light);
+    color: var(--text-main);
+}
+
+.login-btn {
+        /*top / side */
+    padding: 1.2rem 2rem;
+    color: var(--text-main);
+    text-decoration: none;
+    font-weight: 700;
+    transition: 0.3s;
+    white-space: nowrap;
+    flex-shrink: 0;
+    /* Position the login button to the right of the header */
+    position: absolute;
+    right: 2.5rem;
+}
+
+.login-btn:hover {
+    color: var(--text-main);
+    background: var(--accent-lighter);
+}
+
+/* ---- Login button stops being absolute when it would overlap ---- */
+@media (max-width: 1100px) {
+    header {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .login-btn {
+        /* Remove absolute positioning so it flows with the nav */
+        position: static;
+        padding: 0.8rem 2rem;
+        width: fit-content;
+    }
+}
+
+/* ---- Nav goes vertical on small screens ---- */
+@media (max-width: 768px) {
+    header {
+        padding: 0 1rem;
+        margin-top: 1.2rem;
+    }
+
+    .navbar {
+        width: 100%;
+        border-radius: 1.2rem;
+        padding: 0.5rem;
+    }
+
+    .navbar ul {
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    .navbar a {
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.8rem;
+        font-size: 0.9rem;
+        text-align: center;
+    }
+
+    .login-btn {
+        width: 100%;
+        text-align: center;
+        border-radius: 1.2rem;
+        padding: 0.75rem 1.5rem;
+        box-sizing: border-box;
+    }
+}
+
+/* ---- Medium screens: login btn drops into flow ---- */
+@media (max-width: 900px) {
+    header {
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 0 1.5rem;
+    }
+
+    .login-btn {
+        position: static;
+        padding: 0.8rem 2rem;
+    }
+}
+
+/* ---- Small screens: tighter nav pills ---- */
+@media (max-width: 580px) {
+    header {
+        margin-top: 1.2rem;
+        padding: 0 1rem;
+    }
+
+    .navbar {
+        width: 100%;
+        padding: 0.5rem;
+    }
+
+    .navbar ul {
+        gap: 0.3rem;
+    }
+
+    .navbar a {
+        padding: 0.6rem 0.9rem;
+        font-size: 0.8rem;
+    }
+
+    .login-btn {
+        width: 100%;
+        text-align: center;
+        padding: 0.8rem;
+    }
+}
+
+
+
+
+/* =====================
+   FOOTER
+   ===================== */
+
+
+.site-footer {
+    border-top: 0.06rem solid var(--border);
+    padding: 2rem 2.5rem;
+    margin-top: 2rem;
+}
+
+.footer__inner {
+    max-width: 1500px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    /* Space between the name, links, and copyright. Split into 3 and are as far away as possible */
+    justify-content: space-between;
+    /* Allow the links to wrap on smaller screens. It squashes the overflowing together*/
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.footer__name {
+    font-family: "Roboto Condensed", sans-serif;
+    font-weight: 900;
+    font-size: 1.1rem;
+    color: var(--text-main);
+    letter-spacing: 0.05em;
+}
+
+.footer__links {
+    display: flex;
+    gap: 0.3rem;
+    /* Allow the links to wrap on smaller screens. It squashes the overflowing together*/
+    flex-wrap: wrap;
+}
+
+.footer__links a {
+    padding: 0.4rem 1rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.85rem;
+    border-radius: 2rem;
+    
+    transition: 0.3s;
+}
+
+.footer__links a:hover {
+    color: var(--text-main);
+    background: var(--accent-lighter);
+}
+
+.footer__copy {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 580px) {
+    .site-footer {
+        padding: 1.5rem 1rem;
+    }
+
+    .footer__inner {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+}

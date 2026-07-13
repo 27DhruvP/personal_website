@@ -1,0 +1,172 @@
+/* =====================
+   CREATE POST PAGE
+   ===================== */
+
+.create-post-wrapper {
+    max-width: 860px;
+}
+
+.create-post-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.create-post-textarea {
+    resize: vertical;
+    min-height: 280px;
+    line-height: 1.7;
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+
+.create-post-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding-top: 0.5rem;
+}
+
+.create-post-cancel {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 0.9rem 1.5rem;
+    border-radius: 0.8rem;
+    border: 0.06rem solid var(--border);
+    background: transparent;
+    transition: color 0.3s, border-color 0.3s;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.create-post-cancel:hover {
+    color: var(--text-main);
+    border-color: var(--accent);
+}
+
+.create-post-clear {
+    color: #f87171;
+    border-color: rgba(248, 113, 113, 0.3);
+}
+
+.create-post-clear:hover {
+    color: #fff;
+    background: rgba(248, 113, 113, 0.2);
+    border-color: #f87171;
+}
+
+.create-post-submit {
+    margin-top: 0;
+    width: auto;
+    padding: 0.9rem 2rem;
+}
+
+/* =====================
+   INPUT FIELD OVERRIDES FOR CREATE POST
+   Darker background so fields stand out from the page
+   Larger label text for the Blog Title / Content headings
+   ===================== */
+
+/* Make the input/textarea background noticeably darker than the card */
+.create-post-form .login-input {
+    background: #0a0612;
+    border-color: #3a3d5c;
+    font-size: 1rem;
+}
+
+.create-post-form .login-input:focus {
+    background: #0d0818;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 0.15rem var(--accent-lighter);
+}
+
+.create-post-form .login-label {
+    font-size: 1.4rem;
+    font-weight: 900;
+    font-family: "Roboto Condensed", sans-serif;
+    letter-spacing: 0.03em;
+    color: var(--text-main);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 0.15rem solid var(--accent);
+    display: inline-block;
+}
+
+/* =====================
+   ASSESSMENT CRITERIA 5
+   Error highlight CSS — applied by JS when fields are blank
+   ===================== */
+
+.input--error {
+    border-color: #f87171 !important;
+    box-shadow: 0 0 0 0.15rem rgba(248, 113, 113, 0.2) !important;
+}
+
+.field-error {
+    display: none;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #f87171;
+    margin-top: 0.25rem;
+    letter-spacing: 0.03em;
+}
+
+/* =====================
+   LOGIN ERROR MESSAGE
+   Larger, more visible error with red borders on inputs
+   ===================== */
+
+.login-error {
+    background: rgba(248, 113, 113, 0.15);
+    border: 0.15rem solid #f87171;
+    border-radius: 1rem;
+    padding: 1.5rem 1.5rem;
+    color: #ff6b6b;
+    font-size: 1.1rem;
+    font-weight: 800;
+    font-family: "Roboto Condensed", sans-serif;
+    text-align: center;
+    letter-spacing: 0.02em;
+    margin-bottom: 1.5rem;
+}
+
+/* When an error is present on the login page, highlight all inputs red */
+.login-error ~ form .login-input,
+.has-error .login-input {
+    border-color: #f87171;
+    border-width: 0.12rem;
+    box-shadow: 0 0 0 0.2rem rgba(248, 113, 113, 0.2);
+}
+
+/* =====================
+   PREVIEW LABEL
+   ===================== */
+
+.preview-label {
+    font-family: "Roboto Condensed", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    letter-spacing: 0.03em;
+    color: var(--text-main);
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+    display: block;
+    padding-bottom: 0.4rem;
+    border-bottom: 0.15rem solid var(--accent);
+}
+
+@media (max-width: 580px) {
+    .create-post-actions {
+        flex-direction: column-reverse;
+    }
+
+    .create-post-cancel,
+    .create-post-submit {
+        width: 100%;
+        text-align: center;
+    }
+}

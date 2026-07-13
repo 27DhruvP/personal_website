@@ -1,0 +1,351 @@
+/* =====================
+   PROJECTS PAGE
+   ===================== */
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.proj-card {
+    background: var(--card-bg);
+    border: 0.06rem solid var(--border);
+    border-radius: 1.2rem;
+    padding: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    transition: border-color 0.3s;
+}
+
+.proj-card:hover {
+    border-color: var(--accent);
+}
+
+.proj-card--winner {
+    border-color: rgba(250, 199, 117, 0.4);
+}
+
+.proj-card--winner:hover {
+    border-color: #FAC775;
+}
+
+/* ---- Card header row ---- */
+.proj-card__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.proj-card__number {
+    font-family: "Roboto Condensed", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 900;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+}
+
+.proj-card__type {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.proj-card__number::after {
+    content: '——';
+    margin-left: 0.4rem;
+    color: var(--border);
+    font-weight: 400;
+    letter-spacing: -0.05em;
+}
+
+.proj-card__award {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #FAC775;
+    background: rgba(250, 199, 117, 0.1);
+    border: 0.06rem solid rgba(250, 199, 117, 0.25);
+    border-radius: 2rem;
+    padding: 0.2rem 0.7rem;
+    /*Moves all the empty space to left so content goes on the right */
+    margin-left: auto;
+}
+
+/* ---- Title ---- */
+.proj-card__title {
+    font-family: "Roboto Condensed", sans-serif;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--text-main);
+    line-height: 1.05;
+}
+
+/* ---- Visual panels ---- */
+.proj-card__visual {
+    border-radius: 1rem;
+    /*hidens anything outside this box*/
+    overflow: hidden;
+    position: relative;
+    min-height: 220px;
+    display: flex;
+    /* vertically aligns items */
+    align-items: center;
+    /* Horizonally aligns */
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.proj-card__visual--chess {
+    background: #1a1a2e;
+    border: 0.06rem solid var(--border);
+    padding: 1.2rem;
+}
+
+.proj-card__visual--finchat {
+    padding: 1.2rem;
+}
+
+/* ---- Chess board ---- */
+.chess-board {
+    position: relative;
+    width: 176px;
+    height: 176px;
+    flex-shrink: 0;
+}
+
+.chess-board__grid {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    /* create 8x8 grid. all of fraction available space (fr)
+    grid-template-columns: repeat(8, 1fr); */
+    grid-template-rows: repeat(8, 1fr);
+    border: 0.1rem solid #8B5CF6;
+    border-radius: 0.2rem;
+    overflow: hidden;
+}
+
+/*chess board done using the help AI. Mentioned in documentation */
+.chess-board__grid::before {
+    content: '';
+    display: block;
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
+    /* CSS-only checkerboard */
+    background-image:
+        repeating-conic-gradient(#2d2d4e 0% 25%, #1a1a2e 0% 50%);
+    background-size: 44px 44px;
+}
+
+/* pieces positioned on the board */
+.chess-pieces {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+}
+
+.chess-piece {
+    grid-column: calc(var(--c) + 1);
+    grid-row: calc(8 - var(--r));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    line-height: 1;
+    z-index: 2;
+    cursor: default;
+    user-select: none;
+}
+
+.chess-highlight {
+    grid-column: calc(var(--c) + 1);
+    grid-row: calc(8 - var(--r));
+    background: rgba(139, 92, 246, 0.45);
+    border-radius: 50%;
+    margin: 3px;
+    z-index: 1;
+    animation: highlight-pulse 1.8s ease-in-out infinite;
+}
+
+.chess-highlight--from {
+    background: rgba(139, 92, 246, 0.2);
+}
+
+@keyframes highlight-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+.proj-card__engine-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-lighter);
+    border: 0.06rem solid var(--accent-light);
+    border-radius: 2rem;
+    padding: 0.3rem 0.9rem;
+}
+
+/* ---- FinChat mockup ---- */
+.finchat-mockup {
+    width: 100%;
+    max-width: 340px;
+    background: #0d1117;
+    border-radius: 0.8rem;
+    overflow: hidden;
+    border: 0.06rem solid rgba(255,255,255,0.08);
+}
+
+.finchat-mockup__bar {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.8rem;
+    background: #161b22;
+    border-bottom: 0.06rem solid rgba(255,255,255,0.06);
+}
+
+.finchat-dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.finchat-url {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.3);
+    margin-left: 0.5rem;
+    font-family: monospace;
+}
+
+.finchat-mockup__body {
+    padding: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.finchat-ticker {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem 0.6rem;
+    background: rgba(255,255,255,0.04);
+    border-radius: 0.4rem;
+    border: 0.06rem solid rgba(255,255,255,0.06);
+}
+
+.finchat-ticker__symbol {
+    font-family: "Roboto Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 0.8rem;
+    color: #fff;
+    min-width: 2.5rem;
+}
+
+.finchat-ticker__price {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.7);
+    flex: 1;
+}
+
+.finchat-ticker__change {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.3rem;
+}
+
+.finchat-ticker__change--up {
+    color: #4ade80;
+    background: rgba(74, 222, 128, 0.12);
+}
+
+.finchat-ticker__change--down {
+    color: #f87171;
+    background: rgba(248, 113, 113, 0.12);
+}
+
+.finchat-msg {
+    padding: 0.6rem 0.7rem;
+    border-radius: 0.5rem;
+    background: rgba(139, 92, 246, 0.1);
+    border: 0.06rem solid rgba(139, 92, 246, 0.2);
+}
+
+.finchat-msg--ai p {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+    margin: 0.2rem 0 0;
+}
+
+.finchat-msg__label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.finchat-msg--speed {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #4ade80;
+    background: rgba(74, 222, 128, 0.08);
+    border: 0.06rem solid rgba(74, 222, 128, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.7rem;
+    border-radius: 0.5rem;
+}
+
+/* ---- Tags row ---- */
+.proj-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding-top: 0.4rem;
+}
+
+/* =====================
+   PROJECTS RESPONSIVE
+   ===================== */
+
+@media (max-width: 900px) {
+    .projects-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 580px) {
+    .proj-card__title {
+        font-size: 1.8rem;
+    }
+
+    .proj-card__visual {
+        min-height: 180px;
+    }
+
+    .chess-board {
+        width: 144px;
+        height: 144px;
+    }
+
+    .finchat-mockup {
+        max-width: 100%;
+    }
+}

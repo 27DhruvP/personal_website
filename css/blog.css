@@ -1,0 +1,445 @@
+/* =====================
+   BLOG PAGE
+   ===================== */
+
+.blog-main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 2.5rem 4rem;
+}
+
+.blog-header {
+    padding: 3rem 0 2.5rem;
+}
+
+.blog-page-title {
+    font-family: "Roboto Condensed", sans-serif;
+    font-weight: 900;
+    font-size: 3.5rem;
+    color: var(--text-main);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.blog-page-subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.05em;
+}
+
+/* Logged-in status bar */
+.blog-logged-in-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: #4ade80;
+    font-weight: 600;
+}
+
+.blog-logout-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-left: 0.5rem;
+    transition: color 0.3s;
+}
+
+.blog-logout-link:hover {
+    color: var(--text-main);
+}
+
+/* ---- Extra Feature 1: Archive bar ---- */
+.blog-archive-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.blog-archive-form {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.blog-archive-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+.blog-archive-select {
+    background: var(--card-bg);
+    border: 0.06rem solid var(--border);
+    border-radius: 0.6rem;
+    padding: 0.5rem 1rem;
+    color: var(--text-main);
+    font-size: 0.85rem;
+    font-family: inherit;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.blog-archive-select:focus {
+    border-color: var(--accent);
+}
+
+.blog-add-post-btn {
+    display: inline-block;
+    padding: 0.6rem 1.4rem;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    font-family: "Roboto Condensed", sans-serif;
+    letter-spacing: 0.08em;
+    border-radius: 2rem;
+    text-decoration: none;
+    transition: background 0.3s, transform 0.15s;
+    white-space: nowrap;
+}
+
+.blog-add-post-btn:hover {
+    background: var(--accent-dark);
+    transform: translateY(-1px);
+}
+
+/* ---- Feed ---- */
+.blog-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.blog-empty {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    padding: 2rem 0;
+}
+
+/* ---- Individual post card ---- */
+.blog-post {
+    background: var(--card-bg);
+    border: 0.06rem solid var(--border);
+    border-radius: 1.2rem;
+    padding: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: border-color 0.3s;
+}
+
+.blog-post:hover {
+    border-color: var(--accent);
+}
+
+.blog-post__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+/* Date — styled per spec requirement */
+.blog-post__date {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.blog-post__tag {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    background: var(--accent-lighter);
+    border: 0.06rem solid var(--accent-light);
+    border-radius: 2rem;
+    padding: 0.2rem 0.7rem;
+}
+
+/* Title — distinct style as per spec */
+.blog-post__title {
+    font-family: "Roboto Condensed", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1.1;
+}
+
+/* Body — distinct style as per spec */
+.blog-post__body {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+}
+
+/* Horizontal rule separating post from comments — as required by spec */
+.blog-post__divider {
+    border: none;
+    border-top: 0.06rem solid var(--border);
+    margin: 0.5rem 0;
+}
+
+/* Admin delete button */
+.blog-delete-btn {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #f87171;
+    background: rgba(248, 113, 113, 0.1);
+    border: 0.06rem solid rgba(248, 113, 113, 0.25);
+    border-radius: 2rem;
+    padding: 0.2rem 0.7rem;
+    text-decoration: none;
+    margin-left: auto;
+    transition: background 0.3s;
+}
+
+.blog-delete-btn:hover {
+    background: rgba(248, 113, 113, 0.25);
+}
+
+.blog-delete-btn--small {
+    padding: 0.1rem 0.5rem;
+    font-size: 0.65rem;
+    margin-left: 0.5rem;
+}
+
+/* =====================
+   EXTRA FEATURE 2: COMMENTS
+   ===================== */
+
+.blog-comments {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.blog-comments__heading {
+    font-family: "Roboto Condensed", sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--text-main);
+    letter-spacing: 0.05em;
+}
+
+.blog-comments__empty {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.blog-comment {
+    background: var(--bg-main);
+    border: 0.06rem solid var(--border);
+    border-radius: 0.8rem;
+    padding: 0.9rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.blog-comment__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.blog-comment__author {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.blog-comment__date {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+}
+
+.blog-comment__body {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+}
+
+/* Comment submission form */
+.blog-comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding-top: 0.5rem;
+}
+
+.blog-comment-input,
+.blog-comment-textarea {
+    background: var(--bg-main);
+    border: 0.06rem solid var(--border);
+    border-radius: 0.6rem;
+    padding: 0.65rem 0.9rem;
+    color: var(--text-main);
+    font-size: 0.85rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.3s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.blog-comment-input::placeholder,
+.blog-comment-textarea::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.5;
+}
+
+.blog-comment-input:focus,
+.blog-comment-textarea:focus {
+    border-color: var(--accent);
+}
+
+.blog-comment-textarea {
+    resize: vertical;
+    min-height: 70px;
+    line-height: 1.5;
+}
+
+.blog-comment-submit {
+    align-self: flex-end;
+    padding: 0.55rem 1.4rem;
+    background: var(--accent-lighter);
+    border: 0.06rem solid var(--accent-light);
+    border-radius: 2rem;
+    color: var(--accent);
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-family: "Roboto Condensed", sans-serif;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+}
+
+.blog-comment-submit:hover {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 580px) {
+    .blog-main {
+        padding: 0 1rem 3rem;
+    }
+
+    .blog-page-title {
+        font-size: 2.5rem;
+    }
+
+    .blog-archive-bar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* ---- Guest comment prompt (shown to logged-out visitors) ---- */
+.blog-comments__login-prompt {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    padding: 0.75rem 1rem;
+    background: var(--accent-lighter);
+    border: 0.06rem solid var(--accent-light);
+    border-radius: 0.6rem;
+}
+
+.blog-comments__login-prompt a {
+    color: var(--accent);
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.blog-comments__login-prompt a:hover {
+    color: var(--text-main);
+}
+
+/* =====================
+   PREVIEW PAGE
+   ===================== */
+
+.preview-nav {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.preview-nav__btn {
+    padding: 0.8rem 2rem;
+    font-family: "Roboto Condensed", sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    border-radius: 2rem;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s, opacity 0.3s;
+}
+
+.preview-nav__btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.preview-nav__btn--publish {
+    background: var(--accent);
+    color: #fff;
+}
+
+.preview-nav__btn--edit {
+    background: var(--card-bg);
+    color: var(--text-main);
+    border: 0.06rem solid var(--border);
+}
+
+.preview-new-label {
+    font-family: "Roboto Condensed", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    color: #FAC775;
+    margin-bottom: 0.5rem;
+}
+
+.blog-post--preview {
+    border-color: rgba(250, 199, 117, 0.4);
+}
+/* =====================
+   PREVIEW PAGE — classes replacing removed inline styles
+   ===================== */
+
+/* Replaces style="display:inline;" on the publish/edit forms */
+.preview-form--inline {
+    display: inline;
+}
+
+/* Replaces style="background:rgba(250,199,117,0.15);color:#FAC775;border-color:rgba(250,199,117,0.3);"
+   on the "Preview" tag badge */
+.blog-post__tag--preview {
+    background: rgba(250, 199, 117, 0.15);
+    color: #FAC775;
+    border-color: rgba(250, 199, 117, 0.3);
+}
+
+/* Replaces style="opacity:0.4" on the "No title/content entered" placeholder text */
+.preview-placeholder {
+    opacity: 0.4;
+}
