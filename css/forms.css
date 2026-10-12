@@ -1,0 +1,144 @@
+/* =====================================================================
+   forms.css
+   Fields, alerts and form layouts: login, create post, blog comments.
+
+   js/addEntry.js relies on these hooks and must keep working:
+   .input--error (red border on a blank field) and .field-error (message,
+   hidden until the script shows it).
+   ===================================================================== */
+
+.field {
+    display: grid;
+    gap: var(--space-2);
+}
+
+.field__label {
+    font-family: var(--font-display);
+    font-weight: 600;
+}
+
+.field__input {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: var(--space-3) var(--space-4);
+    border: var(--stroke) solid var(--control-border);
+    border-radius: var(--radius);
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-text);
+    font-size: var(--text-base);
+    line-height: 1.5;
+    transition: border-color var(--dur-1) ease;
+}
+
+.field__input::placeholder {
+    color: var(--ink-muted);
+    opacity: 0.85;
+}
+
+.field__input:hover {
+    border-color: var(--ink);
+}
+
+.field__input:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+    border-color: var(--ink);
+}
+
+select.field__input {
+    width: auto;
+    padding-right: var(--space-6);
+    cursor: pointer;
+}
+
+textarea.field__input {
+    min-height: 8rem;
+    resize: vertical;
+}
+
+/* Set by js/addEntry.js when a field is blank on submit */
+.field__input.input--error {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 1px var(--danger);
+}
+
+.field-error {
+    display: none;
+    color: var(--danger);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 600;
+}
+
+/* Messages from the server (wrong password, failed save) */
+.alert {
+    padding: var(--space-4);
+    border: var(--stroke) solid var(--danger);
+    border-left-width: 4px;
+    border-radius: var(--radius);
+    background: var(--danger-bg);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-weight: 600;
+}
+
+/* ---- Log in ---- */
+
+.auth {
+    max-width: 26rem;
+    padding-bottom: var(--space-8);
+}
+
+.auth__form {
+    display: grid;
+    gap: var(--space-5);
+}
+
+.auth .alert {
+    margin-bottom: var(--space-5);
+}
+
+.auth__form .button {
+    width: 100%;
+}
+
+.auth__back {
+    margin-top: var(--space-5);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+}
+
+/* ---- Create post ---- */
+
+.compose {
+    display: grid;
+    gap: var(--space-5);
+    padding-bottom: var(--space-8);
+}
+
+.compose .field__input[name="post-title"] {
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+    font-weight: 600;
+}
+
+.compose textarea.field__input {
+    min-height: 18rem;
+    line-height: 1.7;
+}
+
+.compose__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-3);
+}
+
+@media (max-width: 36rem) {
+    .compose__actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+}

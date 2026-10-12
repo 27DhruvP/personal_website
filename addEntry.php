@@ -29,132 +29,84 @@ $prefill_title   = htmlspecialchars($_POST["post-title"]   ?? "");
 $prefill_content = htmlspecialchars($_POST["post-content"] ?? "");
 ?>
 
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Post - Dhruv Patel</title>
-
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/nav_footer.css">
-    <link rel="stylesheet" href="css/style_create_post.css">
-    <link rel="stylesheet" href="css/style_eduction.css">
-    <link rel="stylesheet" href="css/style_projects.css">
-    <link rel="stylesheet" href="css/style_portfolio.css">
-    <link rel="stylesheet" href="css/blog.css">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-</head>
+<?php
+$page_title       = 'New post | Dhruv Patel';
+$page_description = 'Write a new blog post.';
+$page_styles      = ['css/forms.css', 'css/blog.css'];
+$page_path        = 'addEntry.php';
+$noindex          = true;
+$nav_current      = 'blog';
+include 'head.php';
+?>
 
 <body>
 
-    <header>
-        <nav class="navbar">
-            <ul>
-                <li><a href="index.php">Home</a></li>
-                <li><a href="education.php">Education</a></li>
-                <li><a href="portfolio.php">Portfolio</a></li>
-                <li><a href="projects.php">Projects</a></li>
-                <li><a href="skills.php">Skills</a></li>
-                <li><a href="viewBlog.php" class="active">Blog</a></li>
-            </ul>
-        </nav>
-        <a href="logout.php" class="login-btn">Logout</a>
-    </header>
+    <?php include 'nav_header.php'; ?>
 
-    <main>
-        <section class="edu-section" aria-label="Create a blog post">
+    <main id="main">
+        <div class="container container--narrow">
 
-            <div class="edu-header">
-                <h1 class="edu-page-title">Create Post</h1>
-                <p class="edu-page-subtitle">
-                    Welcome, <strong><?php echo htmlspecialchars($_SESSION['user_email']); ?></strong> — write and publish a new blog entry.
+            <div class="page-head">
+                <h1 class="page-head__title">New post</h1>
+                <p class="page-head__lead">
+                    Logged in as <?php echo htmlspecialchars($_SESSION['user_email']); ?>. Write the post, preview it, then publish.
                 </p>
             </div>
 
-            <div class="create-post-wrapper">
-                <!--
-                    action="previewPost.php" — sends to preview page (Advanced Feature)
-                    method="post"            — sends data in request body
-                    id="post-form"           — referenced by JavaScript
-                -->
-                <form class="create-post-form" id="post-form" action="previewPost.php" method="post" novalidate>
+            <?php if (isset($_GET['error'])): ?>
+                <div class="alert" role="alert"><?php echo htmlspecialchars($_GET['error']); ?></div>
+            <?php endif; ?>
 
-                    <!-- Title field -->
-                    <div class="login-field">
-                        <label class="login-label" for="post-title">Blog Title</label>
-                        <input
-                            class="login-input"
-                            type="text"
-                            id="post-title"
-                            name="post-title"
-                            placeholder="Enter your post title..."
-                            value="<?php echo $prefill_title; ?>"
-                            autocomplete="off"
-                        >
-                        <!-- Error span hidden by default; JS shows it on blank submission -->
-                        <span class="field-error" id="title-error">Title cannot be empty.</span>
-                    </div>
+            <!--
+                action="previewPost.php" sends the post to the preview page (Advanced Feature)
+                method="post"            sends data in the request body
+                id="post-form"           referenced by js/addEntry.js
+            -->
+            <form class="compose" id="post-form" action="previewPost.php" method="post" novalidate>
 
-                    <!-- Content field -->
-                    <div class="login-field">
-                        <label class="login-label" for="post-content">Content</label>
-                        <textarea
-                            class="login-input create-post-textarea"
-                            id="post-content"
-                            name="post-content"
-                            placeholder="Write your blog post here..."
-                            rows="14"
-                        ><?php echo $prefill_content; ?></textarea>
-                        <!-- Error span hidden by default; JS shows it on blank submission -->
-                        <span class="field-error" id="content-error">Content cannot be empty.</span>
-                    </div>
+                <!-- Title field -->
+                <div class="field">
+                    <label class="field__label" for="post-title">Title</label>
+                    <input
+                        class="field__input"
+                        type="text"
+                        id="post-title"
+                        name="post-title"
+                        value="<?php echo $prefill_title; ?>"
+                        autocomplete="off"
+                    >
+                    <!-- Hidden by default; js/addEntry.js shows it on blank submission -->
+                    <span class="field-error" id="title-error">Add a title.</span>
+                </div>
 
-                    <!-- Action buttons -->
-                    <div class="create-post-actions">
-                        <a href="viewBlog.php" class="create-post-cancel">Cancel</a>
-                        <!--
-                            Clear button — Assessment Criteria 4
-                            Triggers confirm dialog in js/addEntry.js
-                        -->
-                        <button type="button" class="create-post-cancel create-post-clear" id="clear-btn">
-                            Clear
-                        </button>
-                        <!--
-                            Preview button — Advanced Feature
-                            JS validates fields first, then submits to previewPost.php
-                        -->
-                        <button class="login-btn-submit create-post-submit" type="submit" id="post-btn">
-                            Preview Post
-                        </button>
-                    </div>
+                <!-- Content field -->
+                <div class="field">
+                    <label class="field__label" for="post-content">Content</label>
+                    <textarea
+                        class="field__input"
+                        id="post-content"
+                        name="post-content"
+                        rows="14"
+                    ><?php echo $prefill_content; ?></textarea>
+                    <!-- Hidden by default; js/addEntry.js shows it on blank submission -->
+                    <span class="field-error" id="content-error">Add some content.</span>
+                </div>
 
-                </form>
-            </div>
+                <!-- Action buttons -->
+                <div class="compose__actions">
+                    <a href="viewBlog.php" class="button button--secondary">Cancel</a>
+                    <!-- Clear button: confirm dialog is handled in js/addEntry.js (Assessment Criteria 4) -->
+                    <button type="button" class="button button--danger" id="clear-btn">Clear</button>
+                    <!-- Preview button: js/addEntry.js validates first, then the form goes to previewPost.php -->
+                    <button class="button button--primary" type="submit" id="post-btn">Preview post</button>
+                </div>
 
-        </section>
+            </form>
+
+        </div>
     </main>
 
-    <footer class="site-footer">
-        <div class="footer__inner">
-            <p class="footer__name">Dhruv Patel</p>
-            <nav class="footer__links" aria-label="Footer navigation">
-                <a href="index.php">Home</a>
-                <a href="education.php">Education</a>
-                <a href="portfolio.php">Portfolio</a>
-                <a href="projects.php">Projects</a>
-                <a href="skills.php">Skills</a>
-                <a href="viewBlog.php">Blog</a>
-            </nav>
-            <p class="footer__copy">&copy; 2026 Dhruv Patel. All rights reserved.</p>
-        </div>
-    </footer>
+    <?php include 'footer.php'; ?>
 
     <script src="js/addEntry.js"></script>
 

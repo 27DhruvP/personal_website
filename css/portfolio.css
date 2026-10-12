@@ -1,0 +1,682 @@
+/* =====================================================================
+   portfolio.css
+   The single scrolling home page: hero, then sections that share one
+   structure (title on the left, content on the right).
+   ===================================================================== */
+
+/* ---- Bento grid: the opening of the page ----
+   Four cells of different sizes sharing one radius, one padding and one
+   border. Two break the pattern on purpose: "Now" is inverted, and
+   "Outside of code" takes the pastel (--pastel in tokens.css). */
+
+.bento-section {
+    padding-top: var(--space-5);
+    padding-bottom: var(--space-8);
+}
+
+.bento {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+        "name"
+        "now"
+        "place"
+        "hobbies";
+}
+
+@media (min-width: 40rem) {
+    .bento {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-areas:
+            "name  name"
+            "now   place"
+            "hobbies hobbies";
+    }
+}
+
+@media (min-width: 64rem) {
+    .bento {
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        grid-template-areas:
+            "name    name    name    name    name    name    name    name    now     now     now     now"
+            "name    name    name    name    name    name    name    name    place   place   place   place"
+            "hobbies hobbies hobbies hobbies hobbies hobbies hobbies hobbies hobbies hobbies hobbies hobbies";
+    }
+}
+
+.bento__cell {
+    min-width: 0;
+    padding: var(--space-5);
+    border: var(--stroke) solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--paper-raised);
+    animation: fade-in 600ms var(--ease) both;
+}
+
+.bento__cell--name {
+    grid-area: name;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--space-6);
+    padding: var(--space-6);
+    background: var(--paper);
+    border-color: var(--ink);
+    animation: none;
+}
+
+.bento__cell--now {
+    grid-area: now;
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+    animation-delay: 250ms;
+}
+
+.bento__cell--place {
+    grid-area: place;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--space-5);
+    animation-delay: 400ms;
+}
+
+.bento__cell--hobbies {
+    grid-area: hobbies;
+    border-color: var(--pastel);
+    background: var(--pastel);
+    color: var(--pastel-ink);
+    animation-delay: 550ms;
+}
+
+.bento__title {
+    margin-bottom: var(--space-4);
+    font-size: var(--text-md);
+}
+
+/* Outside of code: three facts side by side once there is room */
+
+.bento__cell--hobbies .facts {
+    gap: var(--space-5);
+}
+
+.bento__cell--hobbies .facts__row,
+.bento__cell--hobbies .facts__row:last-child {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: var(--space-1);
+    padding: var(--space-3) 0 0;
+    border-width: var(--stroke) 0 0;
+    border-style: solid;
+    border-color: var(--pastel-ink);
+}
+
+.bento__cell--hobbies .facts dd {
+    color: color-mix(in srgb, var(--pastel-ink) 82%, var(--pastel));
+}
+
+@media (min-width: 40rem) {
+    .bento__cell--hobbies .facts {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+/* Now: current roles */
+
+.now-list {
+    display: grid;
+    gap: var(--space-4);
+}
+
+.now-list strong {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 650;
+}
+
+.now-list span {
+    font-size: var(--text-sm);
+    opacity: 0.85;
+}
+
+/* Place: London and its local time */
+
+.place__city {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+}
+
+.place__time {
+    margin-top: var(--space-2);
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-variant-numeric: tabular-nums;
+}
+
+.place__dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    background: var(--ball);
+}
+
+/* The greeting and name. Each word of the name settles from a condensed
+   width to its full width as the page loads: the one deliberate
+   typographic moment on the page. */
+
+.hero__name {
+    font-size: clamp(3.75rem, 2rem + 8vw, 7.5rem);
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+}
+
+.hero__greeting {
+    display: block;
+    margin-bottom: var(--space-4);
+    font-size: var(--text-lg);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    animation: fade-in 500ms var(--ease) both;
+}
+
+.hero__word {
+    display: block;
+    font-stretch: 100%;
+    animation: name-settle 900ms var(--ease) both;
+}
+
+.hero__word+.hero__word {
+    animation-delay: 90ms;
+}
+
+/* The ball is the full stop */
+.hero__word:last-child::after {
+    content: "";
+    display: inline-block;
+    width: 0.13em;
+    height: 0.13em;
+    margin-left: 0.07em;
+    border-radius: 50%;
+    background: var(--ball);
+}
+
+@keyframes name-settle {
+    0% {
+        font-stretch: 62%;
+        opacity: 0;
+    }
+
+    35% {
+        opacity: 1;
+    }
+
+    100% {
+        font-stretch: 100%;
+        opacity: 1;
+    }
+}
+
+.hero__lead,
+.hero__actions {
+    animation: fade-in 600ms var(--ease) both;
+}
+
+.hero__lead {
+    max-width: 34rem;
+    margin-top: var(--space-5);
+    font-size: var(--text-md);
+    line-height: 1.5;
+    animation-delay: 450ms;
+}
+
+.hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    animation-delay: 550ms;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ---- Sections ---- */
+
+.section {
+    padding-block: var(--space-8);
+    border-top: var(--stroke) solid var(--rule);
+}
+
+.section__grid {
+    display: grid;
+    gap: var(--space-5);
+}
+
+.section__title {
+    font-size: var(--text-xl);
+}
+
+@media (min-width: 60rem) {
+    .section__grid {
+        grid-template-columns: 13rem minmax(0, 1fr);
+        gap: var(--space-7);
+    }
+
+    .section__title {
+        position: sticky;
+        top: calc(var(--header-h) + var(--space-5));
+        align-self: start;
+    }
+}
+
+.section__subtitle {
+    margin-top: var(--space-7);
+    margin-bottom: var(--space-4);
+    font-size: var(--text-md);
+}
+
+.prose {
+    max-width: var(--measure);
+}
+
+.prose p+p {
+    margin-top: var(--space-4);
+}
+
+/* ---- Term and description rows (hobbies, skills, contact) ---- */
+
+.facts {
+    display: grid;
+}
+
+.facts__row {
+    display: grid;
+    gap: var(--space-1);
+    padding-block: var(--space-3);
+    border-top: var(--stroke) solid var(--rule);
+}
+
+.facts__row:last-child {
+    border-bottom: var(--stroke) solid var(--rule);
+}
+
+.facts dt {
+    font-family: var(--font-display);
+    font-weight: 600;
+}
+
+.facts dd {
+    color: var(--ink-muted);
+}
+
+@media (min-width: 40rem) {
+    .facts__row {
+        grid-template-columns: 12rem minmax(0, 1fr);
+        gap: var(--space-5);
+    }
+}
+
+/* ---- Inline lists: "Python, HTML, CSS" ---- */
+
+.inline-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.35em;
+}
+
+.inline-list li:not(:last-child)::after {
+    content: ",";
+}
+
+.entry .inline-list,
+.project .inline-list {
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+}
+
+/* ---- Bullets: short dash, not a dot ---- */
+
+.bullets {
+    display: grid;
+    gap: var(--space-3);
+    max-width: var(--measure);
+}
+
+.bullets li {
+    position: relative;
+    padding-left: var(--space-5);
+}
+
+.bullets li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.85em;
+    width: 0.75rem;
+    height: 2px;
+    background: var(--ink-muted);
+}
+
+/* ---- Entries: education and experience ---- */
+
+.entry {
+    display: grid;
+    gap: var(--space-4);
+    padding-block: var(--space-6);
+    border-top: var(--stroke) solid var(--rule);
+}
+
+.entry:first-child {
+    padding-top: 0;
+    border-top: 0;
+}
+
+.entry__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-1) var(--space-5);
+}
+
+.entry__title {
+    font-size: var(--text-md);
+}
+
+.entry__role {
+    margin-top: var(--space-1);
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-weight: 500;
+}
+
+.entry__meta {
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 40rem) {
+    .entry__meta {
+        text-align: right;
+    }
+}
+
+/* ---- Projects ---- */
+
+.project {
+    display: grid;
+    gap: var(--space-5);
+    padding-block: var(--space-7);
+    border-top: var(--stroke) solid var(--rule);
+}
+
+.project:first-child {
+    padding-top: 0;
+    border-top: 0;
+}
+
+.project__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-1) var(--space-4);
+}
+
+.project__title {
+    font-size: var(--text-lg);
+}
+
+.project__type {
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+}
+
+/* The ball marks the win */
+.project__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 600;
+}
+
+.project__badge::before {
+    content: "";
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 50%;
+    background: var(--ball);
+}
+
+.project__visual {
+    padding: var(--space-5);
+    border: var(--stroke) solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--paper-raised);
+}
+
+/* Chess: board with the last move, beside the UCI exchange that produced it */
+
+.chess-demo {
+    display: grid;
+    align-items: center;
+    gap: var(--space-5);
+}
+
+@media (min-width: 40rem) {
+    .chess-demo {
+        grid-template-columns: 13rem minmax(0, 1fr);
+        gap: var(--space-6);
+    }
+}
+
+.chess-board {
+    width: 100%;
+    max-width: 13rem;
+    overflow: hidden;
+    border: var(--stroke) solid var(--ink);
+    border-radius: var(--radius);
+    shape-rendering: crispEdges;
+}
+
+.chess-board__light {
+    fill: var(--board-light);
+}
+
+.chess-board__dark {
+    fill: var(--board-dark);
+}
+
+.chess-board__highlight {
+    fill: var(--board-highlight);
+}
+
+.chess-board__arrow {
+    fill: var(--paper);
+    stroke: var(--ink);
+    stroke-width: 0.06;
+    stroke-linejoin: round;
+}
+
+.uci {
+    overflow-x: auto;
+    color: var(--ink-muted);
+    font-family: var(--font-code);
+    font-size: var(--text-sm);
+    line-height: 1.9;
+}
+
+.uci__reply {
+    color: var(--ink);
+    font-weight: 600;
+}
+
+.uci__caption {
+    margin-top: var(--space-3);
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+}
+
+/* FinChat: the data flow, in order */
+
+.pipeline {
+    display: grid;
+    gap: var(--space-5);
+}
+
+.pipeline__step {
+    position: relative;
+    padding: var(--space-4);
+    border: var(--stroke) solid var(--control-border);
+    border-radius: var(--radius);
+    background: var(--paper);
+}
+
+.pipeline__name {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 650;
+}
+
+.pipeline__note {
+    display: block;
+    margin-top: var(--space-1);
+    color: var(--ink-muted);
+    font-size: var(--text-sm);
+    line-height: 1.4;
+}
+
+.pipeline__step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: calc(-1 * (var(--space-5) + 0.6rem) / 2);
+    width: 0.6rem;
+    height: 0.6rem;
+    margin-left: -0.3rem;
+    border-right: 2px solid var(--ink-muted);
+    border-bottom: 2px solid var(--ink-muted);
+    transform: rotate(45deg);
+}
+
+@media (min-width: 48rem) {
+    .pipeline {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .pipeline__step:not(:last-child)::after {
+        left: auto;
+        right: calc(-1 * (var(--space-5) + 0.6rem) / 2);
+        bottom: auto;
+        top: 50%;
+        margin: -0.3rem 0 0;
+        transform: rotate(-45deg);
+    }
+}
+
+.pipeline__summary {
+    margin-top: var(--space-4);
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+}
+
+/* ---- Skills ---- */
+
+.skill-groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: var(--space-6);
+    margin-bottom: var(--space-7);
+}
+
+.skill-group {
+    padding-top: var(--space-4);
+    border-top: var(--stroke) solid var(--ink);
+}
+
+.skill-group__title {
+    margin-bottom: var(--space-4);
+    font-size: var(--text-base);
+}
+
+.skill-group dl {
+    display: grid;
+    gap: var(--space-4);
+}
+
+.skill-group dt {
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 600;
+}
+
+/* ---- Contact ---- */
+
+.contact__lead {
+    margin-bottom: var(--space-3);
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+}
+
+.contact__email {
+    display: inline-block;
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: clamp(1.375rem, 0.9rem + 2.4vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.18em;
+    overflow-wrap: anywhere;
+}
+
+.contact__email:hover {
+    color: var(--link);
+}
+
+.facts [data-london-time]:not([hidden]) {
+    display: block;
+}
+
+.contact .facts {
+    margin-top: var(--space-7);
+}
+
+.facts dd a {
+    color: var(--link);
+}
+
+/* ---- Scroll reveal: fade in once, only when JavaScript is running ---- */
+
+.js .reveal {
+    opacity: 0;
+    transform: translateY(0.75rem);
+    transition: opacity var(--dur-3) var(--ease), transform var(--dur-3) var(--ease);
+}
+
+.js .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+}

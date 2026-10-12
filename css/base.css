@@ -1,0 +1,310 @@
+/* =====================================================================
+   base.css
+   Reset, element defaults, and the few components used on every page
+   (links, buttons, skip link). Loaded after tokens.css.
+   ===================================================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* Anchored sections stop below the sticky header */
+    scroll-padding-top: calc(var(--header-h) + var(--space-5));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+    }
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-text);
+    font-size: var(--text-base);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+main {
+    flex: 1 0 auto;
+    /* The navigation pill floats above the page, so leave room for it */
+    padding-top: var(--header-h);
+}
+
+/* Brief colour fade when the visitor changes theme (class set by site.js) */
+html.theme-fade *,
+html.theme-fade *::before,
+html.theme-fade *::after {
+    transition: background-color var(--dur-2) ease, color var(--dur-2) ease,
+        border-color var(--dur-2) ease, fill var(--dur-2) ease, stroke var(--dur-2) ease !important;
+}
+
+/* ---- Elements ---- */
+
+h1,
+h2,
+h3,
+h4 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+}
+
+p,
+ul,
+ol,
+dl,
+dd,
+figure,
+fieldset,
+pre {
+    margin: 0;
+}
+
+p {
+    text-wrap: pretty;
+}
+
+ul,
+ol {
+    padding: 0;
+    list-style: none;
+}
+
+fieldset {
+    padding: 0;
+    border: 0;
+    min-width: 0;
+}
+
+img,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+img {
+    height: auto;
+}
+
+strong {
+    font-weight: 650;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+    color: inherit;
+}
+
+a {
+    color: var(--link);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    transition: text-decoration-thickness var(--dur-1) ease, color var(--dur-1) ease;
+}
+
+a:hover {
+    text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 3px;
+}
+
+::selection {
+    background: var(--ink);
+    color: var(--paper);
+}
+
+/* ---- Utilities ---- */
+
+.container {
+    width: 100%;
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+}
+
+.container--narrow {
+    max-width: 48rem;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.muted {
+    color: var(--ink-muted);
+}
+
+.skip-link {
+    position: absolute;
+    left: var(--space-4);
+    top: -5rem;
+    z-index: 100;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius);
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-decoration: none;
+    transition: top var(--dur-1) var(--ease);
+}
+
+.skip-link:focus {
+    top: var(--space-3);
+}
+
+/* ---- Buttons ----
+   .button is the only button style. Variants change colour, not shape. */
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: 2.75rem;
+    padding: 0 var(--space-5);
+    border: var(--stroke) solid transparent;
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color var(--dur-1) ease, border-color var(--dur-1) ease, color var(--dur-1) ease;
+}
+
+.button:hover {
+    text-decoration: none;
+}
+
+.button--primary {
+    background: var(--button-bg);
+    color: var(--button-ink);
+}
+
+.button--primary:hover {
+    background: var(--button-bg-hover);
+}
+
+.button--secondary {
+    border-color: var(--control-border);
+    color: var(--ink);
+}
+
+.button--secondary:hover {
+    border-color: var(--ink);
+    background: var(--paper-raised);
+}
+
+.button--danger {
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+.button--danger:hover {
+    background: var(--danger-bg);
+}
+
+/* Loading state: site.js sets aria-busy on a form's submit button */
+.button[aria-busy="true"] {
+    pointer-events: none;
+    opacity: 0.85;
+}
+
+.button[aria-busy="true"]::after {
+    content: "";
+    width: 1em;
+    height: 1em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin 700ms linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ---- Reduced motion: no decorative movement anywhere ---- */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        animation-delay: 0ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ---- Windows forced-colours mode ---- */
+
+@media (forced-colors: active) {
+    .button--primary {
+        border-color: ButtonText;
+    }
+}
+
+/* ---- Print: plain black on white, everything visible ---- */
+
+@media print {
+
+    .island,
+    .skip-link,
+    .site-footer__links {
+        display: none !important;
+    }
+
+    body {
+        background: #fff;
+        color: #000;
+    }
+
+    .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    a {
+        color: #000;
+    }
+}

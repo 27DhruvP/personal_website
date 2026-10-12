@@ -1,0 +1,255 @@
+/* =====================================================================
+   tokens.css
+   Design tokens for the whole site. Every other stylesheet reads from
+   these variables; nothing else hard-codes a colour, size or space.
+
+   Themes: light (default) and dark, each with a high-contrast variant.
+   js/theme.js sets data-theme="light|dark" and data-contrast="standard|high"
+   on <html>. With JavaScript off, the visitor's OS colour scheme decides.
+
+   Colour idea: a table-tennis table (deep blue) and the ball (orange).
+   Blue does the work. Orange is used only as a marker: the progress ball
+   in the header, the full stop after the name, and the "winner" marker.
+   ===================================================================== */
+
+/* ---- Fonts (self-hosted, licences in /fonts) ---- */
+
+@font-face {
+    font-family: "Archivo";
+    src: url("../fonts/archivo-latin-wdth.woff2") format("woff2");
+    font-weight: 100 900;
+    font-stretch: 62% 125%;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Source Serif 4";
+    src: url("../fonts/source-serif-4-latin-wght.woff2") format("woff2");
+    font-weight: 200 900;
+    font-display: swap;
+}
+
+/* ---- Theme-independent tokens ---- */
+
+:root {
+    --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --font-text: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --font-code: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+    /* Type scale: 17px base, ratio 1.25 */
+    --text-sm: 0.875rem;
+    --text-base: 1.0625rem;
+    --text-md: 1.3125rem;
+    --text-lg: 1.625rem;
+    --text-xl: clamp(1.75rem, 1.2rem + 2vw, 2.0625rem);
+    --text-page: clamp(2.5rem, 1.5rem + 5vw, 4.5rem);
+    --text-display: clamp(4.25rem, 2rem + 13vw, 10rem);
+
+    /* Spacing: every value is a multiple of 4px */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.5rem;
+    --space-6: 2rem;
+    --space-7: 3rem;
+    --space-8: 4rem;
+    --space-9: 6rem;
+
+    /* Shape: one radius for everything (circles excepted) */
+    --radius: 6px;
+
+    /* Layout */
+    --container: 72rem;
+    --measure: 40rem;
+    --gutter: clamp(1rem, 0.4rem + 3vw, 2.5rem);
+    --header-h: 4.75rem;
+
+    /* Motion */
+    --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+    --dur-1: 150ms;
+    --dur-2: 250ms;
+    --dur-3: 600ms;
+}
+
+/* ---- Light, standard contrast (default) ---- */
+
+:root {
+    color-scheme: light;
+
+    --paper: #F3F5F9;
+    --paper-raised: #E8ECF3;
+    --ink: #0E1A33;
+    --ink-muted: #455470;
+    --rule: #CDD4E1;
+    --control-border: #76849F;
+    --link: #1C3F94;
+    --button-bg: #1C3F94;
+    --button-bg-hover: #142F70;
+    --button-ink: #FFFFFF;
+    --ball: #D9500A;
+    --danger: #B42318;
+    --danger-bg: #FBE9E7;
+    --focus: #1C3F94;
+
+    --board-light: #DCE3EF;
+    --board-dark: #8C9CBC;
+    --board-highlight: rgba(217, 80, 10, 0.55);
+
+    --stroke: 1px;
+    --elevation: 0 8px 24px rgba(14, 26, 51, 0.14);
+}
+
+/* ---- Dark, standard contrast ----
+   The same values appear twice on purpose: once for visitors without
+   JavaScript (OS preference), once for the explicit data-theme switch. */
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+        color-scheme: dark;
+
+        --paper: #0A1730;
+        --paper-raised: #122246;
+        --ink: #E9EEF8;
+        --ink-muted: #A2B2CF;
+        --rule: #243556;
+        --control-border: #6A7DA3;
+        --link: #8DB3FF;
+        --button-bg: #8DB3FF;
+        --button-bg-hover: #B1CCFF;
+        --button-ink: #0A1730;
+        --ball: #FF7A2E;
+        --danger: #FF9A90;
+        --danger-bg: #3A1620;
+        --focus: #8DB3FF;
+
+        --board-light: #2F4A82;
+        --board-dark: #17305F;
+        --board-highlight: rgba(255, 122, 46, 0.6);
+
+        --elevation: 0 8px 24px rgba(0, 0, 0, 0.5);
+    }
+}
+
+:root[data-theme="dark"] {
+    color-scheme: dark;
+
+    --paper: #0A1730;
+    --paper-raised: #122246;
+    --ink: #E9EEF8;
+    --ink-muted: #A2B2CF;
+    --rule: #243556;
+    --control-border: #6A7DA3;
+    --link: #8DB3FF;
+    --button-bg: #8DB3FF;
+    --button-bg-hover: #B1CCFF;
+    --button-ink: #0A1730;
+    --ball: #FF7A2E;
+    --danger: #FF9A90;
+    --danger-bg: #3A1620;
+    --focus: #8DB3FF;
+
+    --board-light: #2F4A82;
+    --board-dark: #17305F;
+    --board-highlight: rgba(255, 122, 46, 0.6);
+
+    --elevation: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* ---- Light, high contrast (7:1 text, 2px borders) ---- */
+
+:root[data-contrast="high"] {
+    --paper: #FFFFFF;
+    --paper-raised: #F0F0F0;
+    --ink: #000000;
+    --ink-muted: #262626;
+    --rule: #000000;
+    --control-border: #000000;
+    --link: #0033CC;
+    --button-bg: #0033CC;
+    --button-bg-hover: #00247A;
+    --button-ink: #FFFFFF;
+    --ball: #B83B00;
+    --danger: #8A0F00;
+    --danger-bg: #FFF0ED;
+    --focus: #000000;
+
+    --board-light: #FFFFFF;
+    --board-dark: #000000;
+    --board-highlight: rgba(184, 59, 0, 0.6);
+
+    --stroke: 2px;
+    --elevation: none;
+}
+
+/* ---- Dark, high contrast ---- */
+
+:root[data-theme="dark"][data-contrast="high"] {
+    --paper: #000000;
+    --paper-raised: #1A1A1A;
+    --ink: #FFFFFF;
+    --ink-muted: #E6E6E6;
+    --rule: #FFFFFF;
+    --control-border: #FFFFFF;
+    --link: #FFE14D;
+    --button-bg: #FFE14D;
+    --button-bg-hover: #FFF3A6;
+    --button-ink: #000000;
+    --ball: #FF9A52;
+    --danger: #FFB4AB;
+    --danger-bg: #330000;
+    --focus: #FFE14D;
+
+    --board-light: #FFFFFF;
+    --board-dark: #000000;
+    --board-highlight: rgba(255, 154, 82, 0.7);
+
+    --stroke: 2px;
+    --elevation: none;
+}
+
+/* ---- Navigation pill and pastel cell, per theme ----
+   The pill is always the darkest thing on the page (or the lightest, in
+   high-contrast dark), so it reads as a floating object in every theme. */
+
+:root {
+    --island-bg: #0E1A33;
+    --island-fg: #F3F5F9;
+    --island-edge: transparent;
+    --pastel: #FFE2CF;
+    --pastel-ink: #0E1A33;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+        --island-bg: #02060F;
+        --island-fg: #E9EEF8;
+        --island-edge: #243556;
+        --pastel: #F6D6BF;
+        --pastel-ink: #0A1730;
+    }
+}
+
+:root[data-theme="dark"] {
+    --island-bg: #02060F;
+    --island-fg: #E9EEF8;
+    --island-edge: #243556;
+    --pastel: #F6D6BF;
+    --pastel-ink: #0A1730;
+}
+
+:root[data-contrast="high"] {
+    --island-bg: #000000;
+    --island-fg: #FFFFFF;
+    --island-edge: #000000;
+    --pastel: #FFFFFF;
+    --pastel-ink: #000000;
+}
+
+:root[data-theme="dark"][data-contrast="high"] {
+    --island-bg: #000000;
+    --island-fg: #FFFFFF;
+    --island-edge: #FFFFFF;
+    --pastel: #000000;
+    --pastel-ink: #FFFFFF;
+}

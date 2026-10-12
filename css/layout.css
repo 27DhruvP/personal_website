@@ -1,0 +1,519 @@
+/* =====================================================================
+   layout.css
+   The floating navigation pill, the Display (theme) panel, the footer,
+   and the page-head block used by the blog and form pages.
+   ===================================================================== */
+
+/* ---- Navigation pill ("island") ----
+   Wide at the top of the page, small while you read, and wide again when
+   you hover, focus or tap it. js/site.js sets data-open and measures the
+   open width (--island-open-w). With JavaScript off it is simply a wide
+   pill with every link showing. */
+
+.island {
+    position: fixed;
+    top: var(--space-3);
+    left: 50%;
+    z-index: 50;
+    transform: translateX(-50%);
+}
+
+.island__shell {
+    position: relative;
+    display: grid;
+    align-items: center;
+    height: 3.5rem;
+    border: var(--stroke) solid var(--island-edge);
+    border-radius: 999px;
+    background: var(--island-bg);
+    color: var(--island-fg);
+    box-shadow: var(--elevation);
+    overflow: clip;
+}
+
+.js .island__shell {
+    width: var(--island-open-w, min(46rem, calc(100vw - 2rem)));
+}
+
+.js .island[data-open="false"] .island__shell {
+    width: var(--island-compact-w, 15rem);
+}
+
+/* The width only animates once the page has measured itself */
+.island.is-ready .island__shell {
+    transition: width var(--dur-3) var(--ease);
+}
+
+.island__shell :focus-visible {
+    outline: 3px solid var(--island-fg);
+    outline-offset: 2px;
+}
+
+/* Two layers share one grid cell: the full navigation and the small label */
+
+.island__full {
+    grid-area: 1 / 1;
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    min-width: 0;
+    padding-inline: var(--space-5) var(--space-2);
+    white-space: nowrap;
+    transition: opacity var(--dur-2) ease, visibility 0s;
+}
+
+.island__toggle {
+    grid-area: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    width: 100%;
+    height: 100%;
+    padding: 0 var(--space-5);
+    border: 0;
+    background: transparent;
+    color: var(--island-fg);
+    font-family: var(--font-display);
+    font-size: 0.9375rem;
+    font-weight: 650;
+    cursor: pointer;
+    transition: opacity var(--dur-2) ease, visibility 0s;
+}
+
+.island__toggle svg {
+    flex-shrink: 0;
+    transition: transform var(--dur-2) var(--ease);
+}
+
+html:not(.js) .island__toggle {
+    display: none;
+}
+
+.js .island[data-open="false"] .island__full {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--dur-1) ease, visibility 0s linear var(--dur-1);
+}
+
+.js .island:not([data-open="false"]) .island__toggle {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity var(--dur-1) ease, visibility 0s linear var(--dur-1);
+}
+
+.brand {
+    flex-shrink: 0;
+    color: var(--island-fg);
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    font-weight: 750;
+    font-stretch: 112%;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+}
+
+.brand:hover {
+    text-decoration: none;
+}
+
+/* Scroll progress: a hairline along the bottom of the pill with an orange
+   ball riding it. site.js writes --progress (0 to 1) on .island. */
+
+.island__progress {
+    position: absolute;
+    left: var(--space-5);
+    right: var(--space-5);
+    bottom: 0.4rem;
+    height: 2px;
+    background: color-mix(in srgb, var(--island-fg) 25%, transparent);
+    pointer-events: none;
+}
+
+.island__progress::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--island-fg);
+    transform: scaleX(var(--progress, 0));
+    transform-origin: left;
+}
+
+.island__ball {
+    position: absolute;
+    top: 50%;
+    left: calc(var(--progress, 0) * (100% - 0.5rem));
+    width: 0.5rem;
+    height: 0.5rem;
+    margin-top: -0.25rem;
+    border-radius: 50%;
+    background: var(--ball);
+}
+
+/* ---- Navigation links ---- */
+
+.site-nav {
+    --nav-fg: var(--island-fg);
+    --nav-muted: color-mix(in srgb, var(--island-fg) 78%, var(--island-bg));
+
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: var(--space-4);
+}
+
+.site-nav__list {
+    display: flex;
+    gap: var(--space-1);
+}
+
+.site-nav__link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding-inline: var(--space-3);
+    color: var(--nav-muted);
+    font-family: var(--font-display);
+    font-size: 0.9375rem;
+    font-weight: 550;
+    text-decoration: none;
+    transition: color var(--dur-1) ease;
+}
+
+.site-nav__link::after {
+    content: "";
+    position: absolute;
+    left: var(--space-3);
+    right: var(--space-3);
+    bottom: 0.55rem;
+    height: 2px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--dur-2) var(--ease);
+}
+
+.site-nav__link:hover {
+    color: var(--nav-fg);
+    text-decoration: none;
+}
+
+.site-nav__link[aria-current] {
+    color: var(--nav-fg);
+}
+
+.site-nav__link[aria-current]::after {
+    transform: scaleX(1);
+}
+
+.site-nav__tools {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-left: auto;
+}
+
+/* ---- Display button (theme and contrast) ---- */
+
+/* Without JavaScript the controls can't work, so they stay hidden */
+html:not(.js) .display-menu {
+    display: none;
+}
+
+.display-menu__button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 2.75rem;
+    padding-inline: var(--space-3);
+    border: 0;
+    background: transparent;
+    color: var(--nav-muted);
+    font-family: var(--font-display);
+    font-size: 0.9375rem;
+    font-weight: 550;
+    cursor: pointer;
+    transition: color var(--dur-1) ease;
+}
+
+.display-menu__button:hover,
+.display-menu__button[aria-expanded="true"] {
+    color: var(--nav-fg);
+}
+
+/* The panel hangs under the pill, outside it, so the pill can clip while it resizes */
+.display-menu__panel {
+    position: absolute;
+    left: 50%;
+    top: calc(100% + var(--space-2));
+    z-index: 60;
+    display: grid;
+    gap: var(--space-5);
+    width: min(19rem, calc(100vw - 2rem));
+    padding: var(--space-5);
+    border: var(--stroke) solid var(--control-border);
+    border-radius: var(--radius);
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: var(--elevation);
+    transform: translateX(-50%);
+}
+
+.display-menu__panel[hidden] {
+    display: none;
+}
+
+.segmented__label {
+    margin-bottom: var(--space-2);
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 600;
+}
+
+.segmented__options {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    overflow: hidden;
+    border: var(--stroke) solid var(--control-border);
+    border-radius: var(--radius);
+}
+
+.segmented__option {
+    position: relative;
+    display: block;
+}
+
+.segmented__option+.segmented__option {
+    border-left: var(--stroke) solid var(--control-border);
+}
+
+.segmented__option input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.segmented__option span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding-inline: var(--space-2);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    transition: background-color var(--dur-1) ease, color var(--dur-1) ease;
+}
+
+.segmented__option input:hover:not(:checked)+span {
+    background: var(--paper-raised);
+}
+
+.segmented__option input:checked+span {
+    background: var(--ink);
+    color: var(--paper);
+}
+
+/* Inset so the ring isn't clipped by the rounded container */
+.segmented__option input:focus-visible+span {
+    outline: 3px solid var(--focus);
+    outline-offset: -3px;
+}
+
+/* ---- Narrow screens: a small pill that opens a menu below it ---- */
+
+@media (max-width: 69.99rem) {
+    .js .island__shell,
+    .js .island[data-open="false"] .island__shell {
+        width: min(18rem, calc(100vw - 2rem));
+        overflow: visible;
+    }
+
+    .js .island:not([data-open="false"]) .island__toggle,
+    .js .island[data-open="false"] .island__toggle {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    .js .island[data-open="true"] .island__toggle svg {
+        transform: rotate(180deg);
+    }
+
+    .island__full {
+        display: contents;
+    }
+
+    .brand {
+        display: none;
+    }
+
+    .js .site-nav {
+        --nav-fg: var(--ink);
+        --nav-muted: var(--ink-muted);
+
+        display: none;
+        position: absolute;
+        top: calc(100% + var(--space-2));
+        left: 50%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-4);
+        width: calc(100vw - 2rem);
+        max-height: calc(100dvh - 7rem);
+        overflow-y: auto;
+        padding: var(--space-3) var(--space-5) var(--space-5);
+        border: var(--stroke) solid var(--control-border);
+        border-radius: 1.5rem;
+        background: var(--paper);
+        box-shadow: var(--elevation);
+        transform: translateX(-50%);
+    }
+
+    .js .island[data-open="true"] .site-nav {
+        display: flex;
+    }
+
+    .island__shell .site-nav :focus-visible {
+        outline-color: var(--focus);
+    }
+
+    .site-nav__list {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .site-nav__link {
+        width: 100%;
+        min-height: 3rem;
+        padding-inline: 0;
+        border-bottom: var(--stroke) solid var(--rule);
+        font-size: var(--text-base);
+    }
+
+    .site-nav__link::after {
+        left: 0;
+        right: auto;
+        bottom: -1px;
+        width: 2rem;
+    }
+
+    .site-nav__tools {
+        flex-wrap: wrap;
+        margin-left: 0;
+        gap: var(--space-4);
+    }
+
+    .site-nav__tools .site-nav__link {
+        width: auto;
+        border-bottom: 0;
+    }
+
+    .site-nav__tools .site-nav__link::after {
+        display: none;
+    }
+
+    .display-menu__button {
+        padding-inline: 0;
+    }
+
+    /* No JavaScript: the pill becomes an ordinary wrapped header */
+    html:not(.js) .island {
+        position: static;
+        padding: var(--space-3) var(--gutter) 0;
+        transform: none;
+    }
+
+    html:not(.js) .island__shell {
+        height: auto;
+        padding-block: var(--space-3);
+        border-radius: 1.5rem;
+    }
+
+    html:not(.js) .island__full {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    html:not(.js) .brand {
+        display: block;
+    }
+
+    html:not(.js) .site-nav,
+    html:not(.js) .site-nav__list {
+        flex-wrap: wrap;
+        flex-direction: row;
+    }
+
+    html:not(.js) .site-nav__link {
+        width: auto;
+        border-bottom: 0;
+    }
+
+    html:not(.js) main {
+        padding-top: 0;
+    }
+}
+
+/* ---- Page head: title block for blog and form pages ---- */
+
+.page-head {
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-6);
+}
+
+.page-head__title {
+    font-size: var(--text-page);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+}
+
+.page-head__lead {
+    max-width: var(--measure);
+    margin-top: var(--space-4);
+    color: var(--ink-muted);
+    font-size: var(--text-md);
+    line-height: 1.5;
+}
+
+/* ---- Footer ---- */
+
+.site-footer {
+    margin-top: var(--space-7);
+    padding-block: var(--space-6);
+    border-top: var(--stroke) solid var(--rule);
+}
+
+.site-footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4) var(--space-6);
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+}
+
+.site-footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+}
+
+.site-footer a {
+    color: var(--ink-muted);
+}
+
+.site-footer a:hover {
+    color: var(--ink);
+}
