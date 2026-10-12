@@ -132,6 +132,12 @@ a:hover {
 }
 
 ::selection {
+    background: color-mix(in srgb, var(--link) 28%, var(--paper));
+    color: var(--ink);
+}
+
+/* High contrast keeps the strongest possible selection */
+:root[data-contrast="high"] ::selection {
     background: var(--ink);
     color: var(--paper);
 }
