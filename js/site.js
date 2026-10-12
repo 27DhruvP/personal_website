@@ -5,7 +5,7 @@
 // without it. Page-specific logic stays in its own file (js/addEntry.js).
 //
 //   1. Navigation pill: shrinks while scrolling, opens on hover, focus or tap,
-//      with the Display panel (theme and contrast) and scroll progress
+//      with the theme and contrast buttons and scroll progress
 //   4. Reveal on scroll
 //   5. Form loading state
 //   6. Confirm dialogs and auto-submitting filters (replaces inline handlers)
@@ -25,7 +25,6 @@
     //   hover    a mouse is over it
     //   focus    keyboard focus is on one of its links
     //   pinned   opened with the button (the only way on phones)
-    //   panel    the Display panel is open (wide screens only)
     // ---------------------
     var island = document.getElementById('island');
 
@@ -35,16 +34,16 @@
         var label = island.querySelector('[data-island-label]');
         var firstLink = island.querySelector('.site-nav__link');
         var defaultLabel = island.getAttribute('data-default-label') || 'Dhruv Patel';
-        var displayToggle = island.querySelector('[data-display-toggle]');
-        var displayPanel = document.getElementById('display-panel');
-        var radios = displayPanel ? displayPanel.querySelectorAll('input[type="radio"]') : [];
+        var themeButton = island.querySelector('[data-theme-toggle]');
+        var themeLabel = island.querySelector('[data-theme-toggle-label]');
+        var contrastButton = island.querySelector('[data-contrast-toggle]');
         var wide = window.matchMedia('(min-width: 70rem)');
 
-        var state = { atTop: window.scrollY < 24, hover: false, focus: false, pinned: false, panel: false };
+        var state = { atTop: window.scrollY < 24, hover: false, focus: false, pinned: false };
 
         var isOpen = function () {
             if (wide.matches) {
-                return state.atTop || state.hover || state.focus || state.pinned || state.panel;
+                return state.atTop || state.hover || state.focus || state.pinned;
             }
             return state.pinned;
         };
@@ -72,42 +71,36 @@
 
         var closeEverything = function () {
             state.pinned = false;
-            if (state.panel) { setPanel(false); }
             render();
         };
 
-        // ---- Display panel ----
-        var showCurrentChoice = function () {
-            if (!window.siteTheme) { return; }
-            var current = window.siteTheme.get();
-            Array.prototype.forEach.call(radios, function (radio) {
-                radio.checked = radio.value === (radio.name === 'theme' ? current.theme : current.contrast);
-            });
+        // ---- Theme and contrast buttons ----
+        // The page theme is always "light" or "dark" on <html>; one press flips it.
+        var showChoice = function () {
+            var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+            var high = window.siteTheme.get().contrast === 'high';
+            if (themeLabel) { themeLabel.textContent = dark ? 'Switch to light mode' : 'Switch to dark mode'; }
+            if (contrastButton) { contrastButton.setAttribute('aria-pressed', high ? 'true' : 'false'); }
         };
 
-        var setPanel = function (open) {
-            if (!displayPanel || !displayToggle) { return; }
-            state.panel = open;
-            displayPanel.hidden = !open;
-            displayToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-            // On phones the menu and the panel would overlap, so the menu steps aside
-            if (open && !wide.matches) { state.pinned = false; }
-            render();
-        };
-
-        if (displayToggle && displayPanel && window.siteTheme) {
-            displayToggle.addEventListener('click', function () { setPanel(displayPanel.hidden); });
-
-            Array.prototype.forEach.call(radios, function (radio) {
-                radio.addEventListener('change', function () {
-                    var current = window.siteTheme.get();
-                    var theme = radio.name === 'theme' ? radio.value : current.theme;
-                    var contrast = radio.name === 'contrast' ? radio.value : current.contrast;
-                    window.siteTheme.set(theme, contrast, !reduceMotion);
+        if (window.siteTheme) {
+            if (themeButton) {
+                themeButton.addEventListener('click', function () {
+                    var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+                    window.siteTheme.set(dark ? 'light' : 'dark', window.siteTheme.get().contrast, !reduceMotion);
+                    showChoice();
                 });
-            });
+            }
 
-            showCurrentChoice();
+            if (contrastButton) {
+                contrastButton.addEventListener('click', function () {
+                    var current = window.siteTheme.get();
+                    window.siteTheme.set(current.theme, current.contrast === 'high' ? 'standard' : 'high', !reduceMotion);
+                    showChoice();
+                });
+            }
+
+            showChoice();
         }
 
         // ---- Opening and closing ----
@@ -135,7 +128,6 @@
 
         toggle.addEventListener('click', function () {
             state.pinned = !state.pinned;
-            if (state.pinned && displayPanel && !displayPanel.hidden) { setPanel(false); }
             render();
 
             // The button hides once the pill is open, so hand focus to the first link
@@ -148,19 +140,16 @@
         });
 
         document.addEventListener('click', function (event) {
-            if (!island.contains(event.target) && (state.pinned || state.panel)) { closeEverything(); }
+            if (!island.contains(event.target) && state.pinned) { closeEverything(); }
         });
 
         document.addEventListener('keydown', function (event) {
             if (event.key !== 'Escape') { return; }
 
-            var panelWasOpen = state.panel;
-            var menuWasOpen = state.pinned;
-            if (!panelWasOpen && !menuWasOpen) { return; }
+            if (!state.pinned) { return; }
 
             closeEverything();
-            if (panelWasOpen && displayToggle) { displayToggle.focus(); }
-            else if (!wide.matches) { toggle.focus(); }
+            if (!wide.matches) { toggle.focus(); }
         });
 
         var onWidthChange = function () {

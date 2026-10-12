@@ -72,16 +72,24 @@ $login_url = 'login.php?redirect=' . urlencode($current_page);
                         <a class="site-nav__link" href="<?php echo htmlspecialchars($login_url); ?>"<?php echo $current_page === 'login.php' ? ' aria-current="page"' : ''; ?>>Log in</a>
                     <?php endif; ?>
 
-                    <div class="display-menu" data-display-menu>
-                        <button class="display-menu__button" type="button"
-                                aria-expanded="false" aria-controls="display-panel" data-display-toggle>
-                            <svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18" focusable="false">
-                                <circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/>
-                                <path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/>
-                            </svg>
-                            Display
-                        </button>
-                    </div>
+                    <button class="tool-button" type="button" data-theme-toggle>
+                        <span class="visually-hidden" data-theme-toggle-label>Switch to dark mode</span>
+                        <svg class="theme-icon" aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" focusable="false">
+                            <g class="theme-icon__sun" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
+                                <circle cx="12" cy="12" r="4"/>
+                                <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/>
+                            </g>
+                            <path class="theme-icon__moon" fill="currentColor" d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/>
+                        </svg>
+                    </button>
+
+                    <button class="tool-button" type="button" aria-pressed="false" data-contrast-toggle>
+                        <span class="visually-hidden">High contrast</span>
+                        <svg aria-hidden="true" viewBox="0 0 20 20" width="20" height="20" focusable="false">
+                            <circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.75"/>
+                            <path class="contrast-icon__half" d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/>
+                        </svg>
+                    </button>
                 </div>
             </nav>
         </div>
@@ -90,23 +98,4 @@ $login_url = 'login.php?redirect=' . urlencode($current_page);
         <div class="island__progress" aria-hidden="true"><span class="island__ball"></span></div>
     </div>
 
-    <!-- Theme and contrast. Sits outside the pill so the pill can clip while it resizes. -->
-    <div class="display-menu__panel" id="display-panel" hidden>
-        <div role="radiogroup" aria-labelledby="theme-label">
-            <p class="segmented__label" id="theme-label">Theme</p>
-            <div class="segmented__options">
-                <label class="segmented__option"><input type="radio" name="theme" value="system"><span>System</span></label>
-                <label class="segmented__option"><input type="radio" name="theme" value="light"><span>Light</span></label>
-                <label class="segmented__option"><input type="radio" name="theme" value="dark"><span>Dark</span></label>
-            </div>
-        </div>
-
-        <div role="radiogroup" aria-labelledby="contrast-label">
-            <p class="segmented__label" id="contrast-label">Contrast</p>
-            <div class="segmented__options">
-                <label class="segmented__option"><input type="radio" name="contrast" value="standard"><span>Standard</span></label>
-                <label class="segmented__option"><input type="radio" name="contrast" value="high"><span>High</span></label>
-            </div>
-        </div>
-    </div>
 </header>

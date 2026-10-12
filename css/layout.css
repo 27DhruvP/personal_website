@@ -215,117 +215,62 @@ html:not(.js) .island__toggle {
     margin-left: auto;
 }
 
-/* ---- Display button (theme and contrast) ---- */
+/* ---- Theme and contrast buttons ---- */
 
-/* Without JavaScript the controls can't work, so they stay hidden */
-html:not(.js) .display-menu {
+/* Without JavaScript the buttons can't work, so they stay hidden */
+html:not(.js) .tool-button {
     display: none;
 }
 
-.display-menu__button {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    min-height: 2.75rem;
-    padding-inline: var(--space-3);
+.tool-button {
+    display: inline-grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
     border: 0;
+    border-radius: 50%;
     background: transparent;
     color: var(--nav-muted);
-    font-family: var(--font-display);
-    font-size: 0.9375rem;
-    font-weight: 550;
     cursor: pointer;
-    transition: color var(--dur-1) ease;
+    transition: color var(--dur-1) ease, background-color var(--dur-1) ease;
 }
 
-.display-menu__button:hover,
-.display-menu__button[aria-expanded="true"] {
+.tool-button:hover,
+.tool-button[aria-pressed="true"] {
     color: var(--nav-fg);
 }
 
-/* The panel hangs under the pill, outside it, so the pill can clip while it resizes */
-.display-menu__panel {
-    position: absolute;
-    left: 50%;
-    top: calc(100% + var(--space-2));
-    z-index: 60;
-    display: grid;
-    gap: var(--space-5);
-    width: min(19rem, calc(100vw - 2rem));
-    padding: var(--space-5);
-    border: var(--stroke) solid var(--control-border);
-    border-radius: var(--radius);
-    background: var(--paper);
-    color: var(--ink);
-    box-shadow: var(--elevation);
-    transform: translateX(-50%);
+.tool-button[aria-pressed="true"] {
+    background: color-mix(in srgb, var(--nav-fg) 18%, transparent);
 }
 
-.display-menu__panel[hidden] {
-    display: none;
+/* Sun and moon share one spot. The one that isn't showing turns away and shrinks. */
+.theme-icon {
+    overflow: visible;
 }
 
-.segmented__label {
-    margin-bottom: var(--space-2);
-    color: var(--ink-muted);
-    font-family: var(--font-display);
-    font-size: var(--text-sm);
-    font-weight: 600;
+.theme-icon__sun,
+.theme-icon__moon {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform var(--dur-3) var(--ease), opacity var(--dur-2) ease;
 }
 
-.segmented__options {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 1fr;
-    overflow: hidden;
-    border: var(--stroke) solid var(--control-border);
-    border-radius: var(--radius);
-}
-
-.segmented__option {
-    position: relative;
-    display: block;
-}
-
-.segmented__option+.segmented__option {
-    border-left: var(--stroke) solid var(--control-border);
-}
-
-.segmented__option input {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    margin: 0;
+:root:not([data-theme="dark"]) .theme-icon__moon {
     opacity: 0;
-    cursor: pointer;
+    transform: rotate(-90deg) scale(0.4);
 }
 
-.segmented__option span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 2.75rem;
-    padding-inline: var(--space-2);
-    font-family: var(--font-display);
-    font-size: var(--text-sm);
-    font-weight: 600;
-    transition: background-color var(--dur-1) ease, color var(--dur-1) ease;
+:root[data-theme="dark"] .theme-icon__sun {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.4);
 }
 
-.segmented__option input:hover:not(:checked)+span {
-    background: var(--paper-raised);
-}
-
-.segmented__option input:checked+span {
-    background: var(--ink);
-    color: var(--paper);
-}
-
-/* Inset so the ring isn't clipped by the rounded container */
-.segmented__option input:focus-visible+span {
-    outline: 3px solid var(--focus);
-    outline-offset: -3px;
+@media (prefers-reduced-motion: reduce) {
+    .theme-icon__sun,
+    .theme-icon__moon {
+        transition: none;
+    }
 }
 
 /* ---- Narrow screens: a small pill that opens a menu below it ---- */
@@ -419,10 +364,6 @@ html:not(.js) .display-menu {
 
     .site-nav__tools .site-nav__link::after {
         display: none;
-    }
-
-    .display-menu__button {
-        padding-inline: 0;
     }
 
     /* No JavaScript: the pill becomes an ordinary wrapped header */

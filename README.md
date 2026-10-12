@@ -21,7 +21,7 @@ The portfolio is a single scrolling page (Education, Experience, Projects, Skill
 
 - **One-page portfolio** that opens with a bento grid (a short personal statement under the name, current roles, London time, and a pastel "Outside of code" cell), then scrolls through the sections with smooth scrolling
 - **Dynamic-island navigation**: a floating pill that is wide at the top of the page, shrinks to the current section's name while you read, and reopens on hover, keyboard focus or tap. It highlights the section you are in and carries a scroll-progress line with an orange ball. On phones it is a small pill that opens a menu; without JavaScript it becomes an ordinary header
-- **Display menu** with Light, Dark and System themes plus a High contrast mode (7:1 text contrast, thicker borders). The choice is saved in the browser, and the OS preferences for colour scheme, contrast and reduced motion are respected
+- **Theme and contrast buttons** in the header: a sun and moon button that flips between light and dark with a small turning animation (it starts from your OS setting), and a High contrast toggle (7:1 text contrast, thicker borders). The choice is saved in the browser, and the OS preferences for colour scheme, contrast and reduced motion are respected
 - **Blog system** with role-based access control:
   - Visitors can read all posts
   - Logged-in users (`user` or `admin` role) can comment
@@ -50,13 +50,13 @@ The portfolio is a single scrolling page (Education, Experience, Projects, Skill
 ├── css/
 │   ├── tokens.css         # Colours (4 themes), type scale, spacing, radius
 │   ├── base.css           # Reset, typography, buttons
-│   ├── layout.css         # Navigation pill, Display menu, footer
+│   ├── layout.css         # Navigation pill, theme buttons, footer
 │   ├── portfolio.css      # Home page sections
 │   ├── blog.css           # Blog feed, comments, preview
 │   └── forms.css          # Login, create post, comment fields
 ├── js/
 │   ├── theme.js           # Applies saved theme before first paint (loaded in <head>)
-│   ├── site.js            # Navigation pill, Display menu, scroll progress, reveals, form loading state
+│   ├── site.js            # Navigation pill, theme buttons, scroll progress, reveals, form loading state
 │   └── addEntry.js        # Create-post form: clear confirm and blank-field validation
 ├── fonts/                 # Self-hosted variable fonts and licences
 └── images/                # Icons, social preview card, screenshots

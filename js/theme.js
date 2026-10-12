@@ -82,7 +82,7 @@
         darkQuery.addListener(onSystemChange);
     }
 
-    // Small API used by the Display menu in js/site.js
+    // Small API used by the header buttons in js/site.js
     window.siteTheme = {
         get: function () {
             return { theme: theme, contrast: contrast };
