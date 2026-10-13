@@ -16,6 +16,7 @@
 //   7. Local time in London
 //   8. Folding role descriptions in the Experience timeline
 //   9. Projects: the pinned sideways sequence
+//  10. Scroll cue on the landing view
 // =====================
 
 (function () {
@@ -811,5 +812,33 @@
         if (document.fonts && document.fonts.ready) { document.fonts.ready.then(scheduleCheck); }
 
         check();
+    })();
+
+    // ---------------------
+    // 10. Scroll cue on the landing view
+    // Pops up after 7.5 seconds on the page, and only while the page is
+    // at the top; the first bit of scrolling fades it away. The CSS decides
+    // which screens it appears on.
+    // ---------------------
+    (function () {
+        var cue = document.querySelector('[data-scroll-cue]');
+        if (!cue) { return; }
+
+        var ready = false;
+        var frame = 0;
+
+        var update = function () {
+            frame = 0;
+            cue.classList.toggle('is-shown', ready && window.scrollY < 24);
+        };
+
+        window.addEventListener('scroll', function () {
+            if (!frame) { frame = window.requestAnimationFrame(update); }
+        }, { passive: true });
+
+        window.setTimeout(function () {
+            ready = true;
+            update();
+        }, 7500);
     })();
 })();

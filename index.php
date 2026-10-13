@@ -24,6 +24,13 @@ include 'head.php';
 
         <!-- ===== Bento: introduction ===== -->
         <section class="bento-section" id="top" aria-label="Introduction">
+            <!-- A hint that the page goes on, on laptop-sized screens only.
+                 js/site.js fades it out once the visitor starts scrolling. -->
+            <div class="scroll-cue" aria-hidden="true" data-scroll-cue>
+                <svg class="scroll-cue__arrow" viewBox="0 0 24 24" width="24" height="24" focusable="false">
+                    <path d="M12 4v15M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
             <div class="container bento">
 
                 <div class="bento__cell bento__cell--name" data-pointer-light>

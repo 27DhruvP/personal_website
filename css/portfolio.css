@@ -69,6 +69,73 @@
     }
 }
 
+/* ---- Scroll cue ----
+   A down arrow in the right margin of the landing view that gently bobs up
+   and down. It pops up after 7.5 seconds on the page, and only while the
+   page is still at the top (js/site.js adds .is-shown), so it never sits
+   there for ever without JavaScript. Laptop-sized screens with a mouse or
+   trackpad only (touch screens already invite a swipe). With reduced
+   motion it still appears, but keeps still. */
+
+.scroll-cue {
+    display: none;
+}
+
+@media (min-width: 64rem) and (hover: hover) and (pointer: fine) {
+    .js .scroll-cue {
+        position: fixed;
+        bottom: var(--space-7);
+        /* Centred in the space beside the content column */
+        right: calc((max(0px, (100vw - var(--container)) / 2) + var(--gutter) - var(--space-5)) / 2);
+        z-index: 1;
+        display: block;
+        color: var(--link);
+        opacity: 0;
+        transform: translateY(var(--space-4)) scale(0.8);
+        pointer-events: none;
+        transition: opacity var(--dur-3) var(--ease), transform var(--dur-3) var(--ease);
+    }
+
+    .js .scroll-cue.is-shown {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.scroll-cue__arrow {
+    display: block;
+    width: var(--space-5);
+    height: var(--space-5);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .scroll-cue__arrow {
+        animation: scroll-cue 1.6s var(--ease-in-out) infinite alternate;
+    }
+}
+
+@keyframes scroll-cue {
+    from {
+        transform: translateY(calc(-1 * var(--space-2)));
+    }
+
+    to {
+        transform: translateY(var(--space-2));
+    }
+}
+
+@media (forced-colors: active) {
+    .scroll-cue {
+        color: CanvasText;
+    }
+}
+
+@media print {
+    .scroll-cue {
+        display: none !important;
+    }
+}
+
 /* The cells rise in one after another while the name settles. "backwards"
    rather than "both", so no transform is left on the cells afterwards. */
 .bento__cell {
