@@ -1155,6 +1155,153 @@ main {
     }
 }
 
+/* ---- Folding role descriptions ----
+   js/site.js folds each role down to the first two lines of its first
+   bullet, ending in an ellipsis, with the second line blurred into the
+   band, and adds a "Show more" button. Without JS nothing is folded. */
+
+.entry__more {
+    position: relative;
+    display: grid;
+    gap: var(--space-4);
+}
+
+.entry__more.is-collapsed .bullets li:first-child {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+}
+
+.entry__more.is-collapsed .bullets li:not(:first-child),
+.entry__more.is-collapsed .inline-list {
+    display: none;
+}
+
+/* The height animates between the two states (js/site.js sets it) */
+.entry__more.is-animating {
+    overflow: hidden;
+    transition: height var(--dur-3) var(--ease);
+}
+
+/* The veil over the second line is a progressive blur: four stacked
+   layers, each blurring more than the last and masked to a lower band, so
+   the line stays sharp at the top and turns to frosted glass towards the
+   bottom, where a tint of the band finishes the fade. js/site.js adds it.
+   Each layer fades on its own: opacity on the veil itself would cut off
+   what the layers can see behind them. */
+.entry__veil {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 1.6em;
+    pointer-events: none;
+}
+
+.entry__veil span,
+.entry__veil::after {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity var(--dur-2) var(--ease);
+}
+
+.entry__veil span:nth-child(1) {
+    -webkit-backdrop-filter: blur(0.5px);
+    backdrop-filter: blur(0.5px);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 20%, #000 40%, transparent 60%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 20%, #000 40%, transparent 60%);
+}
+
+.entry__veil span:nth-child(2) {
+    -webkit-backdrop-filter: blur(1.5px);
+    backdrop-filter: blur(1.5px);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 20%, #000 40%, #000 60%, transparent 80%);
+    mask-image: linear-gradient(to bottom, transparent 20%, #000 40%, #000 60%, transparent 80%);
+}
+
+.entry__veil span:nth-child(3) {
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 40%, #000 60%, #000 80%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 40%, #000 60%, #000 80%, transparent 100%);
+}
+
+.entry__veil span:nth-child(4) {
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 60%, #000 80%);
+    mask-image: linear-gradient(to bottom, transparent 60%, #000 80%);
+}
+
+.entry__veil::after {
+    content: "";
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        color-mix(in srgb, var(--paper-raised) 55%, transparent) 60%,
+        var(--paper-raised)
+    );
+}
+
+.entry__more.is-collapsed .entry__veil span,
+.entry__more.is-collapsed .entry__veil::after,
+.entry__more.is-folding .entry__veil span,
+.entry__more.is-folding .entry__veil::after {
+    opacity: 1;
+}
+
+.entry__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    justify-self: start;
+    margin-top: calc(-1 * var(--space-2));
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--link);
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 600;
+}
+
+.entry__toggle:hover {
+    text-decoration: underline;
+}
+
+/* A small chevron that turns over when the description is open */
+.entry__toggle::after {
+    content: "";
+    width: 0.45em;
+    height: 0.45em;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: translateY(-25%) rotate(45deg);
+    transition: transform var(--dur-2) var(--ease);
+}
+
+.entry__toggle[aria-expanded="true"]::after {
+    transform: translateY(25%) rotate(-135deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .entry__veil span,
+    .entry__veil::after,
+    .entry__toggle::after {
+        transition: none;
+    }
+}
+
+@media (forced-colors: active) {
+    .entry__veil {
+        display: none;
+    }
+}
+
 /* ---- Projects ---- */
 
 /* Each project is a raised card. On hover (mouse) or keyboard focus inside

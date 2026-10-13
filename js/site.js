@@ -544,4 +544,101 @@
         showTime();
         window.setInterval(showTime, 30000);
     }
+
+    // ---------------------
+    // 8. Folding role descriptions
+    // Each role in the Experience timeline starts folded to the opening of
+    // its first bullet. "Show more" opens it and "Show less" folds it again. A description
+    // already short enough to show in full is left alone.
+    // ---------------------
+    var foldables = document.querySelectorAll('[data-collapsible]');
+
+    var collapsedHeight = function (box) {
+        var wasCollapsed = box.classList.contains('is-collapsed');
+        box.classList.add('is-collapsed');
+        var height = box.offsetHeight;
+        if (!wasCollapsed) { box.classList.remove('is-collapsed'); }
+        return height;
+    };
+
+    // Animates the box's height from one value to another, then hands the
+    // height back to the stylesheet
+    var animateHeight = function (box, from, to, done) {
+        if (reduceMotion || from === to) { done(); return; }
+
+        var timer;
+        var finish = function (event) {
+            if (event && (event.target !== box || event.propertyName !== 'height')) { return; }
+            box.removeEventListener('transitionend', finish);
+            window.clearTimeout(timer);
+            box.classList.remove('is-animating');
+            box.style.height = '';
+            done();
+        };
+
+        box.style.height = from + 'px';
+        box.classList.add('is-animating');
+        void box.offsetHeight; // commit the start height before changing it
+        box.style.height = to + 'px';
+        box.addEventListener('transitionend', finish);
+        timer = window.setTimeout(finish, 900); // in case transitionend never comes
+    };
+
+    var setOpen = function (button, open) {
+        button.setAttribute('aria-expanded', open ? 'true' : 'false');
+        button.textContent = open ? 'Show less' : 'Show more';
+    };
+
+    var openBox = function (box, button) {
+        var from = box.offsetHeight;
+        box.classList.remove('is-collapsed');
+        setOpen(button, true);
+        animateHeight(box, from, box.offsetHeight, function () {});
+    };
+
+    // From the button: the text slides shut while still on screen
+    var closeBox = function (box, button) {
+        var from = box.offsetHeight;
+        var to = collapsedHeight(box);
+        setOpen(button, false);
+        box.classList.add('is-folding');
+        animateHeight(box, from, to, function () {
+            box.classList.remove('is-folding');
+            box.classList.add('is-collapsed');
+            if (button.getBoundingClientRect().top < 0) {
+                button.scrollIntoView({ block: 'nearest' });
+            }
+        });
+    };
+
+    foldables.forEach(function (box, index) {
+        if (box.offsetHeight - collapsedHeight(box) < 4) { return; }
+
+        if (!box.id) { box.id = 'role-details-' + (index + 1); }
+
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'entry__toggle';
+        button.setAttribute('aria-controls', box.id);
+        setOpen(button, false);
+
+        var veil = document.createElement('span');
+        veil.className = 'entry__veil';
+        veil.setAttribute('aria-hidden', 'true');
+        veil.innerHTML = '<span></span><span></span><span></span><span></span>';
+        box.appendChild(veil);
+
+        box.classList.add('is-collapsed');
+        box.insertAdjacentElement('afterend', button);
+
+        button.addEventListener('click', function () {
+            if (box.classList.contains('is-animating')) { return; }
+
+            if (box.classList.contains('is-collapsed')) {
+                openBox(box, button);
+            } else {
+                closeBox(box, button);
+            }
+        });
+    });
 })();
