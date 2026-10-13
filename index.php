@@ -141,10 +141,11 @@ include 'head.php';
                     <article class="entry reveal">
                         <header class="entry__head">
                             <div>
+                                <p class="entry__when">2025&ndash;2028 <span>London, UK</span></p>
                                 <h3 class="entry__title">Queen Mary University of London</h3>
                                 <p class="entry__role">BSc Computer Science</p>
                             </div>
-                            <p class="entry__meta">2025&ndash;2028<br>London, UK</p>
+                            <img class="entry__logo entry__logo--full" src="images/logos/qmul-icon.png" alt="" width="64" height="64">
                         </header>
                         <p class="prose">
                             Expected <strong>First Class Honours</strong>, graduating June 2028.
@@ -160,10 +161,11 @@ include 'head.php';
                     <article class="entry reveal">
                         <header class="entry__head">
                             <div>
+                                <p class="entry__when">2023&ndash;2025 <span>London, UK</span></p>
                                 <h3 class="entry__title">Green School Sixth Form</h3>
                                 <p class="entry__role">A levels</p>
                             </div>
-                            <p class="entry__meta">2023&ndash;2025<br>London, UK</p>
+                            <img class="entry__logo" src="images/logos/green-school.png" alt="" width="64" height="64">
                         </header>
                         <p class="prose">Mathematics (<strong>A*</strong>), Computer Science (<strong>A</strong>), Further Mathematics and Physics.</p>
                     </article>
@@ -186,9 +188,10 @@ include 'head.php';
                             <article class="entry reveal">
                                 <header class="entry__head">
                                     <div>
-                                        <p class="timeline__when">Sep 2026&ndash;present</p>
+                                        <p class="entry__when">Sep 2026&ndash;present</p>
                                         <h3 class="entry__title">University Lab Demonstrator</h3>
                                     </div>
+                                    <img class="entry__logo entry__logo--full" src="images/logos/qmul-icon.png" alt="" width="64" height="64">
                                 </header>
                             </article>
                         </li>
@@ -197,9 +200,10 @@ include 'head.php';
                             <article class="entry reveal">
                                 <header class="entry__head">
                                     <div>
-                                        <p class="timeline__when">Sep&ndash;Nov 2026</p>
+                                        <p class="entry__when">Sep&ndash;Nov 2026</p>
                                         <h3 class="entry__title">IBM SkillsBuild AI Experiential Learning Lab</h3>
                                     </div>
+                                    <img class="entry__logo entry__logo--wide" src="images/logos/ibm.svg" alt="" width="64" height="24">
                                 </header>
                             </article>
                         </li>
@@ -208,7 +212,7 @@ include 'head.php';
                             <article class="entry reveal">
                                 <header class="entry__head">
                                     <div>
-                                        <p class="timeline__when">Aug 2026&ndash;present <span>London, UK</span></p>
+                                        <p class="entry__when">Aug 2026&ndash;present <span>London, UK</span></p>
                                         <h3 class="entry__title">CarePlusAI</h3>
                                         <p class="entry__role">Software &amp; AI Engineer (part-time)</p>
                                     </div>
@@ -231,10 +235,11 @@ include 'head.php';
                             <article class="entry reveal">
                                 <header class="entry__head">
                                     <div>
-                                        <p class="timeline__when">Jul&ndash;Aug 2026 <span>London, UK</span></p>
+                                        <p class="entry__when">Jul&ndash;Aug 2026 <span>London, UK</span></p>
                                         <h3 class="entry__title">FunTech</h3>
                                         <p class="entry__role">Assistant Location Coordinator</p>
                                     </div>
+                                    <?php /* Inlined so the lettering can follow the theme colour */ echo file_get_contents(__DIR__ . "/images/logos/funtech.svg"); ?>
                                 </header>
                                 <ul class="bullets">
                                     <li>Led daily operations across a 5-week technology summer camp serving <strong>75+ students and tutors</strong>, coordinating tutors and resolving operational issues.</li>
@@ -255,10 +260,11 @@ include 'head.php';
                             <article class="entry reveal">
                                 <header class="entry__head">
                                     <div>
-                                        <p class="timeline__when">Dec 2025&ndash;present</p>
+                                        <p class="entry__when">Dec 2025&ndash;present</p>
                                         <h3 class="entry__title">AI Society</h3>
                                         <p class="entry__role">Vice President &amp; Head of Outreach</p>
                                     </div>
+                                    <img class="entry__logo" src="images/logos/ai-society.png" alt="" width="64" height="64">
                                 </header>
                                 <ul class="bullets">
                                     <li>Co-founded and helped grow the society to <strong>350+ members</strong>, securing sponsorships and organising weekly AI sessions and hackathons.</li>
@@ -272,10 +278,11 @@ include 'head.php';
                             <article class="entry reveal">
                                 <header class="entry__head">
                                     <div>
-                                        <p class="timeline__when">Jul 2024 <span>London, UK</span></p>
+                                        <p class="entry__when">Jul 2024 <span>London, UK</span></p>
                                         <h3 class="entry__title">Cisco Systems</h3>
                                         <p class="entry__role">Computer Science Work Experience</p>
                                     </div>
+                                    <img class="entry__logo entry__logo--wide" src="images/logos/cisco.svg" alt="" width="45" height="24">
                                 </header>
                                 <ul class="bullets">
                                     <li>Analysed latency-compression trade-offs in large-scale video codec systems within a professional software engineering environment.</li>
@@ -294,10 +301,11 @@ include 'head.php';
                             <article class="entry reveal">
                                 <header class="entry__head">
                                     <div>
-                                        <p class="timeline__when">Dec 2023&ndash;Jun 2026 <span>London, UK</span></p>
+                                        <p class="entry__when">Dec 2023&ndash;Jun 2026 <span>London, UK</span></p>
                                         <h3 class="entry__title">Transit Community Support CIC</h3>
                                         <p class="entry__role">Security Engineer and Tutor</p>
                                     </div>
+                                    <img class="entry__logo" src="images/logos/transit.png" alt="" width="64" height="64">
                                 </header>
                                 <ul class="bullets">
                                     <li>Established system hardening and security practices covering phishing risks, safe system usage and credential handling, bringing security-related incidents to <strong>near zero</strong>.</li>

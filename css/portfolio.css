@@ -944,17 +944,51 @@ main {
     font-weight: 500;
 }
 
-.entry__meta {
+/* Dates first, then the place */
+.entry__when {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-3);
+    margin-bottom: var(--space-1);
     color: var(--ink-muted);
     font-family: var(--font-display);
     font-size: var(--text-sm);
+    font-weight: 700;
     font-variant-numeric: tabular-nums;
+    letter-spacing: 0.06em;
+    line-height: var(--space-5);
+    text-transform: uppercase;
 }
 
-@media (min-width: 40rem) {
-    .entry__meta {
-        text-align: right;
-    }
+.entry__when span {
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+/* The organisation's logo, in its own colours on a transparent
+   background, opposite the heading (on phones it wraps under it when
+   there is no room). Square marks share one size; wordmarks share one
+   width, which gives them about the same visual weight. The image is
+   decoration (the name is in the heading), so it has empty alt text.
+   FunTech's is inlined so its lettering can take the ink colour. */
+.entry__logo {
+    flex: none;
+    align-self: center;
+    width: var(--space-8);
+    height: var(--space-8);
+    object-fit: contain;
+}
+
+.entry__logo--wide {
+    width: var(--space-9);
+    height: auto;
+    color: var(--ink);
+}
+
+/* Queen Mary's icon is a square with its own background */
+.entry__logo--full {
+    border-radius: var(--radius);
 }
 
 /* ---- Experience timeline ----
@@ -1075,21 +1109,6 @@ main {
     box-shadow: 0 0 0 var(--space-1) color-mix(in srgb, var(--link) 22%, transparent);
 }
 
-.timeline__when {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0 var(--space-3);
-    margin-bottom: var(--space-1);
-    color: var(--ink-muted);
-    font-family: var(--font-display);
-    font-size: var(--text-sm);
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.06em;
-    line-height: var(--space-5);
-    text-transform: uppercase;
-}
-
 /* Roles still going send out a slow pulse from their node, like London
    on the globe. It is only added when motion is welcome. */
 @media (prefers-reduced-motion: no-preference) {
@@ -1121,16 +1140,8 @@ main {
     }
 }
 
-.timeline__item--now .timeline__when {
+.timeline__item--now .entry__when {
     color: var(--link);
-}
-
-/* The place, after the dates */
-.timeline__when span {
-    color: var(--ink-muted);
-    font-weight: 500;
-    letter-spacing: 0;
-    text-transform: none;
 }
 
 @media (forced-colors: active) {
