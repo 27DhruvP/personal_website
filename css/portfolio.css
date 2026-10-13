@@ -1090,6 +1090,37 @@ main {
     text-transform: uppercase;
 }
 
+/* Roles still going send out a slow pulse from their node, like London
+   on the globe. It is only added when motion is welcome. */
+@media (prefers-reduced-motion: no-preference) {
+    .timeline__item--now::after {
+        content: "";
+        position: absolute;
+        left: calc(-1 * var(--tl-gutter));
+        top: calc(var(--space-5) + (var(--space-5) - var(--tl-node)) / 2);
+        width: var(--tl-node);
+        height: var(--tl-node);
+        border: 2px solid var(--link);
+        border-radius: 50%;
+        opacity: 0;
+        pointer-events: none;
+        animation: timeline-pulse 2.4s var(--ease) infinite;
+    }
+}
+
+@keyframes timeline-pulse {
+    0% {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+
+    70%,
+    100% {
+        opacity: 0;
+        transform: scale(2.6);
+    }
+}
+
 .timeline__item--now .timeline__when {
     color: var(--link);
 }
@@ -1103,7 +1134,8 @@ main {
 }
 
 @media (forced-colors: active) {
-    .timeline::after {
+    .timeline::after,
+    .timeline__item--now::after {
         display: none;
     }
 
