@@ -54,30 +54,80 @@ include 'head.php';
                     </ul>
                 </section>
 
-                <section class="bento__cell bento__cell--place" aria-label="Location">
-                    <span class="place__dot" aria-hidden="true"></span>
+                <section class="bento__cell bento__cell--win" aria-labelledby="win-title">
+                    <h2 class="visually-hidden" id="win-title">Hackathon results</h2>
+                    <p class="win__rank">1st</p>
+                    <p class="win__event">Coinbase Hackathon</p>
+                    <p class="win__meta">Dec 2025, with FinChat</p>
+                    <a class="win__link" href="#projects">See FinChat</a>
+                    <p class="win__second"><strong>2nd</strong> Nationwide Hackathon, Nov 2025</p>
+                </section>
+
+                <section class="bento__cell bento__cell--place" aria-labelledby="place-title">
+                    <svg class="globe" viewBox="-110 -110 220 220" aria-hidden="true" focusable="false">
+                        <circle class="globe__sphere" r="100"/>
+                        <path class="globe__grid" d="M-35.3 93.5L-30.3 95L-24.9 96.2L-19 97.2L-12.8 97.9L-6.4 98.3L0.1 98.5L6.6 98.3L13.1 97.9L19.2 97.2L25.1 96.2L30.5 94.9L35.4 93.4M-83.6 54.7L-79.9 58.4L-74.9 61.9L-68.6 65.1L-61.1 68L-52.6 70.5L-43.1 72.7L-33 74.4L-22.2 75.6L-11.1 76.4L0.2 76.6L11.5 76.3L22.6 75.6L33.3 74.3L43.5 72.6L52.9 70.4L61.4 67.9L68.8 65L75.1 61.7L80.1 58.3L83.7 54.6M-100 0.1L-99.1 4.5L-96.5 8.9L-92.3 13.2L-86.5 17.2L-79.2 20.9L-70.6 24.2L-60.7 27.2L-49.8 29.7L-38.1 31.6L-25.7 33.1L-12.8 33.9L0.2 34.2L13.3 33.9L26.1 33L38.5 31.6L50.2 29.6L61.1 27.1L70.9 24.1L79.5 20.8L86.7 17L92.5 13L96.7 8.8L99.2 4.4M-85.9 -50.8L-86.6 -46.9L-85.8 -43.1L-83.6 -39.3L-79.9 -35.6L-74.9 -32.1L-68.6 -28.9L-61.1 -26L-52.6 -23.4L-43.1 -21.3L-33 -19.6L-22.2 -18.4L-11.1 -17.6L0.2 -17.4L11.5 -17.6L22.6 -18.4L33.3 -19.6L43.5 -21.4L52.9 -23.5L61.4 -26.1L68.8 -29L75.1 -32.2L80.1 -35.7L83.7 -39.4L85.9 -43.2L86.6 -47.1L85.8 -50.9M-39.7 -91.8L-43.4 -89.9L-46.2 -87.9L-48.3 -85.8L-49.6 -83.6L-50 -81.3L-49.6 -79.1L-48.3 -76.9L-46.2 -74.8L-43.2 -72.8L-39.6 -70.9L-35.3 -69.3L-30.3 -67.8L-24.9 -66.6L-19 -65.6L-12.8 -64.9L-6.4 -64.4L0.1 -64.3L6.6 -64.4L13.1 -64.9L19.2 -65.6L25.1 -66.6L30.5 -67.8L35.4 -69.3L39.7 -71L43.4 -72.9L46.2 -74.9L48.3 -77L49.6 -79.2L50 -81.4L49.6 -83.7L48.3 -85.8L46.2 -88L43.2 -90L39.6 -91.8M-6.8 -99.3L-3.4 -97.5L0 -94M-27.1 -96.1L-18.3 -97L-9.3 -96.3L0 -94M-76.7 -64.2L-68.3 -72.7L-58.8 -79.9L-48.3 -85.8L-37 -90.2L-25 -93L-12.6 -94.3L0 -94M-83.6 54.7L-89.2 44.2L-93.2 32.9L-95.7 21.1L-96.5 8.9L-95.7 -3.4L-93.2 -15.7L-89.2 -27.7L-83.6 -39.3L-76.6 -50.1L-68.3 -60.1L-58.8 -69.1L-48.3 -76.9L-36.9 -83.4L-25 -88.5L-12.6 -92L0 -94M-35.3 93.5L-42.9 89.3L-49.9 83.6L-56 76.4L-61.1 68L-65.2 58.4L-68.1 47.7L-69.9 36.3L-70.6 24.2L-69.9 11.8L-68.1 -0.9L-65.2 -13.6L-61.1 -26L-56 -38L-49.9 -49.3L-42.9 -59.8L-35.3 -69.3L-27 -77.5L-18.3 -84.5L-9.2 -90L0 -94M-9.8 99.5L-12.8 97.9L-15.6 94.7L-18.1 89.8L-20.4 83.4L-22.2 75.6L-23.7 66.5L-24.8 56.3L-25.4 45L-25.7 33.1L-25.4 20.5L-24.8 7.6L-23.7 -5.4L-22.2 -18.4L-20.4 -31L-18.1 -43.1L-15.6 -54.4L-12.8 -64.9L-9.8 -74.2L-6.6 -82.2L-3.3 -88.9L0 -94M10 99.5L13.1 97.9L15.9 94.6L18.5 89.8L20.7 83.4L22.6 75.6L24.1 66.5L25.2 56.2L25.9 45L26.1 33L25.9 20.5L25.2 7.6L24.1 -5.5L22.6 -18.4L20.7 -31L18.5 -43.1L15.9 -54.5L13.1 -64.9L10 -74.2L6.8 -82.2L3.4 -88.9L0 -94M35.4 93.4L43.1 89.2L50.1 83.5L56.2 76.3L61.4 67.9L65.5 58.3L68.5 47.6L70.3 36.2L70.9 24.1L70.3 11.7L68.5 -1L65.5 -13.7L61.4 -26.1L56.2 -38.1L50.1 -49.4L43.1 -59.9L35.4 -69.3L27.1 -77.6L18.3 -84.5L9.3 -90L0 -94M83.7 54.6L89.3 44.1L93.4 32.8L95.8 21L96.7 8.8L95.8 -3.6L93.4 -15.8L89.3 -27.9L83.7 -39.4L76.7 -50.2L68.3 -60.2L58.8 -69.2L48.3 -77L37 -83.5L25 -88.5L12.6 -92L0 -94M76.6 -64.3L68.3 -72.8L58.8 -80L48.3 -85.8L36.9 -90.2L25 -93.1L12.6 -94.3L0 -94M27 -96.1L18.3 -97L9.2 -96.3L0 -94M6.6 -99.3L3.3 -97.5L0 -94"/>
+                        <circle class="globe__pulse" cx="0" cy="-52.3" r="4.5"/>
+                        <circle class="globe__london" cx="0" cy="-52.3" r="4.5"/>
+                    </svg>
+                    <p class="place__time" data-london-time hidden></p>
                     <div>
-                        <p class="place__city">London, England</p>
-                        <p class="place__time" data-london-time hidden></p>
+                        <h2 class="place__city" id="place-title">London, England</h2>
+                        <p class="place__coords">51.51&deg; N, 0.13&deg; W</p>
                     </div>
                 </section>
 
                 <section class="bento__cell bento__cell--hobbies" aria-labelledby="hobbies-title">
                     <h2 class="bento__title" id="hobbies-title">Outside of code</h2>
-                    <dl class="facts">
-                        <div class="facts__row">
-                            <dt>Table tennis</dt>
-                            <dd>Won the Jack Petchey Foundation tournament.</dd>
-                        </div>
-                        <div class="facts__row">
-                            <dt>Chess</dt>
-                            <dd>Strategic thinking on and off the board.</dd>
-                        </div>
-                        <div class="facts__row">
-                            <dt>Tech tracking</dt>
-                            <dd>Following the latest product and AI launches.</dd>
-                        </div>
-                    </dl>
+                    <ul class="hobbies">
+                        <li class="hobby">
+                            <svg class="hobby__icon" aria-hidden="true" viewBox="0 0 24 24" focusable="false" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
+                                <ellipse cx="9" cy="9" rx="6" ry="6.75" transform="rotate(-45 9 9)" fill="currentColor" stroke="none"/>
+                                <path d="M13.6 13.6l5.6 5.6" stroke-width="3.25"/>
+                                <circle class="ball" cx="19.5" cy="4.5" r="2"/>
+                            </svg>
+                            <h3 class="hobby__name">Table tennis</h3>
+                            <p class="hobby__text">Won the Jack Petchey Foundation tournament.</p>
+                            <p class="hobby__extra hobby__extra--win">Tournament winner</p>
+                        </li>
+                        <li class="hobby">
+                            <svg class="hobby__icon" aria-hidden="true" viewBox="0 0 24 24" focusable="false" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="6" r="2.5"/>
+                                <path d="M9.5 10.5h5M10.75 10.5l-1.25 7h5l-1.25-7M7.5 20.5h9"/>
+                            </svg>
+                            <h3 class="hobby__name">Chess</h3>
+                            <p class="hobby__text">Strategic thinking on and off the board.</p>
+                            <a class="hobby__extra" href="#projects">I built a chess bot on Stockfish</a>
+                        </li>
+                        <li class="hobby">
+                            <svg class="hobby__icon" aria-hidden="true" viewBox="0 0 24 24" focusable="false" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
+                                <circle cx="12" cy="12" r="1.5"/>
+                                <path d="M8.5 8.5a5 5 0 0 0 0 7M15.5 8.5a5 5 0 0 1 0 7M5.5 5.5a9.2 9.2 0 0 0 0 13M18.5 5.5a9.2 9.2 0 0 1 0 13"/>
+                            </svg>
+                            <h3 class="hobby__name">Tech tracking</h3>
+                            <p class="hobby__text">Following the latest product and AI launches.</p>
+                        </li>
+                    </ul>
+                </section>
+
+                <section class="bento__cell bento__cell--reach" aria-labelledby="reach-title">
+                    <h2 class="bento__title" id="reach-title">Say hello</h2>
+                    <p class="reach__lead">Open to connecting and collaborating. Email is quickest.</p>
+                    <a class="reach__email" href="mailto:2710dhruvpatel@gmail.com">2710dhruvpatel@gmail.com</a>
+                    <ul class="reach__links">
+                        <li>
+                            <a class="reach__link" href="https://linkedin.com/in/27dhruv/" target="_blank" rel="noopener">
+                                <span>LinkedIn<small>in/27dhruv</small></span><span class="visually-hidden"> (opens in a new tab)</span>
+                                <svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false"><path d="M5 11l6-6M6 5h5v5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="reach__link" href="https://github.com/27DhruvP" target="_blank" rel="noopener">
+                                <span>GitHub<small>27DhruvP</small></span><span class="visually-hidden"> (opens in a new tab)</span>
+                                <svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false"><path d="M5 11l6-6M6 5h5v5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </a>
+                        </li>
+                    </ul>
                 </section>
 
             </div>
@@ -122,7 +172,7 @@ include 'head.php';
         </section>
 
         <!-- ===== Experience ===== -->
-        <section class="section" id="experience" aria-labelledby="experience-title">
+        <section class="section section--alt" id="experience" aria-labelledby="experience-title">
             <div class="container section__grid">
                 <h2 class="section__title" id="experience-title">Experience</h2>
                 <div>
@@ -263,11 +313,14 @@ include 'head.php';
                                 <h3 class="project__title">Chess Bot Application</h3>
                                 <p class="project__type">Desktop app</p>
                             </div>
-                            <button class="demo-replay" type="button" data-demo-replay>
-                                <svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false">
-                                    <path d="M2.75 8a5.25 5.25 0 1 0 1.6-3.77M2.75 2.5v3.25H6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <button class="demo-toggle" type="button" data-demo-toggle>
+                                <svg class="demo-toggle__pause" aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false">
+                                    <path d="M5.5 3.5v9M10.5 3.5v9" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
                                 </svg>
-                                Replay<span class="visually-hidden"> the chess move demo</span>
+                                <svg class="demo-toggle__play" aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false">
+                                    <path d="M5 3.25v9.5L12.75 8z" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
+                                </svg>
+                                <span data-demo-label>Pause</span><span class="visually-hidden"> the chess move demo</span>
                             </button>
                         </header>
 
@@ -312,11 +365,14 @@ include 'head.php';
                                 <p class="project__type">Web app</p>
                                 <p class="project__badge">Hackathon winner</p>
                             </div>
-                            <button class="demo-replay" type="button" data-demo-replay>
-                                <svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false">
-                                    <path d="M2.75 8a5.25 5.25 0 1 0 1.6-3.77M2.75 2.5v3.25H6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <button class="demo-toggle" type="button" data-demo-toggle>
+                                <svg class="demo-toggle__pause" aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false">
+                                    <path d="M5.5 3.5v9M10.5 3.5v9" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
                                 </svg>
-                                Replay<span class="visually-hidden"> the FinChat pipeline demo</span>
+                                <svg class="demo-toggle__play" aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false">
+                                    <path d="M5 3.25v9.5L12.75 8z" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
+                                </svg>
+                                <span data-demo-label>Pause</span><span class="visually-hidden"> the FinChat pipeline demo</span>
                             </button>
                         </header>
 
@@ -363,7 +419,7 @@ include 'head.php';
         </section>
 
         <!-- ===== Skills ===== -->
-        <section class="section" id="skills" aria-labelledby="skills-title">
+        <section class="section section--alt" id="skills" aria-labelledby="skills-title">
             <div class="container section__grid">
                 <h2 class="section__title" id="skills-title">Skills</h2>
                 <div class="reveal">

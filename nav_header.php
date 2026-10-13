@@ -7,8 +7,9 @@
 // Optional: set $nav_current = 'blog' before including to mark the Blog link
 // as the current page (used by the create-post and preview pages).
 //
-// js/site.js shrinks the pill while you scroll and opens it again on hover,
-// focus or tap. Without JavaScript it stays open with every link showing.
+// js/site.js shrinks the pill while you scroll down and opens it again when
+// you scroll up, hover, focus or tap. Without JavaScript it stays open with
+// every link showing.
 // =====================
 
 $is_logged_in = isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] === true;

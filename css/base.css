@@ -43,6 +43,55 @@ main {
     padding-top: var(--header-h);
 }
 
+/* ---- Scrollbar ----
+   A slim rounded thumb in the page's own blues, like the nav pill, on a
+   track that matches the paper. Chrome, Edge and Safari use the
+   ::-webkit-scrollbar rules (the standard properties would override them
+   in Chrome, so those are kept for browsers without the pseudo-elements,
+   i.e. Firefox). High contrast uses solid ink. */
+
+html {
+    --scroll-thumb: color-mix(in srgb, var(--ink) 38%, var(--paper));
+    --scroll-thumb-hover: var(--link);
+    --scroll-track: var(--paper);
+}
+
+:root[data-contrast="high"] {
+    --scroll-thumb: var(--ink);
+    --scroll-thumb-hover: var(--link);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+    html {
+        scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+        scrollbar-width: thin;
+    }
+}
+
+::-webkit-scrollbar {
+    width: 0.75rem;
+    height: 0.75rem;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--scroll-track);
+}
+
+::-webkit-scrollbar-thumb {
+    /* The transparent border insets the thumb so it reads as a pill */
+    border: 3px solid transparent;
+    border-radius: 999px;
+    background: var(--scroll-thumb) padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--scroll-thumb-hover) padding-box;
+}
+
+::-webkit-scrollbar-corner {
+    background: var(--scroll-track);
+}
+
 /* Brief colour fade when the visitor changes theme (class set by site.js) */
 html.theme-fade *,
 html.theme-fade *::before,

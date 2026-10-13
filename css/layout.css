@@ -5,8 +5,8 @@
    ===================================================================== */
 
 /* ---- Navigation pill ("island") ----
-   Wide at the top of the page, small while you read, and wide again when
-   you hover, focus or tap it. js/site.js sets data-open and measures the
+   Wide at the top of the page, small while you read down, and wide again
+   when you scroll back up, hover, focus or tap it. js/site.js sets data-open and measures the
    open width (--island-open-w). With JavaScript off it is simply a wide
    pill with every link showing. */
 

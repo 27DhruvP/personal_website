@@ -9,7 +9,7 @@
 //      underline under the current section
 //   2. Pointer light: the hero grid and project card borders brighten
 //      around a mouse pointer
-//   3. Project demos: the diagrams play when seen, and on Replay
+//   3. Project demos: the diagrams loop while in view, with a Pause button
 //   4. Reveal on scroll
 //   5. Form loading state
 //   6. Confirm dialogs and auto-submitting filters (replaces inline handlers)
@@ -26,6 +26,7 @@
     //
     // State that keeps the pill open:
     //   atTop    scrolled less than a few pixels (wide screens only)
+    //   up       the visitor is scrolling back up (wide screens only)
     //   hover    a mouse is over it
     //   focus    keyboard focus is on one of its links
     //   pinned   opened with the button (the only way on phones)
@@ -43,13 +44,32 @@
         var contrastButton = island.querySelector('[data-contrast-toggle]');
         var wide = window.matchMedia('(min-width: 70rem)');
 
-        var state = { atTop: window.scrollY < 24, hover: false, focus: false, pinned: false };
+        var state = { atTop: window.scrollY < 24, up: false, hover: false, focus: false, pinned: false };
 
         var isOpen = function () {
             if (wide.matches) {
-                return state.atTop || state.hover || state.focus || state.pinned;
+                return state.atTop || state.up || state.hover || state.focus || state.pinned;
             }
             return state.pinned;
+        };
+
+        // Scroll direction, with a little slack so a stray wheel tick or a
+        // bounce at the end of the page doesn't flip the pill open and shut
+        var DIRECTION_SLACK = 16;
+        var lastScrollY = window.scrollY;
+        var travel = 0;
+
+        var trackDirection = function () {
+            var y = window.scrollY;
+            var step = y - lastScrollY;
+            lastScrollY = y;
+            if (step === 0) { return; }
+
+            if ((step < 0) !== (travel < 0)) { travel = 0; } // direction changed: start counting again
+            travel += step;
+
+            if (travel <= -DIRECTION_SLACK) { state.up = true; }
+            if (travel >= DIRECTION_SLACK) { state.up = false; }
         };
 
         var render = function () {
@@ -231,7 +251,9 @@
             island.style.setProperty('--progress', progress.toFixed(4));
 
             var wasAtTop = state.atTop;
+            var wasUp = state.up;
             state.atTop = window.scrollY < 24;
+            trackDirection();
 
             // The current section is the last one whose top has passed the reading line
             var readingLine = 96 + window.innerHeight * 0.3;
@@ -267,7 +289,7 @@
                 }
             }
 
-            if (wasAtTop !== state.atTop) { render(); }
+            if (wasAtTop !== state.atTop || wasUp !== state.up) { render(); }
         };
 
         var requestUpdate = function () {
@@ -332,12 +354,18 @@
 
     // ---------------------
     // 3. Project demos
-    // Each [data-demo] diagram plays once when it is well into view, and
-    // its card's Replay button plays it again. The animations only exist
-    // under .is-playing, so without JavaScript or with reduced motion the
-    // diagrams simply show their finished state (and Replay is hidden).
+    // Each [data-demo] diagram plays when it comes well into view, then
+    // plays again every few seconds while it stays in view. It stops when
+    // scrolled away or the tab is hidden, and its card's Pause button stops
+    // it altogether (looping motion needs a way to stop it, WCAG 2.2.2).
+    // The animations only exist under .is-playing, so without JavaScript or
+    // with reduced motion the diagrams simply show their finished state
+    // (and the button is hidden).
     // ---------------------
-    var demos = document.querySelectorAll('[data-demo]');
+    var DEMO_LENGTH = 1600; // the longest demo, in ms (see portfolio.css)
+    var DEMO_HOLD = 4000;   // how long the finished diagram rests before playing again
+
+    var demos = [];
 
     var playDemo = function (demo) {
         demo.classList.remove('is-playing');
@@ -345,29 +373,79 @@
         demo.classList.add('is-playing');
     };
 
-    if (demos.length && !reduceMotion && 'IntersectionObserver' in window) {
+    var stopLoop = function (loop) {
+        window.clearTimeout(loop.timer);
+        loop.timer = 0;
+    };
+
+    // Play now, then keep playing while it is allowed to
+    var runLoop = function (loop) {
+        stopLoop(loop);
+        if (!loop.visible || loop.paused || document.hidden) { return; }
+
+        playDemo(loop.demo);
+        loop.timer = window.setTimeout(function () { runLoop(loop); }, DEMO_LENGTH + DEMO_HOLD);
+    };
+
+    var showPaused = function (loop) {
+        if (!loop.button) { return; }
+        loop.button.classList.toggle('is-paused', loop.paused);
+        loop.label.textContent = loop.paused ? 'Play' : 'Pause';
+    };
+
+    if (!reduceMotion && 'IntersectionObserver' in window) {
+        document.querySelectorAll('[data-demo]').forEach(function (demo) {
+            var card = demo.closest('.project');
+            var button = card ? card.querySelector('[data-demo-toggle]') : null;
+
+            demos.push({
+                demo: demo,
+                button: button,
+                label: button ? button.querySelector('[data-demo-label]') : null,
+                visible: false,
+                paused: false,
+                timer: 0
+            });
+        });
+    }
+
+    if (demos.length) {
         document.documentElement.classList.add('has-demos');
 
         var demoObserver = new IntersectionObserver(function (entries) {
             entries.forEach(function (entry) {
-                if (entry.isIntersecting) {
-                    playDemo(entry.target);
-                    demoObserver.unobserve(entry.target);
-                }
+                demos.forEach(function (loop) {
+                    if (loop.demo !== entry.target) { return; }
+
+                    loop.visible = entry.isIntersecting;
+                    if (loop.visible) { runLoop(loop); } else { stopLoop(loop); }
+                });
             });
         }, { threshold: 0.4 });
 
-        demos.forEach(function (demo) { demoObserver.observe(demo); });
+        demos.forEach(function (loop) {
+            demoObserver.observe(loop.demo);
 
-        document.addEventListener('click', function (event) {
-            var button = event.target.closest ? event.target.closest('[data-demo-replay]') : null;
-            var card = button ? button.closest('.project') : null;
-            var demo = card ? card.querySelector('[data-demo]') : null;
+            if (loop.button) {
+                loop.button.addEventListener('click', function () {
+                    loop.paused = !loop.paused;
+                    showPaused(loop);
 
-            if (demo) {
-                demoObserver.unobserve(demo);
-                playDemo(demo);
+                    // Pausing jumps straight to the finished diagram
+                    if (loop.paused) {
+                        stopLoop(loop);
+                        loop.demo.classList.remove('is-playing');
+                    } else {
+                        runLoop(loop);
+                    }
+                });
             }
+        });
+
+        document.addEventListener('visibilitychange', function () {
+            demos.forEach(function (loop) {
+                if (document.hidden) { stopLoop(loop); } else { runLoop(loop); }
+            });
         });
     }
 

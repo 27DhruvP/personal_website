@@ -5,9 +5,12 @@
    ===================================================================== */
 
 /* ---- Bento grid: the opening of the page ----
-   Four cells of different sizes sharing one radius, one padding and one
-   border. Two break the pattern on purpose: "Now" is inverted, and
-   "Outside of code" takes the pastel (--pastel in tokens.css). */
+   Six cells sharing one radius, one padding and one border. On wide
+   screens the name takes a 2 x 2 block; beside it sit "Now", the
+   hackathon results and London; underneath, "Outside of code" and the
+   ways to get in touch. Three break the pattern on purpose: "Now" is
+   inverted, "Outside of code" takes the pastel (--pastel in tokens.css)
+   and London has the globe behind it. */
 
 .bento-section {
     padding-top: var(--space-5);
@@ -21,27 +24,31 @@
     grid-template-areas:
         "name"
         "now"
+        "win"
         "place"
-        "hobbies";
+        "hobbies"
+        "reach";
 }
 
 @media (min-width: 40rem) {
     .bento {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         grid-template-areas:
-            "name  name"
-            "now   place"
-            "hobbies hobbies";
+            "name    name"
+            "now     now"
+            "win     place"
+            "hobbies hobbies"
+            "reach   reach";
     }
 }
 
 @media (min-width: 64rem) {
     .bento {
-        grid-template-columns: repeat(12, minmax(0, 1fr));
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         grid-template-areas:
-            "name    name    name    name    name    name    name    name    now     now     now     now"
-            "name    name    name    name    name    name    name    name    place   place   place   place"
-            "hobbies hobbies hobbies hobbies hobbies hobbies hobbies hobbies hobbies hobbies hobbies hobbies";
+            "name    name    now   now"
+            "name    name    win   place"
+            "hobbies hobbies reach reach";
     }
 }
 
@@ -79,13 +86,25 @@
     animation-delay: 200ms;
 }
 
+.bento__cell--win {
+    grid-area: win;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    animation-delay: 280ms;
+}
+
 .bento__cell--place {
     grid-area: place;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: var(--space-5);
-    animation-delay: 280ms;
+    gap: var(--space-6);
+    min-height: 13rem;
+    animation-delay: 360ms;
 }
 
 .bento__cell--hobbies {
@@ -93,7 +112,14 @@
     border-color: var(--pastel);
     background: var(--pastel);
     color: var(--pastel-ink);
-    animation-delay: 360ms;
+    animation-delay: 440ms;
+}
+
+.bento__cell--reach {
+    grid-area: reach;
+    display: flex;
+    flex-direction: column;
+    animation-delay: 520ms;
 }
 
 /* Name cell background: a faint dot grid, strongest in the corner away
@@ -149,31 +175,210 @@
     font-size: var(--text-md);
 }
 
-/* Outside of code: three facts side by side once there is room */
+/* Outside of code: each interest gets an icon, a line about it, and a
+   link or marker where there is something real to point to */
 
-.bento__cell--hobbies .facts {
-    gap: var(--space-5);
+.hobbies {
+    display: grid;
+    gap: var(--space-4);
 }
 
-.bento__cell--hobbies .facts__row,
-.bento__cell--hobbies .facts__row:last-child {
-    grid-template-columns: minmax(0, 1fr);
-    align-content: start;
-    gap: var(--space-1);
-    padding: var(--space-3) 0 0;
-    border-width: var(--stroke) 0 0;
-    border-style: solid;
-    border-color: var(--pastel-ink);
-}
-
-.bento__cell--hobbies .facts dd {
-    color: color-mix(in srgb, var(--pastel-ink) 82%, var(--pastel));
-}
-
+/* Phones: icon beside the text. Wider: the three sit side by side, each
+   with its icon on top. */
 @media (min-width: 40rem) {
-    .bento__cell--hobbies .facts {
+    .hobbies {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
+
+    .hobbies .hobby {
+        grid-template-columns: minmax(0, 1fr);
+        align-content: start;
+    }
+
+    .hobbies .hobby__icon {
+        grid-row: auto;
+        margin-bottom: var(--space-2);
+    }
+}
+
+.hobby {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    gap: var(--space-1) var(--space-4);
+    align-items: start;
+    padding-top: var(--space-4);
+    border-top: var(--stroke) solid color-mix(in srgb, var(--pastel-ink) 30%, transparent);
+}
+
+.hobby__icon {
+    grid-row: span 3;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: var(--space-2);
+    border: var(--stroke) solid var(--pastel-ink);
+    border-radius: 50%;
+    color: var(--pastel-ink);
+    overflow: visible;
+}
+
+.hobby__icon .ball {
+    fill: var(--ball);
+    stroke: none;
+}
+
+.hobby__name {
+    font-size: var(--text-base);
+}
+
+.hobby__text {
+    color: color-mix(in srgb, var(--pastel-ink) 82%, var(--pastel));
+    font-size: var(--text-sm);
+    line-height: 1.5;
+}
+
+.hobby__extra {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    width: fit-content;
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 600;
+}
+
+a.hobby__extra {
+    color: var(--pastel-ink);
+}
+
+/* The ball marks a win, as on the FinChat card */
+.hobby__extra--win::before {
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--ball);
+}
+
+/* Hackathon results */
+
+.win__rank {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 1.8rem + 2vw, 3.25rem);
+    font-weight: 800;
+    font-stretch: 112%;
+    letter-spacing: -0.03em;
+    line-height: 1;
+}
+
+.win__rank::after {
+    content: "";
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: var(--ball);
+}
+
+.win__event {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.win__meta {
+    color: var(--ink-muted);
+    font-size: var(--text-sm);
+}
+
+.win__second {
+    margin-top: auto;
+    padding-top: var(--space-3);
+    border-top: var(--stroke) solid var(--rule);
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+}
+
+.win__second strong {
+    color: var(--ink);
+}
+
+.win__link {
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 600;
+}
+
+/* Ways to get in touch */
+
+.reach__lead {
+    color: var(--ink-muted);
+    font-size: var(--text-sm);
+}
+
+.reach__email {
+    display: inline-block;
+    margin-block: var(--space-2) var(--space-4);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: clamp(1.125rem, 0.95rem + 0.8vw, 1.5rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    overflow-wrap: anywhere;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+}
+
+.reach__email:hover {
+    color: var(--link);
+}
+
+.reach__links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: var(--space-3);
+    margin-top: auto;
+}
+
+.reach__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    min-height: 2.75rem;
+    padding: var(--space-2) var(--space-4);
+    border: var(--stroke) solid var(--control-border);
+    border-radius: var(--radius);
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-decoration: none;
+    transition: border-color var(--dur-1) ease, background-color var(--dur-1) ease;
+}
+
+.reach__link small {
+    display: block;
+    color: var(--ink-muted);
+    font-size: var(--text-sm);
+    font-weight: 500;
+}
+
+.reach__link svg {
+    flex-shrink: 0;
+    transition: transform var(--dur-2) var(--ease);
+}
+
+.reach__link:hover {
+    border-color: var(--ink);
+    text-decoration: none;
+}
+
+.reach__link:hover svg,
+.reach__link:focus-visible svg {
+    transform: translate(2px, -2px);
 }
 
 /* Now: current roles */
@@ -194,7 +399,18 @@
     opacity: 0.85;
 }
 
-/* Place: London and its local time */
+/* Place: London, its local time, and a wireframe globe behind them.
+   The globe is tilted towards London, whose real position is marked by
+   the ball; it rises from the bottom of the cell and fades out towards
+   the top so the text above stays clear. */
+
+.place__time {
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
 
 .place__city {
     font-family: var(--font-display);
@@ -204,18 +420,78 @@
     line-height: 1.1;
 }
 
-.place__time {
-    margin-top: var(--space-2);
+.place__coords {
+    margin-top: var(--space-1);
     color: var(--ink-muted);
-    font-family: var(--font-display);
-    font-variant-numeric: tabular-nums;
+    font-family: var(--font-code);
+    font-size: 0.75rem;
 }
 
-.place__dot {
-    width: 0.75rem;
-    height: 0.75rem;
-    border-radius: 50%;
-    background: var(--ball);
+.globe {
+    position: absolute;
+    z-index: -1;
+    top: 22%;
+    /* Centred in a narrow cell; pushed right in a wide one, so London's
+       marker sits beside the city name rather than behind it */
+    left: max(50%, calc(100% - 6rem));
+    width: min(max(130%, 15rem), 21rem);
+    max-width: none;
+    transform: translateX(-50%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 2%, #000 38%);
+    mask-image: linear-gradient(to bottom, transparent 2%, #000 38%);
+    pointer-events: none;
+}
+
+.globe__sphere {
+    fill: color-mix(in srgb, var(--link) 7%, var(--paper-raised));
+    stroke: color-mix(in srgb, var(--link) 45%, transparent);
+    stroke-width: 1.25;
+}
+
+.globe__grid {
+    fill: none;
+    stroke: color-mix(in srgb, var(--link) 30%, transparent);
+    stroke-width: 0.75;
+}
+
+.globe__london {
+    fill: var(--ball);
+    stroke: var(--paper-raised);
+    stroke-width: 2;
+}
+
+/* A slow ping from London; it stops with reduced motion */
+.globe__pulse {
+    fill: none;
+    stroke: var(--ball);
+    stroke-width: 1.5;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: globe-ping 2.8s var(--ease) 1s infinite backwards;
+}
+
+@keyframes globe-ping {
+    0% {
+        opacity: 0.9;
+        transform: scale(1);
+    }
+
+    70%,
+    100% {
+        opacity: 0;
+        transform: scale(3.6);
+    }
+}
+
+/* High contrast and forced colours: nothing behind the text, as in the name cell */
+:root[data-contrast="high"] .globe {
+    display: none;
+}
+
+@media (forced-colors: active) {
+    .globe {
+        display: none;
+    }
 }
 
 /* The greeting and name. Each word of the name settles from a condensed
@@ -225,7 +501,8 @@
      60ms    "Dhruv" settles, "Patel" 90ms later
      120ms   lead rises in, buttons at 200ms (both finished by 600ms)
      200ms   the other bento cells rise in, 80ms apart
-     650ms   the ball drops onto the end of the name and bounces */
+     650ms   the ball drops onto the end of the name and bounces
+     1.35s   from here the ball hops again every 6s; the text never repeats */
 
 .hero__name {
     font-size: clamp(3.75rem, 2rem + 8vw, 7.5rem);
@@ -256,7 +533,8 @@
 }
 
 /* The ball is the full stop. It is the only thing on the site that
-   bounces: it drops in once the name has settled. */
+   bounces: it drops in once the name has settled, then every 6s it
+   hops and bounces again, like a ball being served. */
 .hero__word:last-child::after {
     content: "";
     display: inline-block;
@@ -265,7 +543,35 @@
     margin-left: 0.07em;
     border-radius: 50%;
     background: var(--ball);
-    animation: ball-drop 700ms 650ms backwards;
+    animation: ball-drop 700ms 650ms backwards, ball-hop 6s 1.35s infinite;
+}
+
+/* The hop takes the first 0.9s of each 6s cycle; the rest is rest */
+@keyframes ball-hop {
+    0% {
+        transform: translateY(0);
+        animation-timing-function: cubic-bezier(0, 0.55, 0.45, 1);
+    }
+
+    5% {
+        transform: translateY(-0.55em);
+        animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+    }
+
+    15%,
+    100% {
+        transform: translateY(0);
+    }
+
+    10% {
+        transform: translateY(0);
+        animation-timing-function: cubic-bezier(0, 0.55, 0.45, 1);
+    }
+
+    12.5% {
+        transform: translateY(-0.12em);
+        animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+    }
 }
 
 /* Falls with gravity (ease-in), then two shrinking bounces */
@@ -366,9 +672,28 @@
 
 /* ---- Sections ---- */
 
+/* Each section is its own band: alternate sections sit on the raised
+   paper, a full-width rule marks the top of every band, and each title
+   carries its number ("01") so the page reads as distinct chapters. */
+
 .section {
     padding-block: var(--space-8);
     border-top: var(--stroke) solid var(--rule);
+    counter-increment: section;
+}
+
+main {
+    counter-reset: section;
+}
+
+.section--alt {
+    background: var(--paper-raised);
+}
+
+@media (min-width: 60rem) {
+    .section {
+        padding-block: var(--space-9);
+    }
 }
 
 .section__grid {
@@ -378,6 +703,22 @@
 
 .section__title {
     font-size: var(--text-xl);
+}
+
+/* The number is decoration, so screen readers skip it (the "/ ''" part) */
+.section__title::before {
+    content: counter(section, decimal-leading-zero);
+    content: counter(section, decimal-leading-zero) / "";
+    display: block;
+    width: fit-content;
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-2);
+    border-bottom: 2px solid var(--link);
+    color: var(--link);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.08em;
 }
 
 @media (min-width: 60rem) {
@@ -646,12 +987,15 @@
     text-transform: uppercase;
 }
 
-/* Replay: only shown when the demos can play (site.js adds .has-demos) */
+/* Pause/Play for the looping demo: only shown when the demos can play
+   (site.js adds .has-demos and swaps the label and icon) */
 
-.demo-replay {
+.demo-toggle {
     display: none;
     align-items: center;
+    justify-content: center;
     gap: var(--space-2);
+    min-width: 6.5rem; /* "Pause" and "Play" take the same space */
     min-height: 2.75rem;
     padding: 0 var(--space-4);
     border: var(--stroke) solid var(--control-border);
@@ -665,24 +1009,26 @@
     transition: border-color var(--dur-1) ease, background-color var(--dur-1) ease, transform var(--dur-1) var(--ease);
 }
 
-.has-demos .demo-replay {
+.has-demos .demo-toggle {
     display: inline-flex;
 }
 
-.demo-replay svg {
-    transition: transform var(--dur-3) var(--ease);
-}
-
-.demo-replay:hover {
+.demo-toggle:hover {
     border-color: var(--ink);
+    background: var(--paper-raised);
 }
 
-.demo-replay:hover svg {
-    transform: rotate(-200deg);
-}
-
-.demo-replay:active {
+.demo-toggle:active {
     transform: scale(0.96);
+}
+
+.demo-toggle__play,
+.demo-toggle.is-paused .demo-toggle__pause {
+    display: none;
+}
+
+.demo-toggle.is-paused .demo-toggle__play {
+    display: block;
 }
 
 /* Bullets: the text steps back so the results in bold stand out */
