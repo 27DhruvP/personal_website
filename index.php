@@ -347,118 +347,133 @@ include 'head.php';
         </section>
 
         <!-- ===== Projects ===== -->
-        <section class="section" id="projects" aria-labelledby="projects-title">
-            <div class="container section__grid">
-                <h2 class="section__title" id="projects-title">Projects</h2>
-                <div class="project-list">
-
-                    <article class="project reveal" data-pointer-light>
-                        <header class="project__head">
-                            <div class="project__heading">
-                                <h3 class="project__title">Chess Bot Application</h3>
-                                <p class="project__type">Desktop app</p>
-                            </div>
-                            <button class="demo-toggle" type="button" data-demo-toggle>
-                                <svg class="demo-toggle__pause" aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false">
-                                    <path d="M5.5 3.5v9M10.5 3.5v9" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
-                                </svg>
-                                <svg class="demo-toggle__play" aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false">
-                                    <path d="M5 3.25v9.5L12.75 8z" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
-                                </svg>
-                                <span data-demo-label>Pause</span><span class="visually-hidden"> the chess move demo</span>
-                            </button>
-                        </header>
-
-                        <div class="project__visual chess-demo" data-demo>
-                            <svg class="chess-board" viewBox="0 0 8 8" role="img"
-                                 aria-label="Chessboard with a pawn moving from e2 to e4">
-                                <defs>
-                                    <pattern id="board-squares" width="2" height="2" patternUnits="userSpaceOnUse">
-                                        <rect width="2" height="2" class="chess-board__light"/>
-                                        <rect x="1" y="0" width="1" height="1" class="chess-board__dark"/>
-                                        <rect x="0" y="1" width="1" height="1" class="chess-board__dark"/>
-                                    </pattern>
-                                </defs>
-                                <rect width="8" height="8" fill="url(#board-squares)"/>
-                                <rect class="chess-board__highlight chess-board__highlight--from" x="4" y="6" width="1" height="1"/>
-                                <rect class="chess-board__highlight chess-board__highlight--to" x="4" y="4" width="1" height="1"/>
-                                <rect class="chess-board__arrow chess-board__arrow--shaft" x="4.4" y="4.9" width="0.2" height="1.4"/>
-                                <polygon class="chess-board__arrow chess-board__arrow--head" points="4.5,4.35 4.15,4.95 4.85,4.95"/>
-                            </svg>
-                            <div>
-                                <pre class="uci" aria-label="Example UCI exchange"><code><span class="uci__line">position startpos moves e2e4</span>
-<span class="uci__line">go movetime 1000</span>
-<span class="uci__reply">bestmove e7e5</span></code></pre>
-                                <p class="uci__caption">Example exchange over the UCI protocol.</p>
-                            </div>
-                        </div>
-
-                        <ul class="bullets">
-                            <li>Built a Python chess application integrating the <strong>Stockfish engine</strong> via the UCI protocol, enabling engine swapping with <strong>0 logic changes</strong>.</li>
-                            <li>Implemented move validation and game state management covering <strong>100% of FIDE rules</strong>.</li>
-                            <li>Designed a clean interface between game logic and the external engine, reducing integration complexity by <strong>~50%</strong>.</li>
-                        </ul>
-                        <ul class="inline-list" aria-label="Technologies">
-                            <li>Python</li><li>Stockfish</li><li>UCI Protocol</li><li>FIDE Rules</li><li>OOP</li>
-                        </ul>
-                    </article>
-
-                    <article class="project reveal" data-pointer-light>
-                        <header class="project__head">
-                            <div class="project__heading">
-                                <h3 class="project__title">FinChat</h3>
-                                <p class="project__type">Web app</p>
-                                <p class="project__badge">Hackathon winner</p>
-                            </div>
-                            <button class="demo-toggle" type="button" data-demo-toggle>
-                                <svg class="demo-toggle__pause" aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false">
-                                    <path d="M5.5 3.5v9M10.5 3.5v9" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
-                                </svg>
-                                <svg class="demo-toggle__play" aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false">
-                                    <path d="M5 3.25v9.5L12.75 8z" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
-                                </svg>
-                                <span data-demo-label>Pause</span><span class="visually-hidden"> the FinChat pipeline demo</span>
-                            </button>
-                        </header>
-
-                        <div class="project__visual" data-demo>
-                            <ol class="pipeline" aria-label="How FinChat produces a summary">
-                                <li class="pipeline__step"><span class="pipeline__name">Financial APIs</span><span class="pipeline__note">Market data (Coinbase)</span></li>
-                                <li class="pipeline__step"><span class="pipeline__name">Preprocessing</span><span class="pipeline__note">Structured data to reduce hallucinations</span></li>
-                                <li class="pipeline__step"><span class="pipeline__name">LLM</span><span class="pipeline__note">Writes the summary</span></li>
-                                <li class="pipeline__step"><span class="pipeline__name">Django web app</span><span class="pipeline__note">Desktop and mobile layouts</span></li>
-                            </ol>
-                            <p class="pipeline__summary">Summary delivered in under 2 seconds.</p>
-                        </div>
-
-                        <ul class="bullets">
-                            <li>Engineered a <strong>Django web app</strong> integrating financial market APIs with an LLM summarisation pipeline serving results in <strong>&lt;2s</strong>.</li>
-                            <li>Built a responsive frontend supporting <strong>desktop and mobile</strong> layouts.</li>
-                            <li>Introduced structured data preprocessing to reduce hallucinations across <strong>100% of generated summaries</strong>.</li>
-                        </ul>
-                        <ul class="inline-list" aria-label="Technologies">
-                            <li>Python</li><li>Django</li><li>LLM</li><li>Financial APIs</li><li>HTML</li><li>CSS</li><li>Coinbase</li>
-                        </ul>
-                    </article>
-
-                    <div class="projects-cta reveal">
-                        <p class="projects-cta__text">Want to see more of my code, or hear how these were built?</p>
-                        <div class="projects-cta__actions">
-                            <a class="button button--primary" href="https://github.com/27DhruvP" target="_blank" rel="noopener">
-                                My GitHub<span class="visually-hidden"> (opens in a new tab)</span>
-                                <svg class="button__arrow" aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false">
-                                    <path d="M5 11l6-6M6 5h5v5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </a>
-                            <a class="button button--secondary" href="#contact">
-                                Ask me about a project
-                                <svg class="button__arrow" aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false">
-                                    <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </a>
+        <!-- On wide screens js/site.js pins the stage while the page scrolls
+             and slides the track sideways (data-projects). On phones the
+             track is a swipe carousel; otherwise the cards simply stack. -->
+        <section class="section projects" id="projects" aria-labelledby="projects-title" data-projects>
+            <div class="projects__runway" data-projects-runway>
+                <div class="projects__stage" data-projects-stage>
+                    <div class="projects__intro">
+                        <h2 class="section__title" id="projects-title">Projects</h2>
+                        <div class="projects__meter" aria-hidden="true">
+                            <span class="projects__count"><span data-projects-index>01</span> / <span data-projects-total>03</span></span>
+                            <span class="projects__bar"><span data-projects-bar></span></span>
                         </div>
                     </div>
+                    <div class="projects__viewport" data-projects-viewport role="region" aria-label="Project cards" tabindex="0">
+                        <div class="project-list projects__track" data-projects-track>
 
+                            <article class="project reveal" data-pointer-light>
+                                <header class="project__head">
+                                    <div class="project__heading">
+                                        <h3 class="project__title">Chess Bot Application</h3>
+                                        <p class="project__type">Desktop app</p>
+                                    </div>
+                                    <button class="demo-toggle" type="button" data-demo-toggle>
+                                        <svg class="demo-toggle__pause" aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false">
+                                            <path d="M5.5 3.5v9M10.5 3.5v9" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+                                        </svg>
+                                        <svg class="demo-toggle__play" aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false">
+                                            <path d="M5 3.25v9.5L12.75 8z" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
+                                        </svg>
+                                        <span data-demo-label>Pause</span><span class="visually-hidden"> the chess move demo</span>
+                                    </button>
+                                </header>
+
+                                <div class="project__visual chess-demo" data-demo>
+                                    <svg class="chess-board" viewBox="0 0 8 8" role="img"
+                                         aria-label="Chessboard with a pawn moving from e2 to e4">
+                                        <defs>
+                                            <pattern id="board-squares" width="2" height="2" patternUnits="userSpaceOnUse">
+                                                <rect width="2" height="2" class="chess-board__light"/>
+                                                <rect x="1" y="0" width="1" height="1" class="chess-board__dark"/>
+                                                <rect x="0" y="1" width="1" height="1" class="chess-board__dark"/>
+                                            </pattern>
+                                        </defs>
+                                        <rect width="8" height="8" fill="url(#board-squares)"/>
+                                        <rect class="chess-board__highlight chess-board__highlight--from" x="4" y="6" width="1" height="1"/>
+                                        <rect class="chess-board__highlight chess-board__highlight--to" x="4" y="4" width="1" height="1"/>
+                                        <rect class="chess-board__arrow chess-board__arrow--shaft" x="4.4" y="4.9" width="0.2" height="1.4"/>
+                                        <polygon class="chess-board__arrow chess-board__arrow--head" points="4.5,4.35 4.15,4.95 4.85,4.95"/>
+                                    </svg>
+                                    <div>
+                                        <pre class="uci" aria-label="Example UCI exchange"><code><span class="uci__line">position startpos moves e2e4</span>
+<span class="uci__line">go movetime 1000</span>
+<span class="uci__reply">bestmove e7e5</span></code></pre>
+                                        <p class="uci__caption">Example exchange over the UCI protocol.</p>
+                                    </div>
+                                </div>
+
+                                <ul class="bullets">
+                                    <li>Built a Python chess application integrating the <strong>Stockfish engine</strong> via the UCI protocol, enabling engine swapping with <strong>0 logic changes</strong>.</li>
+                                    <li>Implemented move validation and game state management covering <strong>100% of FIDE rules</strong>.</li>
+                                    <li>Designed a clean interface between game logic and the external engine, reducing integration complexity by <strong>~50%</strong>.</li>
+                                </ul>
+                                <ul class="inline-list" aria-label="Technologies">
+                                    <li>Python</li><li>Stockfish</li><li>UCI Protocol</li><li>FIDE Rules</li><li>OOP</li>
+                                </ul>
+                            </article>
+
+                            <article class="project reveal" data-pointer-light>
+                                <header class="project__head">
+                                    <div class="project__heading">
+                                        <h3 class="project__title">FinChat</h3>
+                                        <p class="project__type">Web app</p>
+                                        <p class="project__badge">Hackathon winner</p>
+                                    </div>
+                                    <button class="demo-toggle" type="button" data-demo-toggle>
+                                        <svg class="demo-toggle__pause" aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false">
+                                            <path d="M5.5 3.5v9M10.5 3.5v9" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+                                        </svg>
+                                        <svg class="demo-toggle__play" aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false">
+                                            <path d="M5 3.25v9.5L12.75 8z" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
+                                        </svg>
+                                        <span data-demo-label>Pause</span><span class="visually-hidden"> the FinChat pipeline demo</span>
+                                    </button>
+                                </header>
+
+                                <div class="project__visual" data-demo>
+                                    <ol class="pipeline" aria-label="How FinChat produces a summary">
+                                        <li class="pipeline__step"><span class="pipeline__name">Financial APIs</span><span class="pipeline__note">Market data (Coinbase)</span></li>
+                                        <li class="pipeline__step"><span class="pipeline__name">Preprocessing</span><span class="pipeline__note">Structured data to reduce hallucinations</span></li>
+                                        <li class="pipeline__step"><span class="pipeline__name">LLM</span><span class="pipeline__note">Writes the summary</span></li>
+                                        <li class="pipeline__step"><span class="pipeline__name">Django web app</span><span class="pipeline__note">Desktop and mobile layouts</span></li>
+                                    </ol>
+                                    <p class="pipeline__summary">Summary delivered in under 2 seconds.</p>
+                                </div>
+
+                                <ul class="bullets">
+                                    <li>Engineered a <strong>Django web app</strong> integrating financial market APIs with an LLM summarisation pipeline serving results in <strong>&lt;2s</strong>.</li>
+                                    <li>Built a responsive frontend supporting <strong>desktop and mobile</strong> layouts.</li>
+                                    <li>Introduced structured data preprocessing to reduce hallucinations across <strong>100% of generated summaries</strong>.</li>
+                                </ul>
+                                <ul class="inline-list" aria-label="Technologies">
+                                    <li>Python</li><li>Django</li><li>LLM</li><li>Financial APIs</li><li>HTML</li><li>CSS</li><li>Coinbase</li>
+                                </ul>
+                            </article>
+
+                            <div class="projects-github reveal">
+                                <svg class="projects-github__mark" aria-hidden="true" viewBox="0 0 16 16" width="48" height="48" focusable="false">
+                                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" fill="currentColor"/>
+                                </svg>
+                                <div class="projects-github__body">
+                                    <p class="projects-github__eyebrow">github.com/27DhruvP</p>
+                                    <h3 class="projects-github__title" id="projects-github-title">More projects on GitHub</h3>
+                                    <p class="projects-github__text">Coursework, experiments and the code behind the projects above. Browse the repositories, or ask me how any of them were built.</p>
+                                </div>
+                                <div class="projects-github__actions">
+                                    <a class="button projects-github__link" href="https://github.com/27DhruvP" target="_blank" rel="noopener">
+                                        Explore GitHub<span class="visually-hidden"> (opens in a new tab)</span>
+                                        <svg class="button__arrow" aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false">
+                                            <path d="M5 11l6-6M6 5h5v5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </a>
+                                    <a class="projects-github__ask" href="#contact">Ask me about a project</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

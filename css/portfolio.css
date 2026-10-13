@@ -1310,11 +1310,6 @@ main {
    The lift uses `translate`, not `transform`, so it never fights the scroll
    reveal, and nothing changes size, so nothing around it moves. */
 
-.project-list {
-    display: grid;
-    gap: var(--space-5);
-}
-
 .project {
     position: relative;
     display: grid;
@@ -1493,28 +1488,6 @@ main {
     content: none;
 }
 
-/* Calls to action under the cards */
-
-.projects-cta {
-    display: grid;
-    gap: var(--space-4);
-    margin-top: var(--space-7);
-}
-
-.projects-cta__text {
-    max-width: var(--measure);
-    font-family: var(--font-display);
-    font-size: var(--text-md);
-    font-weight: 600;
-    line-height: 1.3;
-}
-
-.projects-cta__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-}
-
 .button__arrow {
     transition: transform var(--dur-2) var(--ease);
 }
@@ -1529,8 +1502,320 @@ main {
     transform: translate(2px, -2px);
 }
 
-.projects-cta .button:active {
+/* ---- Projects: the sideways sequence ----
+   One set of markup, three layouts:
+   - Stacked (the default): the cards stack beside the title column like
+     every other section. Wide screens get this without JavaScript, with
+     reduced motion, or when the screen is too short to show a whole card.
+   - Swipe (below 60rem): the cards sit in a row that scrolls sideways by
+     touch, trackpad or arrow keys, snapping to each card, with the next
+     one peeking in at the edge.
+   - Pinned (.is-pinned, set by js/site.js on wide screens): the stage
+     sticks to the screen while the page scrolls down the runway, and the
+     track slides left by the same distance. The page itself scrolls
+     normally the whole time, so wheels, trackpads, keys, the scrollbar and
+     the nav links all keep working and nobody can get stuck. */
+
+.projects__meter {
+    display: none;
+}
+
+.projects__track {
+    display: grid;
+    gap: var(--space-5);
+}
+
+@media (min-width: 60rem) {
+    .projects:not(.is-pinned) .projects__stage {
+        display: grid;
+        grid-template-columns: 13rem minmax(0, 1fr);
+        gap: var(--space-7);
+        width: 100%;
+        max-width: var(--container);
+        margin-inline: auto;
+        padding-inline: var(--gutter);
+    }
+
+    .projects:not(.is-pinned) .projects__intro {
+        position: sticky;
+        top: calc(var(--header-h) + var(--space-5));
+        align-self: start;
+    }
+}
+
+@media (max-width: 59.99rem) {
+    .projects__intro {
+        width: 100%;
+        max-width: var(--container);
+        margin-inline: auto;
+        margin-bottom: var(--space-2);
+        padding-inline: var(--gutter);
+    }
+
+    /* The padding leaves room for a lifted card's shadow */
+    .projects__viewport {
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: var(--gutter);
+        scrollbar-width: thin;
+        padding-block: var(--space-4) var(--space-6);
+    }
+
+    .projects__track {
+        display: flex;
+        width: max-content;
+        gap: var(--space-4);
+        padding-inline: var(--gutter);
+    }
+
+    .projects__track > * {
+        flex: none;
+        width: min(85vw, 30rem);
+        scroll-snap-align: start;
+    }
+}
+
+.projects.is-pinned {
+    padding-block: 0;
+}
+
+.projects.is-pinned .projects__stage {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-4);
+    height: 100vh;
+    padding-block: calc(var(--header-h) + var(--space-1)) var(--space-4);
+}
+
+.projects.is-pinned .projects__intro {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-5);
+    width: 100%;
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+}
+
+/* The number sits beside the title here, to leave the height for the cards */
+.projects.is-pinned .section__title {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+}
+
+.projects.is-pinned .section__title::before {
+    margin-bottom: 0;
+}
+
+/* Which panel is in front, and how far along the sequence is */
+.projects.is-pinned .projects__meter {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding-bottom: var(--space-2);
+}
+
+.projects__count {
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.08em;
+}
+
+.projects__count span:first-child {
+    color: var(--link);
+}
+
+.projects__bar {
+    position: relative;
+    width: 8rem;
+    height: 2px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: var(--rule);
+}
+
+.projects__bar span {
+    position: absolute;
+    inset: 0;
+    background: var(--link);
+    transform: scaleX(0);
+    transform-origin: left;
+}
+
+/* Clipped sideways only, so a lifted card's shadow still shows above and
+   below (browsers without overflow: clip fall back to hidden) */
+.projects.is-pinned .projects__viewport {
+    overflow: hidden;
+    overflow-x: clip;
+    overflow-y: visible;
+}
+
+/* The inset lines the first card up with the page's content column, and
+   the same inset at the end leaves the last panel fully on screen */
+.projects.is-pinned .projects__track {
+    position: relative;
+    display: flex;
+    width: max-content;
+    gap: var(--space-5);
+    padding-inline: max(var(--gutter), calc((100% - var(--container)) / 2 + var(--gutter)));
+    will-change: transform;
+}
+
+/* A pinned card is wide and short, so it fits on a laptop screen: the
+   demo across the top, then the bullets beside the technology tags */
+.projects.is-pinned .project {
+    width: min(64rem, 80vw);
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    grid-template-areas:
+        "head head"
+        "visual visual"
+        "bullets tags";
+    align-content: start;
+    gap: var(--space-3) var(--space-6);
+    padding: var(--space-5);
+}
+
+.projects.is-pinned .project .bullets {
+    gap: var(--space-2);
+}
+
+.projects.is-pinned .project__head {
+    grid-area: head;
+}
+
+.projects.is-pinned .project__visual {
+    grid-area: visual;
+}
+
+.projects.is-pinned .project > .bullets {
+    grid-area: bullets;
+}
+
+.projects.is-pinned .project > .inline-list {
+    grid-area: tags;
+    align-self: start;
+}
+
+.projects.is-pinned .project__visual {
+    padding: var(--space-4);
+}
+
+.projects.is-pinned .chess-demo {
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: var(--space-5);
+}
+
+.projects.is-pinned .chess-board {
+    max-width: 9rem;
+}
+
+.projects.is-pinned .projects-github {
+    width: min(26rem, 32vw);
+}
+
+/* ---- The last panel: more on GitHub ----
+   The one solid block of the accent colour on the page, so the sequence
+   ends on something to act on. Its colours come from the primary button
+   tokens, which already work in every colour mode. */
+
+.projects-github {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--space-6);
+    padding: var(--space-6);
+    border: var(--stroke) solid transparent;
+    border-radius: var(--radius);
+    background: var(--button-bg);
+    background: linear-gradient(150deg, var(--button-bg) 45%, var(--button-bg-hover));
+    color: var(--button-ink);
+}
+
+.projects-github__mark {
+    width: var(--space-7);
+    height: var(--space-7);
+}
+
+.projects-github__body {
+    display: grid;
+    gap: var(--space-3);
+}
+
+.projects-github__eyebrow {
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.projects-github__title {
+    color: inherit;
+    font-size: var(--text-lg);
+    font-weight: 750;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+}
+
+.projects-github__text {
+    max-width: 34ch;
+}
+
+.projects-github__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3) var(--space-5);
+}
+
+/* The button turns the panel's colours round */
+.projects-github__link {
+    background: var(--button-ink);
+    color: var(--button-bg);
+}
+
+.projects-github__link:hover {
+    background: color-mix(in srgb, var(--button-ink) 86%, var(--button-bg));
+}
+
+.projects-github__link:active {
     transform: scale(0.97);
+}
+
+.projects-github__ask {
+    color: inherit;
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 600;
+}
+
+/* The usual focus colour is the panel's own colour, so use its ink */
+.projects-github :focus-visible {
+    outline-color: var(--button-ink);
+}
+
+@media print {
+    .projects__runway {
+        height: auto !important;
+    }
+
+    .projects.is-pinned .projects__stage {
+        position: static;
+        height: auto;
+    }
+
+    .projects__track {
+        transform: none !important;
+    }
 }
 
 /* The ball marks the win */

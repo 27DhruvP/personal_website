@@ -14,6 +14,8 @@
 //   5. Form loading state
 //   6. Confirm dialogs and auto-submitting filters (replaces inline handlers)
 //   7. Local time in London
+//   8. Folding role descriptions in the Experience timeline
+//   9. Projects: the pinned sideways sequence
 // =====================
 
 (function () {
@@ -641,4 +643,173 @@
             }
         });
     });
+
+    // ---------------------
+    // 9. Projects: the pinned sideways sequence
+    // On wide screens with motion allowed, the Projects stage sticks to the
+    // screen while the page scrolls down a runway as long as the track is
+    // wide, and the track slides left in step. Only the page scrolls, so
+    // wheels, trackpads, keys, the scrollbar and anchor links behave as
+    // usual, and the pin lets go once the last panel is fully in view.
+    // It only switches on when a whole card fits on the screen; otherwise
+    // the CSS layouts take over (a swipe row below 60rem, a stack above).
+    // Its own scope, so its helpers can't clash with section 1's names.
+    // ---------------------
+    (function () {
+        var projects = document.querySelector('[data-projects]');
+        if (!projects) { return; }
+
+        var runway = projects.querySelector('[data-projects-runway]');
+        var stage = projects.querySelector('[data-projects-stage]');
+        var intro = stage.querySelector('.projects__intro');
+        var viewport = projects.querySelector('[data-projects-viewport]');
+        var track = projects.querySelector('[data-projects-track]');
+        var panels = Array.prototype.slice.call(track.children);
+        var indexLabel = projects.querySelector('[data-projects-index]');
+        var bar = projects.querySelector('[data-projects-bar]');
+        var pinMedia = window.matchMedia('(min-width: 60rem) and (prefers-reduced-motion: no-preference)');
+
+        var pinned = false;
+        var distance = 0;   // how far the track travels, in px
+        var stops = [];     // how far it has travelled when each panel is at the front
+        var frame = 0;
+        var resizeObserver = null;
+        var checkScheduled = false;
+
+        var twoDigits = function (n) { return (n < 10 ? '0' : '') + n; };
+        projects.querySelector('[data-projects-total]').textContent = twoDigits(panels.length);
+
+        var render = function () {
+            frame = 0;
+
+            var travelled = Math.min(distance, Math.max(0, -runway.getBoundingClientRect().top));
+            track.style.transform = 'translate3d(' + (-travelled).toFixed(1) + 'px, 0, 0)';
+            bar.style.transform = 'scaleX(' + (distance ? travelled / distance : 0).toFixed(4) + ')';
+
+            var current = 0;
+            stops.forEach(function (stop, i) {
+                if (Math.abs(stop - travelled) < Math.abs(stops[current] - travelled)) { current = i; }
+            });
+
+            var text = twoDigits(current + 1);
+            if (indexLabel.textContent !== text) { indexLabel.textContent = text; }
+        };
+
+        var requestRender = function () {
+            if (!frame) { frame = window.requestAnimationFrame(render); }
+        };
+
+        // The track's travel, where each panel sits on it, and a runway
+        // tall enough to pay for the travel with vertical scrolling
+        var measure = function () {
+            var inset = parseFloat(window.getComputedStyle(track).paddingLeft) || 0;
+
+            distance = Math.max(0, track.offsetWidth - viewport.clientWidth);
+            stops = panels.map(function (panel) {
+                return Math.min(distance, Math.max(0, panel.offsetLeft - inset));
+            });
+            runway.style.height = (stage.offsetHeight + distance) + 'px';
+        };
+
+        // Does the intro plus the tallest card fit inside the stage?
+        var fitsOnScreen = function () {
+            var style = window.getComputedStyle(stage);
+            var room = stage.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+            var needed = viewport.getBoundingClientRect().bottom - intro.getBoundingClientRect().top;
+            return needed <= room + 1;
+        };
+
+        // Tabbing to a link on a panel that is off to the side scrolls the
+        // page to the point where that panel is at the front
+        var onFocusIn = function (event) {
+            var panel = panels.filter(function (item) { return item.contains(event.target); })[0];
+            if (!panel) { return; }
+
+            var box = panel.getBoundingClientRect();
+            var view = viewport.getBoundingClientRect();
+            if (box.left >= view.left - 1 && box.right <= view.right + 1) { return; }
+
+            var runwayTop = window.pageYOffset + runway.getBoundingClientRect().top;
+            window.scrollTo({ top: runwayTop + stops[panels.indexOf(panel)], behavior: 'smooth' });
+        };
+
+        var enable = function () {
+            pinned = true;
+            projects.classList.add('is-pinned');
+            viewport.removeAttribute('tabindex'); // nothing to scroll by hand now
+            measure();
+
+            window.addEventListener('scroll', requestRender, { passive: true });
+            projects.addEventListener('focusin', onFocusIn);
+
+            if ('ResizeObserver' in window) {
+                resizeObserver = new ResizeObserver(scheduleCheck);
+                resizeObserver.observe(track);
+                resizeObserver.observe(stage);
+            }
+
+            render();
+        };
+
+        var disable = function () {
+            pinned = false;
+            projects.classList.remove('is-pinned');
+            viewport.setAttribute('tabindex', '0');
+
+            window.removeEventListener('scroll', requestRender);
+            projects.removeEventListener('focusin', onFocusIn);
+
+            if (resizeObserver) {
+                resizeObserver.disconnect();
+                resizeObserver = null;
+            }
+            if (frame) {
+                window.cancelAnimationFrame(frame);
+                frame = 0;
+            }
+
+            track.style.transform = '';
+            bar.style.transform = '';
+            runway.style.height = '';
+        };
+
+        // Decide between pinned and the CSS layouts. Fitting is measured in
+        // the pinned layout itself, in the same frame, so nothing flashes.
+        var check = function () {
+            checkScheduled = false;
+
+            if (!pinMedia.matches) {
+                if (pinned) { disable(); }
+                return;
+            }
+
+            projects.classList.add('is-pinned');
+
+            if (!fitsOnScreen()) {
+                if (pinned) { disable(); } else { projects.classList.remove('is-pinned'); }
+                return;
+            }
+
+            if (pinned) {
+                measure();
+                requestRender();
+            } else {
+                enable();
+            }
+        };
+
+        function scheduleCheck() {
+            if (!checkScheduled) {
+                checkScheduled = true;
+                window.requestAnimationFrame(check);
+            }
+        }
+
+        window.addEventListener('resize', scheduleCheck);
+        if (pinMedia.addEventListener) { pinMedia.addEventListener('change', scheduleCheck); }
+        else if (pinMedia.addListener) { pinMedia.addListener(scheduleCheck); }
+        if (document.fonts && document.fonts.ready) { document.fonts.ready.then(scheduleCheck); }
+
+        check();
+    })();
 })();
