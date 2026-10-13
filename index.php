@@ -26,7 +26,7 @@ include 'head.php';
         <section class="bento-section" id="top" aria-label="Introduction">
             <div class="container bento">
 
-                <div class="bento__cell bento__cell--name">
+                <div class="bento__cell bento__cell--name" data-pointer-light>
                     <div>
                         <h1 class="hero__name">
                             <span class="hero__greeting">Hi, I am</span>
@@ -255,15 +255,23 @@ include 'head.php';
         <section class="section" id="projects" aria-labelledby="projects-title">
             <div class="container section__grid">
                 <h2 class="section__title" id="projects-title">Projects</h2>
-                <div>
+                <div class="project-list">
 
-                    <article class="project reveal">
+                    <article class="project reveal" data-pointer-light>
                         <header class="project__head">
-                            <h3 class="project__title">Chess Bot Application</h3>
-                            <p class="project__type">Desktop app</p>
+                            <div class="project__heading">
+                                <h3 class="project__title">Chess Bot Application</h3>
+                                <p class="project__type">Desktop app</p>
+                            </div>
+                            <button class="demo-replay" type="button" data-demo-replay>
+                                <svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false">
+                                    <path d="M2.75 8a5.25 5.25 0 1 0 1.6-3.77M2.75 2.5v3.25H6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Replay<span class="visually-hidden"> the chess move demo</span>
+                            </button>
                         </header>
 
-                        <div class="project__visual chess-demo">
+                        <div class="project__visual chess-demo" data-demo>
                             <svg class="chess-board" viewBox="0 0 8 8" role="img"
                                  aria-label="Chessboard with a pawn moving from e2 to e4">
                                 <defs>
@@ -274,14 +282,14 @@ include 'head.php';
                                     </pattern>
                                 </defs>
                                 <rect width="8" height="8" fill="url(#board-squares)"/>
-                                <rect class="chess-board__highlight" x="4" y="6" width="1" height="1"/>
-                                <rect class="chess-board__highlight" x="4" y="4" width="1" height="1"/>
-                                <rect class="chess-board__arrow" x="4.4" y="4.9" width="0.2" height="1.4"/>
-                                <polygon class="chess-board__arrow" points="4.5,4.35 4.15,4.95 4.85,4.95"/>
+                                <rect class="chess-board__highlight chess-board__highlight--from" x="4" y="6" width="1" height="1"/>
+                                <rect class="chess-board__highlight chess-board__highlight--to" x="4" y="4" width="1" height="1"/>
+                                <rect class="chess-board__arrow chess-board__arrow--shaft" x="4.4" y="4.9" width="0.2" height="1.4"/>
+                                <polygon class="chess-board__arrow chess-board__arrow--head" points="4.5,4.35 4.15,4.95 4.85,4.95"/>
                             </svg>
                             <div>
-                                <pre class="uci" aria-label="Example UCI exchange"><code>position startpos moves e2e4
-go movetime 1000
+                                <pre class="uci" aria-label="Example UCI exchange"><code><span class="uci__line">position startpos moves e2e4</span>
+<span class="uci__line">go movetime 1000</span>
 <span class="uci__reply">bestmove e7e5</span></code></pre>
                                 <p class="uci__caption">Example exchange over the UCI protocol.</p>
                             </div>
@@ -297,14 +305,22 @@ go movetime 1000
                         </ul>
                     </article>
 
-                    <article class="project reveal">
+                    <article class="project reveal" data-pointer-light>
                         <header class="project__head">
-                            <h3 class="project__title">FinChat</h3>
-                            <p class="project__type">Web app</p>
-                            <p class="project__badge">Hackathon winner</p>
+                            <div class="project__heading">
+                                <h3 class="project__title">FinChat</h3>
+                                <p class="project__type">Web app</p>
+                                <p class="project__badge">Hackathon winner</p>
+                            </div>
+                            <button class="demo-replay" type="button" data-demo-replay>
+                                <svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false">
+                                    <path d="M2.75 8a5.25 5.25 0 1 0 1.6-3.77M2.75 2.5v3.25H6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Replay<span class="visually-hidden"> the FinChat pipeline demo</span>
+                            </button>
                         </header>
 
-                        <div class="project__visual">
+                        <div class="project__visual" data-demo>
                             <ol class="pipeline" aria-label="How FinChat produces a summary">
                                 <li class="pipeline__step"><span class="pipeline__name">Financial APIs</span><span class="pipeline__note">Market data (Coinbase)</span></li>
                                 <li class="pipeline__step"><span class="pipeline__name">Preprocessing</span><span class="pipeline__note">Structured data to reduce hallucinations</span></li>
@@ -323,6 +339,24 @@ go movetime 1000
                             <li>Python</li><li>Django</li><li>LLM</li><li>Financial APIs</li><li>HTML</li><li>CSS</li><li>Coinbase</li>
                         </ul>
                     </article>
+
+                    <div class="projects-cta reveal">
+                        <p class="projects-cta__text">Want to see more of my code, or hear how these were built?</p>
+                        <div class="projects-cta__actions">
+                            <a class="button button--primary" href="https://github.com/27DhruvP" target="_blank" rel="noopener">
+                                My GitHub<span class="visually-hidden"> (opens in a new tab)</span>
+                                <svg class="button__arrow" aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false">
+                                    <path d="M5 11l6-6M6 5h5v5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                            <a class="button button--secondary" href="#contact">
+                                Ask me about a project
+                                <svg class="button__arrow" aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" focusable="false">
+                                    <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
 
                 </div>
             </div>

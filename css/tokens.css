@@ -65,11 +65,15 @@
     --gutter: clamp(1rem, 0.4rem + 3vw, 2.5rem);
     --header-h: 4.75rem;
 
-    /* Motion */
+    /* Motion. Everything arrives on --ease with no bounce; only the orange
+       ball bounces (see ball-drop in portfolio.css). --ease-in-out is for
+       things travelling between two places, like the nav indicator. */
     --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
     --dur-1: 150ms;
     --dur-2: 250ms;
     --dur-3: 600ms;
+    --rise: 0.75rem;
 }
 
 /* ---- Light, standard contrast (default) ---- */

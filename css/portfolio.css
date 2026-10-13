@@ -45,17 +45,22 @@
     }
 }
 
+/* The cells rise in one after another while the name settles. "backwards"
+   rather than "both", so no transform is left on the cells afterwards. */
 .bento__cell {
     min-width: 0;
     padding: var(--space-5);
     border: var(--stroke) solid var(--rule);
     border-radius: var(--radius);
     background: var(--paper-raised);
-    animation: fade-in 600ms var(--ease) both;
+    animation: rise-in 500ms var(--ease) backwards;
 }
 
 .bento__cell--name {
     grid-area: name;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -71,7 +76,7 @@
     border-color: var(--ink);
     background: var(--ink);
     color: var(--paper);
-    animation-delay: 250ms;
+    animation-delay: 200ms;
 }
 
 .bento__cell--place {
@@ -80,7 +85,7 @@
     flex-direction: column;
     justify-content: space-between;
     gap: var(--space-5);
-    animation-delay: 400ms;
+    animation-delay: 280ms;
 }
 
 .bento__cell--hobbies {
@@ -88,7 +93,55 @@
     border-color: var(--pastel);
     background: var(--pastel);
     color: var(--pastel-ink);
-    animation-delay: 550ms;
+    animation-delay: 360ms;
+}
+
+/* Name cell background: a faint dot grid, strongest in the corner away
+   from the text. With a mouse, a soft light follows the pointer and
+   brightens the dots near it (js/site.js sets --mx, --my and .is-lit).
+   Touch, reduced motion and no-JS get the still grid only. The masks
+   are alpha only, so their colour does not matter. */
+
+.bento__cell--name::before,
+.bento__cell--name::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-size: var(--space-5) var(--space-5);
+    background-position: center;
+    pointer-events: none;
+}
+
+.bento__cell--name::before {
+    background-image: radial-gradient(circle, color-mix(in srgb, var(--ink) 26%, transparent) 1px, transparent 1.5px);
+    -webkit-mask-image: radial-gradient(ellipse 85% 120% at 100% 100%, #000, transparent 75%);
+    mask-image: radial-gradient(ellipse 85% 120% at 100% 100%, #000, transparent 75%);
+}
+
+.bento__cell--name::after {
+    background-image: radial-gradient(circle, color-mix(in srgb, var(--link) 70%, transparent) 1.25px, transparent 1.75px);
+    -webkit-mask-image: radial-gradient(circle 9rem at var(--mx, 50%) var(--my, 50%), #000, transparent);
+    mask-image: radial-gradient(circle 9rem at var(--mx, 50%) var(--my, 50%), #000, transparent);
+    opacity: 0;
+    transition: opacity var(--dur-3) var(--ease);
+}
+
+.bento__cell--name.is-lit::after {
+    opacity: 1;
+}
+
+/* High contrast and forced colours: nothing behind the text */
+:root[data-contrast="high"] .bento__cell--name::before,
+:root[data-contrast="high"] .bento__cell--name::after {
+    display: none;
+}
+
+@media (forced-colors: active) {
+    .bento__cell--name::before,
+    .bento__cell--name::after {
+        display: none;
+    }
 }
 
 .bento__title {
@@ -167,7 +220,12 @@
 
 /* The greeting and name. Each word of the name settles from a condensed
    width to its full width as the page loads: the one deliberate
-   typographic moment on the page. */
+   typographic moment on the page. The order of the opening:
+     0ms     greeting fades in
+     60ms    "Dhruv" settles, "Patel" 90ms later
+     120ms   lead rises in, buttons at 200ms (both finished by 600ms)
+     200ms   the other bento cells rise in, 80ms apart
+     650ms   the ball drops onto the end of the name and bounces */
 
 .hero__name {
     font-size: clamp(3.75rem, 2rem + 8vw, 7.5rem);
@@ -179,24 +237,26 @@
 .hero__greeting {
     display: block;
     margin-bottom: var(--space-4);
+    color: var(--ink-muted);
     font-size: var(--text-lg);
     font-weight: 600;
     letter-spacing: -0.01em;
     line-height: 1.2;
-    animation: fade-in 500ms var(--ease) both;
+    animation: fade-in 500ms var(--ease) backwards;
 }
 
 .hero__word {
     display: block;
     font-stretch: 100%;
-    animation: name-settle 900ms var(--ease) both;
+    animation: name-settle 900ms var(--ease) 60ms backwards;
 }
 
 .hero__word+.hero__word {
-    animation-delay: 90ms;
+    animation-delay: 150ms;
 }
 
-/* The ball is the full stop */
+/* The ball is the full stop. It is the only thing on the site that
+   bounces: it drops in once the name has settled. */
 .hero__word:last-child::after {
     content: "";
     display: inline-block;
@@ -205,6 +265,45 @@
     margin-left: 0.07em;
     border-radius: 50%;
     background: var(--ball);
+    animation: ball-drop 700ms 650ms backwards;
+}
+
+/* Falls with gravity (ease-in), then two shrinking bounces */
+@keyframes ball-drop {
+    0% {
+        opacity: 0;
+        transform: translateY(-1.4em);
+        animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateY(0);
+        animation-timing-function: cubic-bezier(0, 0.55, 0.45, 1);
+    }
+
+    68% {
+        transform: translateY(-0.3em);
+        animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+    }
+
+    84% {
+        transform: translateY(0);
+        animation-timing-function: cubic-bezier(0, 0.55, 0.45, 1);
+    }
+
+    92% {
+        transform: translateY(-0.07em);
+        animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes name-settle {
@@ -225,7 +324,7 @@
 
 .hero__lead,
 .hero__actions {
-    animation: fade-in 600ms var(--ease) both;
+    animation: rise-in 400ms var(--ease) backwards;
 }
 
 .hero__lead {
@@ -233,14 +332,14 @@
     margin-top: var(--space-5);
     font-size: var(--text-md);
     line-height: 1.5;
-    animation-delay: 450ms;
+    animation-delay: 120ms;
 }
 
 .hero__actions {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-3);
-    animation-delay: 550ms;
+    animation-delay: 200ms;
 }
 
 @keyframes fade-in {
@@ -250,6 +349,18 @@
 
     to {
         opacity: 1;
+    }
+}
+
+@keyframes rise-in {
+    from {
+        opacity: 0;
+        transform: translateY(var(--rise));
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
     }
 }
 
@@ -419,19 +530,100 @@
 
 /* ---- Projects ---- */
 
-.project {
+/* Each project is a raised card. On hover (mouse) or keyboard focus inside
+   it, the card lifts and its shadow deepens; with a mouse, the border also
+   catches a light that follows the pointer (js/site.js, data-pointer-light).
+   The lift uses `translate`, not `transform`, so it never fights the scroll
+   reveal, and nothing changes size, so nothing around it moves. */
+
+.project-list {
     display: grid;
     gap: var(--space-5);
-    padding-block: var(--space-7);
-    border-top: var(--stroke) solid var(--rule);
 }
 
-.project:first-child {
-    padding-top: 0;
-    border-top: 0;
+.project {
+    position: relative;
+    display: grid;
+    gap: var(--space-5);
+    padding: var(--space-5);
+    border: var(--stroke) solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--paper-raised);
+    transition: translate var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease), border-color var(--dur-2) ease;
 }
+
+.js .project.reveal {
+    transition: opacity var(--dur-3) var(--ease), transform var(--dur-3) var(--ease),
+        translate var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease), border-color var(--dur-2) ease;
+}
+
+@media (min-width: 40rem) {
+    .project {
+        padding: var(--space-6);
+    }
+}
+
+@media (hover: hover) {
+    .project:hover {
+        translate: 0 -3px;
+        border-color: var(--control-border);
+        box-shadow: var(--elevation);
+    }
+}
+
+.project:has(:focus-visible) {
+    translate: 0 -3px;
+    border-color: var(--control-border);
+    box-shadow: var(--elevation);
+}
+
+/* The border light: a ring drawn over the border, visible only near the pointer */
+.project::after {
+    content: "";
+    position: absolute;
+    inset: calc(-1 * var(--stroke));
+    padding: var(--stroke);
+    border-radius: inherit;
+    background: radial-gradient(circle 12rem at var(--mx, 50%) var(--my, 0%), var(--link), transparent);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--dur-2) ease;
+}
+
+.project.is-lit::after {
+    opacity: 1;
+}
+
+:root[data-contrast="high"] .project::after {
+    display: none;
+}
+
+:root[data-contrast="high"] .project:hover,
+:root[data-contrast="high"] .project:has(:focus-visible) {
+    border-color: var(--ink);
+}
+
+@media (forced-colors: active) {
+    .project::after {
+        display: none;
+    }
+}
+
+/* Title first, then what kind of project it is; Replay sits opposite */
 
 .project__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-4);
+}
+
+.project__heading {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
@@ -439,13 +631,127 @@
 }
 
 .project__title {
-    font-size: var(--text-lg);
+    flex-basis: 100%;
+    font-size: var(--text-xl);
+    font-weight: 750;
+    letter-spacing: -0.02em;
 }
 
 .project__type {
     color: var(--ink-muted);
     font-family: var(--font-display);
     font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+/* Replay: only shown when the demos can play (site.js adds .has-demos) */
+
+.demo-replay {
+    display: none;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 2.75rem;
+    padding: 0 var(--space-4);
+    border: var(--stroke) solid var(--control-border);
+    border-radius: 999px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color var(--dur-1) ease, background-color var(--dur-1) ease, transform var(--dur-1) var(--ease);
+}
+
+.has-demos .demo-replay {
+    display: inline-flex;
+}
+
+.demo-replay svg {
+    transition: transform var(--dur-3) var(--ease);
+}
+
+.demo-replay:hover {
+    border-color: var(--ink);
+}
+
+.demo-replay:hover svg {
+    transform: rotate(-200deg);
+}
+
+.demo-replay:active {
+    transform: scale(0.96);
+}
+
+/* Bullets: the text steps back so the results in bold stand out */
+
+.project .bullets {
+    color: var(--ink-muted);
+}
+
+.project .bullets strong {
+    color: var(--ink);
+}
+
+/* Technology tags: chips instead of a comma list */
+
+.project .inline-list {
+    gap: var(--space-2);
+    color: var(--ink);
+}
+
+.project .inline-list li {
+    padding: var(--space-1) var(--space-3);
+    border: var(--stroke) solid var(--rule);
+    border-radius: 999px;
+    background: var(--paper);
+    line-height: 1.3;
+}
+
+.project .inline-list li::after {
+    content: none;
+}
+
+/* Calls to action under the cards */
+
+.projects-cta {
+    display: grid;
+    gap: var(--space-4);
+    margin-top: var(--space-7);
+}
+
+.projects-cta__text {
+    max-width: var(--measure);
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.projects-cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+.button__arrow {
+    transition: transform var(--dur-2) var(--ease);
+}
+
+.button:hover .button__arrow,
+.button:focus-visible .button__arrow {
+    transform: translateX(3px);
+}
+
+.button[target="_blank"]:hover .button__arrow,
+.button[target="_blank"]:focus-visible .button__arrow {
+    transform: translate(2px, -2px);
+}
+
+.projects-cta .button:active {
+    transform: scale(0.97);
 }
 
 /* The ball marks the win */
@@ -470,7 +776,7 @@
     padding: var(--space-5);
     border: var(--stroke) solid var(--rule);
     border-radius: var(--radius);
-    background: var(--paper-raised);
+    background: var(--paper);
 }
 
 /* Chess: board with the last move, beside the UCI exchange that produced it */
@@ -548,7 +854,7 @@
     padding: var(--space-4);
     border: var(--stroke) solid var(--control-border);
     border-radius: var(--radius);
-    background: var(--paper);
+    background: var(--paper-raised);
 }
 
 .pipeline__name {
@@ -598,6 +904,106 @@
     color: var(--ink-muted);
     font-family: var(--font-display);
     font-size: var(--text-sm);
+}
+
+/* Demo playback (js/site.js adds .is-playing). Everything animates from
+   hidden to its normal state, so the resting diagram is the finished one.
+   Chess: e2 lights, the arrow grows, e4 lights, then the UCI lines type
+   out with the engine's reply last. FinChat: the steps light up in order,
+   then the summary appears. */
+
+.uci__line,
+.uci__reply {
+    display: inline-block;
+}
+
+.is-playing .chess-board__highlight--from {
+    animation: demo-fade 250ms var(--ease) backwards;
+}
+
+.is-playing .chess-board__arrow--shaft {
+    transform-box: fill-box;
+    transform-origin: bottom;
+    animation: demo-grow 400ms var(--ease-in-out) 200ms backwards;
+}
+
+.is-playing .chess-board__arrow--head {
+    animation: demo-fade 150ms var(--ease) 560ms backwards;
+}
+
+.is-playing .chess-board__highlight--to {
+    animation: demo-fade 250ms var(--ease) 620ms backwards;
+}
+
+.is-playing .uci__line {
+    animation: demo-type 450ms steps(14, end) 150ms backwards;
+}
+
+.is-playing .uci__line + .uci__line {
+    animation-duration: 300ms;
+    animation-delay: 650ms;
+}
+
+.is-playing .uci__reply {
+    animation: demo-fade 300ms var(--ease) 1150ms backwards;
+}
+
+.is-playing .pipeline__step {
+    animation: demo-step 700ms var(--ease) backwards;
+}
+
+.is-playing .pipeline__step::after {
+    animation: demo-fade 200ms var(--ease) backwards;
+}
+
+.is-playing .pipeline__step:nth-child(2),
+.is-playing .pipeline__step:nth-child(1)::after {
+    animation-delay: 250ms;
+}
+
+.is-playing .pipeline__step:nth-child(3),
+.is-playing .pipeline__step:nth-child(2)::after {
+    animation-delay: 500ms;
+}
+
+.is-playing .pipeline__step:nth-child(4),
+.is-playing .pipeline__step:nth-child(3)::after {
+    animation-delay: 750ms;
+}
+
+.is-playing .pipeline__summary {
+    animation: demo-fade 300ms var(--ease) 1250ms backwards;
+}
+
+@keyframes demo-fade {
+    from {
+        opacity: 0;
+    }
+}
+
+@keyframes demo-grow {
+    from {
+        transform: scaleY(0);
+    }
+}
+
+@keyframes demo-type {
+    from {
+        clip-path: inset(0 100% 0 0);
+    }
+}
+
+/* Each step arrives, briefly takes the link colour, then settles */
+@keyframes demo-step {
+    0% {
+        opacity: 0;
+        border-color: var(--link);
+    }
+
+    40% {
+        opacity: 1;
+        border-color: var(--link);
+    }
 }
 
 /* ---- Skills ---- */

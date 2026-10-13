@@ -29,6 +29,15 @@
     color: var(--island-fg);
     box-shadow: var(--elevation);
     overflow: clip;
+    animation: island-in 500ms var(--ease) backwards;
+}
+
+/* The pill drops into place as the page opens */
+@keyframes island-in {
+    from {
+        opacity: 0;
+        transform: translateY(calc(-1 * var(--space-3)));
+    }
 }
 
 .js .island__shell {
@@ -84,6 +93,23 @@
 .island__toggle svg {
     flex-shrink: 0;
     transition: transform var(--dur-2) var(--ease);
+}
+
+/* When the current section changes, its name slides up into the small
+   pill (site.js adds .is-swapping) */
+[data-island-label] {
+    display: inline-block;
+}
+
+[data-island-label].is-swapping {
+    animation: label-in var(--dur-2) var(--ease);
+}
+
+@keyframes label-in {
+    from {
+        opacity: 0;
+        transform: translateY(0.6em);
+    }
 }
 
 html:not(.js) .island__toggle {
@@ -192,12 +218,18 @@ html:not(.js) .island__toggle {
     background: currentColor;
     transform: scaleX(0);
     transform-origin: left;
-    transition: transform var(--dur-2) var(--ease);
+    transition: transform var(--dur-2) var(--ease), opacity var(--dur-2) ease;
 }
 
 .site-nav__link:hover {
     color: var(--nav-fg);
     text-decoration: none;
+}
+
+/* Hover previews the underline at half strength; the current link has it in full */
+.site-nav__link:not([aria-current]):hover::after {
+    opacity: 0.45;
+    transform: scaleX(1);
 }
 
 .site-nav__link[aria-current] {
@@ -206,6 +238,47 @@ html:not(.js) .island__toggle {
 
 .site-nav__link[aria-current]::after {
     transform: scaleX(1);
+}
+
+/* Wide screens with JavaScript: one underline slides between the section
+   links instead of each link drawing its own. site.js creates it and sets
+   --ind-x, --ind-y (px) and --ind-w (the width as a scale of 1px). */
+
+.site-nav__indicator {
+    display: none;
+}
+
+@media (min-width: 70rem) {
+    .site-nav {
+        position: relative;
+    }
+
+    .site-nav__indicator {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1px;
+        height: 2px;
+        background: var(--nav-fg);
+        opacity: 0;
+        pointer-events: none;
+        transform: translate(var(--ind-x, 0), var(--ind-y, 0)) scaleX(var(--ind-w, 0));
+        transform-origin: left;
+        transition: opacity var(--dur-2) ease;
+    }
+
+    .site-nav__indicator.is-shown {
+        opacity: 1;
+    }
+
+    .site-nav__indicator.is-sliding {
+        transition: transform var(--dur-3) var(--ease-in-out), opacity var(--dur-2) ease;
+    }
+
+    .site-nav.has-indicator .site-nav__list .site-nav__link[aria-current]::after {
+        transform: scaleX(0);
+    }
 }
 
 .site-nav__tools {
@@ -232,12 +305,20 @@ html:not(.js) .tool-button {
     background: transparent;
     color: var(--nav-muted);
     cursor: pointer;
-    transition: color var(--dur-1) ease, background-color var(--dur-1) ease;
+    transition: color var(--dur-1) ease, background-color var(--dur-1) ease, transform var(--dur-1) var(--ease);
 }
 
 .tool-button:hover,
 .tool-button[aria-pressed="true"] {
     color: var(--nav-fg);
+}
+
+.tool-button:hover {
+    background: color-mix(in srgb, var(--nav-fg) 10%, transparent);
+}
+
+.tool-button:active {
+    transform: scale(0.92);
 }
 
 .tool-button[aria-pressed="true"] {
@@ -323,8 +404,18 @@ html:not(.js) .tool-button {
         transform: translateX(-50%);
     }
 
+    /* The menu fades and settles in from the pill. Browsers without
+       @starting-style just show it, as before. */
     .js .island[data-open="true"] .site-nav {
         display: flex;
+        transition: opacity var(--dur-2) var(--ease), transform var(--dur-2) var(--ease);
+    }
+
+    @starting-style {
+        .js .island[data-open="true"] .site-nav {
+            opacity: 0;
+            transform: translateX(-50%) translateY(calc(-1 * var(--space-2))) scale(0.98);
+        }
     }
 
     .island__shell .site-nav :focus-visible {

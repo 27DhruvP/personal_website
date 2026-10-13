@@ -1,0 +1,7 @@
+[33mcommit a84ffe806cbac67afb081549d55efef75de47fe8[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author:     Dhruv Patel <2710dhruvpatel@gmail.com>
+AuthorDate: Tue Oct 13 16:11:52 2026 +0100
+Commit:     Dhruv Patel <2710dhruvpatel@gmail.com>
+CommitDate: Tue Oct 13 16:11:52 2026 +0100
+
+    Use cobalt blue for the Outside of code cell in dark mode

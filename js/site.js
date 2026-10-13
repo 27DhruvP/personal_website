@@ -5,7 +5,11 @@
 // without it. Page-specific logic stays in its own file (js/addEntry.js).
 //
 //   1. Navigation pill: shrinks while scrolling, opens on hover, focus or tap,
-//      with the theme and contrast buttons and scroll progress
+//      with the theme and contrast buttons, scroll progress and the sliding
+//      underline under the current section
+//   2. Pointer light: the hero grid and project card borders brighten
+//      around a mouse pointer
+//   3. Project demos: the diagrams play when seen, and on Replay
 //   4. Reveal on scroll
 //   5. Form loading state
 //   6. Confirm dialogs and auto-submitting filters (replaces inline handlers)
@@ -171,6 +175,52 @@
             .map(function (id) { return document.getElementById(id); })
             .filter(Boolean);
 
+        // ---- Sliding underline (wide screens; CSS hides it otherwise) ----
+        // One line that travels to the current section link, lined up with
+        // where that link's own ::after underline would be.
+        var nav = island.querySelector('.site-nav');
+        var indicator = null;
+        var indicatorFor = null;
+
+        if (nav && sections.length) {
+            indicator = document.createElement('span');
+            indicator.className = 'site-nav__indicator';
+            indicator.setAttribute('aria-hidden', 'true');
+            nav.appendChild(indicator);
+            nav.classList.add('has-indicator');
+        }
+
+        var placeIndicator = function (link) {
+            if (!indicator || !wide.matches) { return; }
+
+            if (!link) {
+                indicator.classList.remove('is-shown');
+                indicatorFor = null;
+                return;
+            }
+
+            var navBox = nav.getBoundingClientRect();
+            var linkBox = link.getBoundingClientRect();
+            var linkStyle = window.getComputedStyle(link);
+            var line = window.getComputedStyle(link, '::after');
+            var left = parseFloat(linkStyle.paddingLeft) || 0;
+            var right = parseFloat(linkStyle.paddingRight) || 0;
+            var fromBottom = (parseFloat(line.bottom) || 0) + (parseFloat(line.height) || 2);
+
+            // Slide only from one link to another; appearing from nothing is a fade
+            indicator.classList.toggle('is-sliding', indicatorFor !== null && indicatorFor !== link);
+            indicator.style.setProperty('--ind-x', (linkBox.left - navBox.left + left) + 'px');
+            indicator.style.setProperty('--ind-y', (linkBox.bottom - navBox.top - fromBottom) + 'px');
+            indicator.style.setProperty('--ind-w', Math.max(0, linkBox.width - left - right).toFixed(2));
+            indicator.classList.add('is-shown');
+            indicatorFor = link;
+        };
+
+        var refreshIndicator = function () {
+            indicatorFor = null; // place again without sliding (layout changed)
+            placeIndicator(nav ? nav.querySelector('.site-nav__list [aria-current]') : null);
+        };
+
         var scheduled = false;
 
         var updateScroll = function () {
@@ -202,8 +252,20 @@
                 }
             });
 
+            var activeLink = activeId ? sectionLinks[activeId] : null;
+            if (activeLink !== indicatorFor) { placeIndicator(activeLink); }
+
             var text = activeId ? sectionLinks[activeId].textContent.trim() : defaultLabel;
-            if (label.textContent !== text) { label.textContent = text; }
+            if (label.textContent !== text) {
+                label.textContent = text;
+
+                // Restart the slide-in (skipped on the first paint)
+                if (!reduceMotion && island.classList.contains('is-ready')) {
+                    label.classList.remove('is-swapping');
+                    void label.offsetWidth;
+                    label.classList.add('is-swapping');
+                }
+            }
 
             if (wasAtTop !== state.atTop) { render(); }
         };
@@ -216,16 +278,96 @@
         };
 
         window.addEventListener('scroll', requestUpdate, { passive: true });
-        window.addEventListener('resize', function () { measure(); requestUpdate(); });
+        window.addEventListener('resize', function () { measure(); refreshIndicator(); requestUpdate(); });
+
+        if (wide.addEventListener) { wide.addEventListener('change', refreshIndicator); }
+        else if (wide.addListener) { wide.addListener(refreshIndicator); }
 
         measure();
         updateScroll();
         render();
 
         // Measure again once the fonts arrive, then allow the width to animate
-        if (document.fonts && document.fonts.ready) { document.fonts.ready.then(measure); }
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(function () { measure(); refreshIndicator(); });
+        }
         window.requestAnimationFrame(function () {
             window.requestAnimationFrame(function () { island.classList.add('is-ready'); });
+        });
+    }
+
+    // ---------------------
+    // 2. Pointer light (hero dot grid, project card borders)
+    // Writes the pointer position as --mx/--my and adds .is-lit; the CSS
+    // decides what lights up. Mouse only: touch has no pointer to follow,
+    // and reduced motion keeps everything still. At most one write per frame.
+    // ---------------------
+    if (!reduceMotion) {
+        document.querySelectorAll('[data-pointer-light]').forEach(function (surface) {
+            var pointerX = 0;
+            var pointerY = 0;
+            var lightFrame = 0;
+
+            var moveLight = function () {
+                lightFrame = 0;
+                var box = surface.getBoundingClientRect();
+                surface.style.setProperty('--mx', (pointerX - box.left).toFixed(1) + 'px');
+                surface.style.setProperty('--my', (pointerY - box.top).toFixed(1) + 'px');
+            };
+
+            surface.addEventListener('pointermove', function (event) {
+                if (event.pointerType !== 'mouse') { return; }
+
+                pointerX = event.clientX;
+                pointerY = event.clientY;
+                if (!lightFrame) { lightFrame = window.requestAnimationFrame(moveLight); }
+                surface.classList.add('is-lit');
+            });
+
+            surface.addEventListener('pointerleave', function () {
+                surface.classList.remove('is-lit');
+            });
+        });
+    }
+
+    // ---------------------
+    // 3. Project demos
+    // Each [data-demo] diagram plays once when it is well into view, and
+    // its card's Replay button plays it again. The animations only exist
+    // under .is-playing, so without JavaScript or with reduced motion the
+    // diagrams simply show their finished state (and Replay is hidden).
+    // ---------------------
+    var demos = document.querySelectorAll('[data-demo]');
+
+    var playDemo = function (demo) {
+        demo.classList.remove('is-playing');
+        void demo.offsetWidth; // restart the CSS animations
+        demo.classList.add('is-playing');
+    };
+
+    if (demos.length && !reduceMotion && 'IntersectionObserver' in window) {
+        document.documentElement.classList.add('has-demos');
+
+        var demoObserver = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    playDemo(entry.target);
+                    demoObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.4 });
+
+        demos.forEach(function (demo) { demoObserver.observe(demo); });
+
+        document.addEventListener('click', function (event) {
+            var button = event.target.closest ? event.target.closest('[data-demo-replay]') : null;
+            var card = button ? button.closest('.project') : null;
+            var demo = card ? card.querySelector('[data-demo]') : null;
+
+            if (demo) {
+                demoObserver.unobserve(demo);
+                playDemo(demo);
+            }
         });
     }
 
