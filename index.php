@@ -176,113 +176,140 @@ include 'head.php';
             <div class="container section__grid">
                 <h2 class="section__title" id="experience-title">Experience</h2>
                 <div>
-                    <article class="entry reveal">
-                        <header class="entry__head">
-                            <div>
-                                <h3 class="entry__title">University Lab Demonstrator</h3>
-                            </div>
-                            <p class="entry__meta">Sep 2026&ndash;present</p>
-                        </header>
-                    </article>
+                    <!-- Newest first, by start date. The year markers are visual
+                         only, as every date already says the year. --now marks
+                         roles that are still going. -->
+                    <ol class="timeline">
+                        <li class="timeline__year" aria-hidden="true">2026</li>
 
-                    <article class="entry reveal">
-                        <header class="entry__head">
-                            <div>
-                                <h3 class="entry__title">CarePlusAI</h3>
-                                <p class="entry__role">Software &amp; AI Engineer (part-time)</p>
-                            </div>
-                            <p class="entry__meta">Aug 2026&ndash;present<br>London, UK</p>
-                        </header>
-                        <ul class="bullets">
-                            <li>Engineered a production multi-tenant SaaS platform using React, TypeScript, Node.js, PostgreSQL and AWS, delivering <strong>20+ workflows</strong> across scheduling, operations, incident tracking and performance analysis.</li>
-                            <li>Secured the platform across <strong>5+ user roles</strong> and multiple organisations with role-based access control, tenant isolation, API authentication, input validation and audit logging.</li>
-                            <li>Developed REST APIs and backend services, designing database schemas and data processing workflows that connect the frontend and backend.</li>
-                            <li>Built an OpenAI API powered insights and recommendation system analysing operational data across <strong>10+ categories</strong> of trends, anomalies and issues, with the client estimating <strong>~60% less manager time</strong> spent on manual analysis.</li>
-                            <li>Accelerated routine development tasks by <strong>~35%</strong> by integrating AI-assisted coding, debugging and refactoring with manual review and functional and security testing.</li>
-                            <li>Wrote unit and integration tests for backend services and API endpoints, and set up GitHub Actions CI/CD to automate testing and build validation on every change.</li>
-                        </ul>
-                        <ul class="inline-list" aria-label="Technologies">
-                            <li>React</li><li>TypeScript</li><li>Node.js</li><li>PostgreSQL</li><li>AWS</li><li>OpenAI API</li><li>GitHub Actions</li>
-                        </ul>
-                    </article>
+                        <li class="timeline__item timeline__item--now">
+                            <article class="entry reveal">
+                                <header class="entry__head">
+                                    <div>
+                                        <p class="timeline__when">Sep 2026&ndash;present</p>
+                                        <h3 class="entry__title">University Lab Demonstrator</h3>
+                                    </div>
+                                </header>
+                            </article>
+                        </li>
 
-                    <article class="entry reveal">
-                        <header class="entry__head">
-                            <div>
-                                <h3 class="entry__title">AI Society</h3>
-                                <p class="entry__role">Vice President &amp; Head of Outreach</p>
-                            </div>
-                            <p class="entry__meta">Dec 2025&ndash;present</p>
-                        </header>
-                        <ul class="bullets">
-                            <li>Co-founded and helped grow the society to <strong>350+ members</strong>, securing sponsorships and organising weekly AI sessions and hackathons.</li>
-                        </ul>
-                    </article>
+                        <li class="timeline__item">
+                            <article class="entry reveal">
+                                <header class="entry__head">
+                                    <div>
+                                        <p class="timeline__when">Sep&ndash;Nov 2026</p>
+                                        <h3 class="entry__title">IBM SkillsBuild AI Experiential Learning Lab</h3>
+                                    </div>
+                                </header>
+                            </article>
+                        </li>
 
-                    <article class="entry reveal">
-                        <header class="entry__head">
-                            <div>
-                                <h3 class="entry__title">IBM SkillsBuild AI Experiential Learning Lab</h3>
-                            </div>
-                            <p class="entry__meta">Sep&ndash;Nov 2026</p>
-                        </header>
-                    </article>
+                        <li class="timeline__item timeline__item--now">
+                            <article class="entry reveal">
+                                <header class="entry__head">
+                                    <div>
+                                        <p class="timeline__when">Aug 2026&ndash;present <span>London, UK</span></p>
+                                        <h3 class="entry__title">CarePlusAI</h3>
+                                        <p class="entry__role">Software &amp; AI Engineer (part-time)</p>
+                                    </div>
+                                </header>
+                                <ul class="bullets">
+                                    <li>Engineered a production multi-tenant SaaS platform using React, TypeScript, Node.js, PostgreSQL and AWS, delivering <strong>20+ workflows</strong> across scheduling, operations, incident tracking and performance analysis.</li>
+                                    <li>Secured the platform across <strong>5+ user roles</strong> and multiple organisations with role-based access control, tenant isolation, API authentication, input validation and audit logging.</li>
+                                    <li>Developed REST APIs and backend services, designing database schemas and data processing workflows that connect the frontend and backend.</li>
+                                    <li>Built an OpenAI API powered insights and recommendation system analysing operational data across <strong>10+ categories</strong> of trends, anomalies and issues, with the client estimating <strong>~60% less manager time</strong> spent on manual analysis.</li>
+                                    <li>Accelerated routine development tasks by <strong>~35%</strong> by integrating AI-assisted coding, debugging and refactoring with manual review and functional and security testing.</li>
+                                    <li>Wrote unit and integration tests for backend services and API endpoints, and set up GitHub Actions CI/CD to automate testing and build validation on every change.</li>
+                                </ul>
+                                <ul class="inline-list" aria-label="Technologies">
+                                    <li>React</li><li>TypeScript</li><li>Node.js</li><li>PostgreSQL</li><li>AWS</li><li>OpenAI API</li><li>GitHub Actions</li>
+                                </ul>
+                            </article>
+                        </li>
 
-                    <article class="entry reveal">
-                        <header class="entry__head">
-                            <div>
-                                <h3 class="entry__title">FunTech</h3>
-                                <p class="entry__role">Assistant Location Coordinator</p>
-                            </div>
-                            <p class="entry__meta">Jul&ndash;Aug 2026<br>London, UK</p>
-                        </header>
-                        <ul class="bullets">
-                            <li>Led daily operations across a 5-week technology summer camp serving <strong>75+ students and tutors</strong>, coordinating tutors and resolving operational issues.</li>
-                            <li>Delivered workshops across <strong>5+ technical areas</strong>, including AI, natural language processing, Python, web development and cybersecurity, with a different focus each week.</li>
-                            <li>Guided 75+ students through <strong>10+ AI projects</strong>, teaching practical AI concepts with Python, TensorFlow and Keras, including introductory machine learning and neural networks.</li>
-                            <li>Worked 40+ hours per week troubleshooting technical issues and supporting students and tutors across programming, AI and technology workshops.</li>
-                            <li>Supported programming and game development sessions using Python, Unity and Unreal Engine, contributing to <strong>100% positive feedback</strong>.</li>
-                        </ul>
-                        <ul class="inline-list" aria-label="Technologies">
-                            <li>Python</li><li>TensorFlow</li><li>Keras</li><li>Unity</li><li>Unreal Engine</li>
-                        </ul>
-                    </article>
+                        <li class="timeline__item">
+                            <article class="entry reveal">
+                                <header class="entry__head">
+                                    <div>
+                                        <p class="timeline__when">Jul&ndash;Aug 2026 <span>London, UK</span></p>
+                                        <h3 class="entry__title">FunTech</h3>
+                                        <p class="entry__role">Assistant Location Coordinator</p>
+                                    </div>
+                                </header>
+                                <ul class="bullets">
+                                    <li>Led daily operations across a 5-week technology summer camp serving <strong>75+ students and tutors</strong>, coordinating tutors and resolving operational issues.</li>
+                                    <li>Delivered workshops across <strong>5+ technical areas</strong>, including AI, natural language processing, Python, web development and cybersecurity, with a different focus each week.</li>
+                                    <li>Guided 75+ students through <strong>10+ AI projects</strong>, teaching practical AI concepts with Python, TensorFlow and Keras, including introductory machine learning and neural networks.</li>
+                                    <li>Worked 40+ hours per week troubleshooting technical issues and supporting students and tutors across programming, AI and technology workshops.</li>
+                                    <li>Supported programming and game development sessions using Python, Unity and Unreal Engine, contributing to <strong>100% positive feedback</strong>.</li>
+                                </ul>
+                                <ul class="inline-list" aria-label="Technologies">
+                                    <li>Python</li><li>TensorFlow</li><li>Keras</li><li>Unity</li><li>Unreal Engine</li>
+                                </ul>
+                            </article>
+                        </li>
 
-                    <article class="entry reveal">
-                        <header class="entry__head">
-                            <div>
-                                <h3 class="entry__title">Transit Community Support CIC</h3>
-                                <p class="entry__role">Security Engineer and Tutor</p>
-                            </div>
-                            <p class="entry__meta">Dec 2023&ndash;Jun 2026<br>London, UK</p>
-                        </header>
-                        <ul class="bullets">
-                            <li>Established system hardening and security practices covering phishing risks, safe system usage and credential handling, bringing security-related incidents to <strong>near zero</strong>.</li>
-                            <li>Delivered Python, HTML and CSS workshops covering algorithms, data structures and introductory machine learning to <strong>120+ students</strong>, achieving <strong>95% session attendance</strong>.</li>
-                            <li>Diagnosed and resolved software, OS and network issues across <strong>30+ Linux/Windows machines</strong>, resolving <strong>90% of issues within 24 hours</strong> and cutting recurring support tickets by ~40%.</li>
-                        </ul>
-                        <ul class="inline-list" aria-label="Technologies">
-                            <li>Python</li><li>HTML</li><li>CSS</li><li>Linux</li><li>Windows</li><li>Networking</li><li>Security</li><li>Teaching</li>
-                        </ul>
-                    </article>
+                        <li class="timeline__year" aria-hidden="true">2025</li>
 
-                    <article class="entry reveal">
-                        <header class="entry__head">
-                            <div>
-                                <h3 class="entry__title">Cisco Systems</h3>
-                                <p class="entry__role">Computer Science Work Experience</p>
-                            </div>
-                            <p class="entry__meta">Jul 2024<br>London, UK</p>
-                        </header>
-                        <ul class="bullets">
-                            <li>Analysed latency-compression trade-offs in large-scale video codec systems within a professional software engineering environment.</li>
-                            <li>Gained exposure to software development lifecycle practices within a large engineering organisation.</li>
-                            <li>Investigated build, testing and production workflows for large-scale networking and media systems alongside <strong>10+ specialists</strong>.</li>
-                        </ul>
-                        <ul class="inline-list" aria-label="Technologies">
-                            <li>Video Codecs</li><li>Networking</li><li>SDLC</li><li>Build Systems</li><li>Production Workflows</li>
-                        </ul>
-                    </article>
+                        <li class="timeline__item timeline__item--now">
+                            <article class="entry reveal">
+                                <header class="entry__head">
+                                    <div>
+                                        <p class="timeline__when">Dec 2025&ndash;present</p>
+                                        <h3 class="entry__title">AI Society</h3>
+                                        <p class="entry__role">Vice President &amp; Head of Outreach</p>
+                                    </div>
+                                </header>
+                                <ul class="bullets">
+                                    <li>Co-founded and helped grow the society to <strong>350+ members</strong>, securing sponsorships and organising weekly AI sessions and hackathons.</li>
+                                </ul>
+                            </article>
+                        </li>
+
+                        <li class="timeline__year" aria-hidden="true">2024</li>
+
+                        <li class="timeline__item">
+                            <article class="entry reveal">
+                                <header class="entry__head">
+                                    <div>
+                                        <p class="timeline__when">Jul 2024 <span>London, UK</span></p>
+                                        <h3 class="entry__title">Cisco Systems</h3>
+                                        <p class="entry__role">Computer Science Work Experience</p>
+                                    </div>
+                                </header>
+                                <ul class="bullets">
+                                    <li>Analysed latency-compression trade-offs in large-scale video codec systems within a professional software engineering environment.</li>
+                                    <li>Gained exposure to software development lifecycle practices within a large engineering organisation.</li>
+                                    <li>Investigated build, testing and production workflows for large-scale networking and media systems alongside <strong>10+ specialists</strong>.</li>
+                                </ul>
+                                <ul class="inline-list" aria-label="Technologies">
+                                    <li>Video Codecs</li><li>Networking</li><li>SDLC</li><li>Build Systems</li><li>Production Workflows</li>
+                                </ul>
+                            </article>
+                        </li>
+
+                        <li class="timeline__year" aria-hidden="true">2023</li>
+
+                        <li class="timeline__item">
+                            <article class="entry reveal">
+                                <header class="entry__head">
+                                    <div>
+                                        <p class="timeline__when">Dec 2023&ndash;Jun 2026 <span>London, UK</span></p>
+                                        <h3 class="entry__title">Transit Community Support CIC</h3>
+                                        <p class="entry__role">Security Engineer and Tutor</p>
+                                    </div>
+                                </header>
+                                <ul class="bullets">
+                                    <li>Established system hardening and security practices covering phishing risks, safe system usage and credential handling, bringing security-related incidents to <strong>near zero</strong>.</li>
+                                    <li>Delivered Python, HTML and CSS workshops covering algorithms, data structures and introductory machine learning to <strong>120+ students</strong>, achieving <strong>95% session attendance</strong>.</li>
+                                    <li>Diagnosed and resolved software, OS and network issues across <strong>30+ Linux/Windows machines</strong>, resolving <strong>90% of issues within 24 hours</strong> and cutting recurring support tickets by ~40%.</li>
+                                </ul>
+                                <ul class="inline-list" aria-label="Technologies">
+                                    <li>Python</li><li>HTML</li><li>CSS</li><li>Linux</li><li>Windows</li><li>Networking</li><li>Security</li><li>Teaching</li>
+                                </ul>
+                            </article>
+                        </li>
+                    </ol>
 
                     <div class="reveal">
                         <h3 class="section__subtitle">Achievements</h3>

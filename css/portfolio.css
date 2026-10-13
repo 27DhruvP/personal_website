@@ -52,6 +52,23 @@
     }
 }
 
+/* Laptops and desktops: the whole grid fits in the first screen. It
+   fills the height left under the nav pill (capped on very tall
+   screens), and the name, the lead and the spacing scale with the
+   viewport height so a short laptop screen still shows the bottom row.
+   On screens too short for that it simply grows and scrolls. */
+@media (min-width: 64rem) {
+    .bento-section {
+        padding-top: var(--space-4);
+        padding-bottom: var(--space-7);
+    }
+
+    .bento {
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        min-height: min(calc(100svh - var(--header-h) - var(--space-4) * 2), 56rem);
+    }
+}
+
 /* The cells rise in one after another while the name settles. "backwards"
    rather than "both", so no transform is left on the cells afterwards. */
 .bento__cell {
@@ -198,6 +215,27 @@
     .hobbies .hobby__icon {
         grid-row: auto;
         margin-bottom: var(--space-2);
+    }
+}
+
+/* Laptops and up, where the grid has to fit in one screen: a smaller
+   icon beside the name, the text below both */
+@media (min-width: 64rem) {
+    .hobbies .hobby {
+        grid-template-columns: 2rem minmax(0, 1fr);
+        align-items: center;
+    }
+
+    .hobbies .hobby__icon {
+        width: 2rem;
+        height: 2rem;
+        margin-bottom: 0;
+        padding: 0.375rem;
+    }
+
+    .hobby__text,
+    .hobby__extra {
+        grid-column: 1 / -1;
     }
 }
 
@@ -648,6 +686,56 @@ a.hobby__extra {
     animation-delay: 200ms;
 }
 
+/* Laptops and up: the name, the lead and the spacing around them follow
+   the viewport height, so the whole bento grid fits in the first screen */
+@media (min-width: 64rem) {
+    .bento__cell {
+        padding: clamp(var(--space-4), 2.6svh, var(--space-5));
+    }
+
+    .bento__cell--name {
+        gap: var(--space-5);
+        padding: clamp(var(--space-5), 3svh, var(--space-6));
+    }
+
+    .hero__name {
+        font-size: clamp(3.75rem, min(2rem + 8vw, 11.5svh), 7.5rem);
+    }
+
+    .hero__greeting {
+        margin-bottom: var(--space-3);
+    }
+
+    .hero__lead {
+        margin-top: clamp(var(--space-4), 2.5svh, var(--space-5));
+        font-size: clamp(var(--text-base), 2.2svh, var(--text-md));
+    }
+
+    .bento__title {
+        margin-bottom: clamp(var(--space-3), 1.7svh, var(--space-4));
+    }
+
+    .bento__cell--place {
+        min-height: 0;
+    }
+}
+
+/* Short laptop screens: a slightly smaller name, and the roles in "Now"
+   sit side by side */
+@media (min-width: 64rem) and (max-height: 50rem) {
+    .bento__cell--name {
+        gap: var(--space-4);
+    }
+
+    .hero__name {
+        font-size: clamp(3.75rem, min(2rem + 8vw, 10svh), 7.5rem);
+    }
+
+    .now-list {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
 @keyframes fade-in {
     from {
         opacity: 0;
@@ -866,6 +954,161 @@ main {
 @media (min-width: 40rem) {
     .entry__meta {
         text-align: right;
+    }
+}
+
+/* ---- Experience timeline ----
+   The roles hang off a rail, newest first, grouped under year markers.
+   Every role has a node on the rail: filled for roles still going
+   (--now), hollow for past ones. Where the browser supports scroll-driven
+   animation, the rail fills in the link colour as the middle of the
+   screen moves down it; elsewhere, and with reduced motion, it stays a
+   plain rail. */
+
+.timeline {
+    --tl-node: var(--space-4);
+    --tl-gutter: var(--space-6);
+    --tl-rail: calc(var(--tl-node) / 2 - 1px);
+
+    position: relative;
+    display: grid;
+    padding-left: var(--tl-gutter);
+}
+
+.timeline::before,
+.timeline::after {
+    content: "";
+    position: absolute;
+    left: var(--tl-rail);
+    top: var(--space-3);
+    bottom: 0;
+    width: 2px;
+}
+
+/* The rail fades out after the oldest role instead of stopping dead */
+.timeline::before {
+    background: var(--rule);
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - var(--space-8)), transparent);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - var(--space-8)), transparent);
+}
+
+.timeline::after {
+    display: none;
+    background: var(--link);
+    transform-origin: top;
+}
+
+/* The fill starts when the top of the timeline reaches the middle of the
+   screen and is complete when its bottom does */
+@supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+        .timeline::after {
+            display: block;
+            -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - var(--space-8)), transparent);
+            mask-image: linear-gradient(to bottom, #000 calc(100% - var(--space-8)), transparent);
+            animation: timeline-fill linear both;
+            animation-timeline: view();
+            animation-range: cover 50vh cover calc(100% - 50vh);
+        }
+    }
+}
+
+@keyframes timeline-fill {
+    from {
+        transform: scaleY(0);
+    }
+
+    to {
+        transform: scaleY(1);
+    }
+}
+
+/* Above the rail and its fill */
+.timeline__item,
+.timeline__year {
+    position: relative;
+    z-index: 1;
+}
+
+/* The year sits on the rail like a station marker. Its background is the
+   Experience band's (.section--alt), so it covers the rail behind it. */
+.timeline__year {
+    width: fit-content;
+    margin-left: calc(-1 * var(--tl-gutter));
+    padding: 0 var(--space-3);
+    border: var(--stroke) solid var(--ink);
+    border-radius: 999px;
+    background: var(--paper-raised);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    line-height: var(--space-5);
+}
+
+.timeline__year:not(:first-child) {
+    margin-top: var(--space-5);
+}
+
+/* The entries lose their dividing rules: the rail does that job now */
+.timeline .entry {
+    padding-block: var(--space-5);
+    border-top: 0;
+}
+
+/* The node lines up with the date, the first line of each entry */
+.timeline__item::before {
+    content: "";
+    position: absolute;
+    left: calc(-1 * var(--tl-gutter));
+    top: calc(var(--space-5) + (var(--space-5) - var(--tl-node)) / 2);
+    width: var(--tl-node);
+    height: var(--tl-node);
+    border: 2px solid var(--control-border);
+    border-radius: 50%;
+    background: var(--paper-raised);
+}
+
+.timeline__item--now::before {
+    border-color: var(--link);
+    background: var(--link);
+    box-shadow: 0 0 0 var(--space-1) color-mix(in srgb, var(--link) 22%, transparent);
+}
+
+.timeline__when {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-3);
+    margin-bottom: var(--space-1);
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.06em;
+    line-height: var(--space-5);
+    text-transform: uppercase;
+}
+
+.timeline__item--now .timeline__when {
+    color: var(--link);
+}
+
+/* The place, after the dates */
+.timeline__when span {
+    color: var(--ink-muted);
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+@media (forced-colors: active) {
+    .timeline::after {
+        display: none;
+    }
+
+    .timeline__item--now::before {
+        background: CanvasText;
     }
 }
 
