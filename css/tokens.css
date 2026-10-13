@@ -225,8 +225,8 @@
         --island-bg: #02060F;
         --island-fg: #E9EEF8;
         --island-edge: #243556;
-        --pastel: #F6D6BF;
-        --pastel-ink: #0A1730;
+        --pastel: #33253A;
+        --pastel-ink: #FFDCC4;
     }
 }
 
@@ -234,8 +234,8 @@
     --island-bg: #02060F;
     --island-fg: #E9EEF8;
     --island-edge: #243556;
-    --pastel: #F6D6BF;
-    --pastel-ink: #0A1730;
+    --pastel: #33253A;
+    --pastel-ink: #FFDCC4;
 }
 
 :root[data-contrast="high"] {
