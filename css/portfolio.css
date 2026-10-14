@@ -416,6 +416,15 @@ a.hobby__extra {
     font-weight: 600;
 }
 
+/* Small text links get a taller touch area (at least 24px) without
+   moving anything: the padding is taken back by the negative margin */
+.win__link,
+a.hobby__extra,
+.projects-github__ask {
+    padding-block: var(--space-1);
+    margin-block: calc(-1 * var(--space-1));
+}
+
 /* Ways to get in touch */
 
 .reach__lead {
@@ -1348,8 +1357,9 @@ main {
     align-items: center;
     gap: var(--space-2);
     justify-self: start;
-    margin-top: calc(-1 * var(--space-2));
-    padding: 0;
+    /* The padding gives a taller touch area; the margins take it back */
+    margin-block: calc(-1 * (var(--space-2) + var(--space-1))) calc(-1 * var(--space-1));
+    padding: var(--space-1) 0;
     border: 0;
     background: none;
     color: var(--link);
@@ -1403,6 +1413,10 @@ main {
 .project {
     position: relative;
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    /* Cards in the swipe row share the tallest card's height; the spare
+       space goes below the content instead of stretching the rows */
+    align-content: start;
     gap: var(--space-5);
     padding: var(--space-5);
     border: var(--stroke) solid var(--rule);
@@ -1562,6 +1576,8 @@ main {
 /* Technology tags: chips instead of a comma list */
 
 .project .inline-list {
+    align-content: flex-start;
+    align-items: center;
     gap: var(--space-2);
     color: var(--ink);
 }
@@ -1758,6 +1774,12 @@ main {
     gap: var(--space-5);
     padding-inline: max(var(--gutter), calc((100% - var(--container)) / 2 + var(--gutter)));
     will-change: transform;
+}
+
+/* While the track glides, cards passing under a still pointer would lift
+   and repaint their shadows; js/site.js sets .is-moving until it settles */
+.projects.is-moving .project {
+    pointer-events: none;
 }
 
 /* A pinned card is wide and short, so it fits on a laptop screen: the
@@ -1992,8 +2014,10 @@ main {
     stroke-linejoin: round;
 }
 
+/* Long lines wrap rather than scroll, so the demo never needs a sideways
+   scroller (which keyboard users couldn't reach) and can't widen its card */
 .uci {
-    overflow-x: auto;
+    white-space: pre-wrap;
     color: var(--ink-muted);
     font-family: var(--font-code);
     font-size: var(--text-sm);
@@ -2283,9 +2307,12 @@ main {
     display: none;
 }
 
+/* isolation keeps the items' z-index (up to 100, set by site.js) inside
+   the sphere, so they never paint over the nav pill or its menu */
 .js .skill-sphere {
     display: block;
     position: relative;
+    isolation: isolate;
     width: min(100%, 30rem);
     aspect-ratio: 1;
     margin-inline: auto;

@@ -24,6 +24,7 @@
 
 .blog-toolbar__form {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: var(--space-3);
 }
@@ -53,6 +54,7 @@
 
 .blog-post {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--space-4);
     padding-block: var(--space-7);
     border-top: var(--stroke) solid var(--rule);
@@ -74,6 +76,13 @@
 
 .blog-post__title {
     font-size: var(--text-lg);
+}
+
+/* Long words and pasted links break rather than widen the page on a phone */
+.blog-post__title,
+.blog-post__body,
+.blog-comment__body {
+    overflow-wrap: anywhere;
 }
 
 .blog-post__body {

@@ -120,7 +120,7 @@ include 'head.php';
                 <section class="bento__cell bento__cell--reach" aria-labelledby="reach-title">
                     <h2 class="bento__title" id="reach-title">Say hello</h2>
                     <p class="reach__lead">Open to connecting and collaborating. Email is quickest.</p>
-                    <a class="reach__email" href="mailto:2710dhruvpatel@gmail.com">2710dhruvpatel@gmail.com</a>
+                    <a class="reach__email" href="mailto:2710dhruvpatel@gmail.com">2710dhruvpatel@<wbr>gmail.com</a>
                     <ul class="reach__links">
                         <li>
                             <a class="reach__link" href="https://linkedin.com/in/27dhruv/" target="_blank" rel="noopener">
@@ -671,7 +671,7 @@ include 'head.php';
                 <h2 class="section__title" id="contact-title">Contact</h2>
                 <div class="reveal">
                     <p class="contact__lead">Open to connecting and collaborating.</p>
-                    <a class="contact__email" href="mailto:2710dhruvpatel@gmail.com">2710dhruvpatel@gmail.com</a>
+                    <a class="contact__email" href="mailto:2710dhruvpatel@gmail.com">2710dhruvpatel@<wbr>gmail.com</a>
 
                     <dl class="facts">
                         <div class="facts__row">

@@ -485,6 +485,21 @@ html:not(.js) .tool-button {
         flex-direction: row;
     }
 
+    /* The links take their own row under the name, so a phone doesn't
+       squeeze them into a narrow column beside it */
+    html:not(.js) .site-nav {
+        flex-basis: 100%;
+        gap: 0 var(--space-4);
+    }
+
+    html:not(.js) .site-nav__list {
+        gap: 0 var(--space-4);
+    }
+
+    html:not(.js) .site-nav__tools {
+        gap: var(--space-4);
+    }
+
     html:not(.js) .site-nav__link {
         width: auto;
         border-bottom: 0;
@@ -539,7 +554,13 @@ html:not(.js) .tool-button {
 .site-footer__links {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2) var(--space-5);
+    gap: 0 var(--space-5);
+}
+
+/* Padded rather than spaced apart, so each link is easy to tap */
+.site-footer__links a {
+    display: inline-block;
+    padding-block: var(--space-2);
 }
 
 .site-footer a {

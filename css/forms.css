@@ -104,9 +104,15 @@ textarea.field__input {
 }
 
 .auth__back {
-    margin-top: var(--space-5);
+    margin-top: var(--space-4);
     font-family: var(--font-display);
     font-size: var(--text-sm);
+}
+
+/* Padded so the link is easy to tap */
+.auth__back a {
+    display: inline-block;
+    padding-block: var(--space-2);
 }
 
 /* ---- Create post ---- */

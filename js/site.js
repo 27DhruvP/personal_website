@@ -674,18 +674,22 @@
         var pinned = false;
         var distance = 0;   // how far the track travels, in px
         var stops = [];     // how far it has travelled when each panel is at the front
+        var travelled = 0;  // where the track is drawn, easing towards the scroll
+        var lastTime = 0;
         var frame = 0;
         var resizeObserver = null;
         var checkScheduled = false;
 
+        // Share of the gap closed per 60Hz frame. A mouse wheel moves the
+        // page in steps, so following it exactly makes the track jump; this
+        // turns each step into a short glide (settles in about 300ms).
+        var EASE = 0.16;
+
         var twoDigits = function (n) { return (n < 10 ? '0' : '') + n; };
         projects.querySelector('[data-projects-total]').textContent = twoDigits(panels.length);
 
-        var render = function () {
-            frame = 0;
-
-            var travelled = Math.min(distance, Math.max(0, -runway.getBoundingClientRect().top));
-            track.style.transform = 'translate3d(' + (-travelled).toFixed(1) + 'px, 0, 0)';
+        var draw = function () {
+            track.style.transform = 'translate3d(' + (-travelled).toFixed(2) + 'px, 0, 0)';
             bar.style.transform = 'scaleX(' + (distance ? travelled / distance : 0).toFixed(4) + ')';
 
             var current = 0;
@@ -695,6 +699,36 @@
 
             var text = twoDigits(current + 1);
             if (indexLabel.textContent !== text) { indexLabel.textContent = text; }
+        };
+
+        // Moves straight to the target when the runway is off screen (e.g.
+        // after jumping to an anchor) or when snap is true, otherwise eases
+        var render = function (time, snap) {
+            frame = 0;
+
+            var box = runway.getBoundingClientRect();
+            var target = Math.min(distance, Math.max(0, -box.top));
+            var onScreen = box.bottom > 0 && box.top < window.innerHeight;
+            var gap = target - travelled;
+
+            if (snap === true || !onScreen || Math.abs(gap) < 0.1) {
+                travelled = target;
+            } else {
+                // Scaled by the time since the last frame, so it feels the
+                // same at 60Hz and 144Hz
+                var step = lastTime ? Math.min(4, (time - lastTime) / (1000 / 60)) : 1;
+                travelled += gap * (1 - Math.pow(1 - EASE, step));
+            }
+            draw();
+
+            var moving = travelled !== target;
+            projects.classList.toggle('is-moving', moving);
+            if (moving) {
+                lastTime = time;
+                frame = window.requestAnimationFrame(render);
+            } else {
+                lastTime = 0;
+            }
         };
 
         var requestRender = function () {
@@ -750,12 +784,12 @@
                 resizeObserver.observe(stage);
             }
 
-            render();
+            render(0, true);
         };
 
         var disable = function () {
             pinned = false;
-            projects.classList.remove('is-pinned');
+            projects.classList.remove('is-pinned', 'is-moving');
             viewport.setAttribute('tabindex', '0');
 
             window.removeEventListener('scroll', requestRender);
@@ -769,6 +803,8 @@
                 window.cancelAnimationFrame(frame);
                 frame = 0;
             }
+            travelled = 0;
+            lastTime = 0;
 
             track.style.transform = '';
             bar.style.transform = '';
@@ -794,7 +830,11 @@
 
             if (pinned) {
                 measure();
-                requestRender();
+                if (frame) {
+                    window.cancelAnimationFrame(frame);
+                    frame = 0;
+                }
+                render(0, true);
             } else {
                 enable();
             }
