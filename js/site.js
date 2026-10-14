@@ -365,7 +365,7 @@
     // with reduced motion the diagrams simply show their finished state
     // (and the button is hidden).
     // ---------------------
-    var DEMO_LENGTH = 1600; // the longest demo, in ms (see portfolio.css)
+    var DEMO_LENGTH = 5800; // the longest demo, in ms (see portfolio.css)
     var DEMO_HOLD = 4000;   // how long the finished diagram rests before playing again
 
     var demos = [];

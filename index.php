@@ -275,7 +275,8 @@ include 'head.php';
                                         <h3 class="entry__title">AI Society</h3>
                                         <p class="entry__role">Vice President &amp; Head of Outreach</p>
                                     </div>
-                                    <img class="entry__logo" src="images/logos/ai-society.png" alt="" width="64" height="64">
+                                    <img class="entry__logo entry__logo--light" src="images/logos/ai-society.png" alt="" width="64" height="64">
+                                    <img class="entry__logo entry__logo--dark" src="images/logos/ai-society-dark.png" alt="" width="64" height="64">
                                 </header>
                                 <div class="entry__more" data-collapsible>
                                     <ul class="bullets">
@@ -389,19 +390,88 @@ include 'head.php';
 
                                 <div class="project__visual chess-demo" data-demo>
                                     <svg class="chess-board" viewBox="0 0 8 8" role="img"
-                                         aria-label="Chessboard with a pawn moving from e2 to e4">
+                                         aria-label="Chessboard in the starting position, with White's pawn moving from e2 to e4">
                                         <defs>
                                             <pattern id="board-squares" width="2" height="2" patternUnits="userSpaceOnUse">
                                                 <rect width="2" height="2" class="chess-board__light"/>
                                                 <rect x="1" y="0" width="1" height="1" class="chess-board__dark"/>
                                                 <rect x="0" y="1" width="1" height="1" class="chess-board__dark"/>
                                             </pattern>
+                                            <!-- Pieces, each drawn on a 10 x 10 square -->
+                                            <symbol id="piece-pawn" viewBox="0 0 10 10">
+                                                <rect x="2.6" y="7.8" width="4.8" height="1.2" rx="0.3"/>
+                                                <path d="M3.7 7.9C4.2 6.6 4.4 5.6 4.4 4.9H5.6C5.6 5.6 5.8 6.6 6.3 7.9Z"/>
+                                                <circle cx="5" cy="3.6" r="1.4"/>
+                                            </symbol>
+                                            <symbol id="piece-rook" viewBox="0 0 10 10">
+                                                <rect x="2.4" y="7.8" width="5.2" height="1.2" rx="0.3"/>
+                                                <rect x="3.5" y="4.2" width="3" height="3.7"/>
+                                                <path d="M3 2H4V2.8H4.6V2H5.4V2.8H6V2H7V4.3H3Z"/>
+                                            </symbol>
+                                            <symbol id="piece-knight" viewBox="0 0 10 10">
+                                                <rect x="2.4" y="7.8" width="5.2" height="1.2" rx="0.3"/>
+                                                <path d="M3.2 7.9C3.2 6.3 4.2 5.6 4.5 4.8L3 5.4C2.4 5.6 2 5 2.4 4.4L4.5 2.3 4.7 1.4 5.6 2.2C7.2 2.5 7.7 4.6 7.2 7.9Z"/>
+                                            </symbol>
+                                            <symbol id="piece-bishop" viewBox="0 0 10 10">
+                                                <rect x="2.4" y="7.8" width="5.2" height="1.2" rx="0.3"/>
+                                                <path d="M3.8 7.9C4.2 6.8 4.4 6 4.3 5.3H5.7C5.6 6 5.8 6.8 6.2 7.9Z"/>
+                                                <path d="M5 2C6.4 3 6.6 4.2 6 5.4H4C3.4 4.2 3.6 3 5 2Z"/>
+                                                <circle cx="5" cy="1.6" r="0.55"/>
+                                            </symbol>
+                                            <symbol id="piece-queen" viewBox="0 0 10 10">
+                                                <rect x="2.4" y="7.8" width="5.2" height="1.2" rx="0.3"/>
+                                                <path d="M3.4 7.9 2.5 3.6 4 5.3 5 2.9 6 5.3 7.5 3.6 6.6 7.9Z"/>
+                                                <circle cx="2.5" cy="3.2" r="0.55"/>
+                                                <circle cx="5" cy="2.5" r="0.55"/>
+                                                <circle cx="7.5" cy="3.2" r="0.55"/>
+                                            </symbol>
+                                            <symbol id="piece-king" viewBox="0 0 10 10">
+                                                <rect x="2.4" y="7.8" width="5.2" height="1.2" rx="0.3"/>
+                                                <path d="M3.4 7.9C3 6 2.6 4.4 3.8 4.2 4.4 4.1 4.8 4.6 5 5.2 5.2 4.6 5.6 4.1 6.2 4.2 7.4 4.4 7 6 6.6 7.9Z"/>
+                                                <path d="M4.7 1.1H5.3V1.9H6V2.5H5.3V4.1H4.7V2.5H4V1.9H4.7Z"/>
+                                            </symbol>
                                         </defs>
                                         <rect width="8" height="8" fill="url(#board-squares)"/>
                                         <rect class="chess-board__highlight chess-board__highlight--from" x="4" y="6" width="1" height="1"/>
                                         <rect class="chess-board__highlight chess-board__highlight--to" x="4" y="4" width="1" height="1"/>
                                         <rect class="chess-board__arrow chess-board__arrow--shaft" x="4.4" y="4.9" width="0.2" height="1.4"/>
                                         <polygon class="chess-board__arrow chess-board__arrow--head" points="4.5,4.35 4.15,4.95 4.85,4.95"/>
+                                        <g class="chess-piece chess-piece--black">
+                                            <use href="#piece-rook" x="0" y="0" width="1" height="1"/>
+                                            <use href="#piece-knight" x="1" y="0" width="1" height="1"/>
+                                            <use href="#piece-bishop" x="2" y="0" width="1" height="1"/>
+                                            <use href="#piece-queen" x="3" y="0" width="1" height="1"/>
+                                            <use href="#piece-king" x="4" y="0" width="1" height="1"/>
+                                            <use href="#piece-bishop" x="5" y="0" width="1" height="1"/>
+                                            <use href="#piece-knight" x="6" y="0" width="1" height="1"/>
+                                            <use href="#piece-rook" x="7" y="0" width="1" height="1"/>
+                                            <use href="#piece-pawn" x="0" y="1" width="1" height="1"/>
+                                            <use href="#piece-pawn" x="1" y="1" width="1" height="1"/>
+                                            <use href="#piece-pawn" x="2" y="1" width="1" height="1"/>
+                                            <use href="#piece-pawn" x="3" y="1" width="1" height="1"/>
+                                            <use href="#piece-pawn" x="4" y="1" width="1" height="1"/>
+                                            <use href="#piece-pawn" x="5" y="1" width="1" height="1"/>
+                                            <use href="#piece-pawn" x="6" y="1" width="1" height="1"/>
+                                            <use href="#piece-pawn" x="7" y="1" width="1" height="1"/>
+                                        </g>
+                                        <g class="chess-piece chess-piece--white">
+                                            <use href="#piece-pawn" x="0" y="6" width="1" height="1"/>
+                                            <use href="#piece-pawn" x="1" y="6" width="1" height="1"/>
+                                            <use href="#piece-pawn" x="2" y="6" width="1" height="1"/>
+                                            <use href="#piece-pawn" x="3" y="6" width="1" height="1"/>
+                                            <use href="#piece-pawn" class="chess-piece__moving" x="4" y="4" width="1" height="1"/>
+                                            <use href="#piece-pawn" x="5" y="6" width="1" height="1"/>
+                                            <use href="#piece-pawn" x="6" y="6" width="1" height="1"/>
+                                            <use href="#piece-pawn" x="7" y="6" width="1" height="1"/>
+                                            <use href="#piece-rook" x="0" y="7" width="1" height="1"/>
+                                            <use href="#piece-knight" x="1" y="7" width="1" height="1"/>
+                                            <use href="#piece-bishop" x="2" y="7" width="1" height="1"/>
+                                            <use href="#piece-queen" x="3" y="7" width="1" height="1"/>
+                                            <use href="#piece-king" x="4" y="7" width="1" height="1"/>
+                                            <use href="#piece-bishop" x="5" y="7" width="1" height="1"/>
+                                            <use href="#piece-knight" x="6" y="7" width="1" height="1"/>
+                                            <use href="#piece-rook" x="7" y="7" width="1" height="1"/>
+                                        </g>
                                     </svg>
                                     <div>
                                         <pre class="uci" aria-label="Example UCI exchange"><code><span class="uci__line">position startpos moves e2e4</span>

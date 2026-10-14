@@ -1058,6 +1058,29 @@ main {
     border-radius: var(--radius);
 }
 
+/* Logos with navy parts come in two versions; show the one for the mode */
+.entry__logo--dark {
+    display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) .entry__logo--light {
+        display: none;
+    }
+
+    :root:not([data-theme]) .entry__logo--dark {
+        display: block;
+    }
+}
+
+:root[data-theme="dark"] .entry__logo--light {
+    display: none;
+}
+
+:root[data-theme="dark"] .entry__logo--dark {
+    display: block;
+}
+
 /* ---- Experience timeline ----
    The roles hang off a rail, newest first, grouped under year markers.
    Every role has a node on the rail: filled for roles still going
@@ -1946,6 +1969,22 @@ main {
     fill: var(--board-highlight);
 }
 
+.chess-piece {
+    stroke-width: 0.45;
+    stroke-linejoin: round;
+    shape-rendering: geometricPrecision;
+}
+
+.chess-piece--white {
+    fill: var(--piece-white);
+    stroke: var(--piece-black);
+}
+
+.chess-piece--black {
+    fill: var(--piece-black);
+    stroke: var(--piece-white);
+}
+
 .chess-board__arrow {
     fill: var(--paper);
     stroke: var(--ink);
@@ -2020,6 +2059,15 @@ main {
         grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
+    .pipeline__step {
+        padding: var(--space-3);
+    }
+
+    /* Smaller in four columns so "Preprocessing" fits on one line */
+    .pipeline__name {
+        font-size: var(--text-sm);
+    }
+
     .pipeline__step:not(:last-child)::after {
         left: auto;
         right: calc(-1 * (var(--space-5) + 0.6rem) / 2);
@@ -2039,8 +2087,9 @@ main {
 
 /* Demo playback (js/site.js adds .is-playing). Everything animates from
    hidden to its normal state, so the resting diagram is the finished one.
-   Chess: e2 lights, the arrow grows, e4 lights, then the UCI lines type
-   out with the engine's reply last. FinChat: the steps light up in order,
+   Chess: e2 lights, the arrow grows, the pawn slides to e4 and e4
+   lights, then the UCI lines fade
+   in with the engine's reply last. FinChat: the steps light up in order,
    then the summary appears. */
 
 .uci__line,
@@ -2049,61 +2098,66 @@ main {
 }
 
 .is-playing .chess-board__highlight--from {
-    animation: demo-fade 250ms var(--ease) backwards;
+    animation: demo-fade 900ms var(--ease) backwards;
 }
 
 .is-playing .chess-board__arrow--shaft {
     transform-box: fill-box;
     transform-origin: bottom;
-    animation: demo-grow 400ms var(--ease-in-out) 200ms backwards;
+    animation: demo-grow 700ms var(--ease-in-out) 400ms backwards;
 }
 
 .is-playing .chess-board__arrow--head {
-    animation: demo-fade 150ms var(--ease) 560ms backwards;
+    animation: demo-fade 700ms var(--ease) 900ms backwards;
+}
+
+/* The pawn waits on e2, then slides two squares up to e4 */
+.is-playing .chess-piece__moving {
+    animation: demo-pawn 700ms var(--ease-in-out) 1200ms backwards;
 }
 
 .is-playing .chess-board__highlight--to {
-    animation: demo-fade 250ms var(--ease) 620ms backwards;
+    animation: demo-fade 900ms var(--ease) 1700ms backwards;
 }
 
+/* The UCI lines fade in slowly, one after another */
 .is-playing .uci__line {
-    animation: demo-type 450ms steps(14, end) 150ms backwards;
+    animation: demo-fade 1400ms var(--ease) 2200ms backwards;
 }
 
 .is-playing .uci__line + .uci__line {
-    animation-duration: 300ms;
-    animation-delay: 650ms;
+    animation-delay: 3200ms;
 }
 
 .is-playing .uci__reply {
-    animation: demo-fade 300ms var(--ease) 1150ms backwards;
+    animation: demo-fade 1600ms var(--ease) 4200ms backwards;
 }
 
 .is-playing .pipeline__step {
-    animation: demo-step 700ms var(--ease) backwards;
+    animation: demo-step 1800ms var(--ease) backwards;
 }
 
 .is-playing .pipeline__step::after {
-    animation: demo-fade 200ms var(--ease) backwards;
+    animation: demo-fade 900ms var(--ease) backwards;
 }
 
 .is-playing .pipeline__step:nth-child(2),
 .is-playing .pipeline__step:nth-child(1)::after {
-    animation-delay: 250ms;
+    animation-delay: 1100ms;
 }
 
 .is-playing .pipeline__step:nth-child(3),
 .is-playing .pipeline__step:nth-child(2)::after {
-    animation-delay: 500ms;
+    animation-delay: 2200ms;
 }
 
 .is-playing .pipeline__step:nth-child(4),
 .is-playing .pipeline__step:nth-child(3)::after {
-    animation-delay: 750ms;
+    animation-delay: 3300ms;
 }
 
 .is-playing .pipeline__summary {
-    animation: demo-fade 300ms var(--ease) 1250ms backwards;
+    animation: demo-fade 1000ms var(--ease) 4300ms backwards;
 }
 
 @keyframes demo-fade {
@@ -2118,9 +2172,9 @@ main {
     }
 }
 
-@keyframes demo-type {
+@keyframes demo-pawn {
     from {
-        clip-path: inset(0 100% 0 0);
+        transform: translateY(2px); /* two squares, in board units */
     }
 }
 
@@ -2131,7 +2185,7 @@ main {
         border-color: var(--link);
     }
 
-    40% {
+    60% {
         opacity: 1;
         border-color: var(--link);
     }
