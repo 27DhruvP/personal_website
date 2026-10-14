@@ -561,49 +561,101 @@ include 'head.php';
                 <h2 class="section__title" id="skills-title">Skills</h2>
                 <div class="reveal">
 
-                    <div class="skill-groups">
-                        <section class="skill-group" aria-labelledby="skills-languages">
-                            <h3 class="skill-group__title" id="skills-languages">Languages</h3>
-                            <dl>
-                                <div><dt>Advanced</dt><dd>Python, HTML, CSS</dd></div>
-                                <div><dt>Proficient</dt><dd>Java, SQL</dd></div>
-                                <div><dt>Familiar</dt><dd>JavaScript</dd></div>
-                            </dl>
-                        </section>
+                    <?php
+                    // Each skill: [name, logo in images/skills, official site].
+                    // The grid and the sphere are both built from this list.
+                    $skill_groups = [
+                        'languages' => ['Languages', [
+                            ['Python', 'python', 'https://www.python.org/'],
+                            ['Java', 'java', 'https://dev.java/'],
+                            ['TypeScript', 'typescript', 'https://www.typescriptlang.org/'],
+                            ['JavaScript', 'javascript', 'https://developer.mozilla.org/en-US/docs/Web/JavaScript'],
+                            ['PHP', 'php', 'https://www.php.net/'],
+                            ['SQL', 'sql', 'https://en.wikipedia.org/wiki/SQL'],
+                            ['HTML', 'html', 'https://developer.mozilla.org/en-US/docs/Web/HTML'],
+                            ['CSS', 'css', 'https://developer.mozilla.org/en-US/docs/Web/CSS'],
+                        ]],
+                        'frameworks' => ['Frameworks and libraries', [
+                            ['React', 'react', 'https://react.dev/'],
+                            ['Node.js', 'nodejs', 'https://nodejs.org/'],
+                            ['Django', 'django', 'https://www.djangoproject.com/'],
+                            ['Flask', 'flask', 'https://flask.palletsprojects.com/'],
+                            ['TensorFlow', 'tensorflow', 'https://www.tensorflow.org/'],
+                        ]],
+                        'tools' => ['Tools and platforms', [
+                            ['Git & GitHub', 'git', 'https://git-scm.com/'],
+                            ['PostgreSQL', 'postgresql', 'https://www.postgresql.org/'],
+                            ['MySQL', 'mysql', 'https://www.mysql.com/'],
+                            ['AWS', 'aws', 'https://aws.amazon.com/'],
+                            ['Microsoft Azure', 'azure', 'https://azure.microsoft.com/'],
+                            ['VS Code', 'vscode', 'https://code.visualstudio.com/'],
+                            ['Linux', 'linux', 'https://www.kernel.org/'],
+                            ['Windows', 'windows', 'https://www.microsoft.com/windows'],
+                        ]],
+                    ];
+                    // Single-colour dark logos, turned white in dark mode
+                    $mono_logos = ['django', 'flask', 'linux', 'sql', 'aws'];
+                    $logo_class = fn(string $logo): string => in_array($logo, $mono_logos, true) ? ' skill-logo--mono' : '';
+                    ?>
 
-                        <section class="skill-group" aria-labelledby="skills-frameworks">
-                            <h3 class="skill-group__title" id="skills-frameworks">Frameworks and libraries</h3>
-                            <dl>
-                                <div><dt>Advanced</dt><dd>Django</dd></div>
-                                <div><dt>Proficient</dt><dd>Flask</dd></div>
-                                <div><dt>Familiar</dt><dd>PHP</dd></div>
-                            </dl>
-                        </section>
+                    <div class="skills-stage">
+                        <!-- The sphere repeats the links below for mouse users, so it is
+                             hidden from screen readers and kept out of the tab order.
+                             js/site.js places the logos and turns it as the page scrolls. -->
+                        <div class="skill-sphere" aria-hidden="true" data-skill-sphere>
+                            <?php foreach ($skill_groups as [, $skills]): ?>
+                                <?php foreach ($skills as [$name, $logo, $url]): ?>
+                                    <a class="skill-sphere__item" href="<?= $h($url) ?>" target="_blank" rel="noopener" tabindex="-1" data-skill="<?= $h($logo) ?>" data-label="<?= $h($name) ?>">
+                                        <span class="skill-sphere__chip"><img class="skill-sphere__logo<?= $logo_class($logo) ?>" src="images/skills/<?= $h($logo) ?>.svg" alt="" width="32" height="32"></span>
+                                    </a>
+                                <?php endforeach; ?>
+                            <?php endforeach; ?>
+                        </div>
 
-                        <section class="skill-group" aria-labelledby="skills-tools">
-                            <h3 class="skill-group__title" id="skills-tools">Tools and platforms</h3>
-                            <dl>
-                                <div><dt>Advanced</dt><dd>VS Code</dd></div>
-                                <div><dt>Proficient</dt><dd>Git, Linux, MySQL, Windows and Linux administration</dd></div>
-                            </dl>
-                        </section>
+                        <div class="skill-groups">
+                            <?php foreach ($skill_groups as $group_id => [$group_title, $skills]): ?>
+                                <section class="skill-group" aria-labelledby="skills-<?= $h($group_id) ?>">
+                                    <h3 class="skill-group__title" id="skills-<?= $h($group_id) ?>"><?= $h($group_title) ?></h3>
+                                    <ul class="skill-tiles">
+                                        <?php foreach ($skills as [$name, $logo, $url]): ?>
+                                            <li>
+                                                <a class="skill-tile" href="<?= $h($url) ?>" target="_blank" rel="noopener" data-skill="<?= $h($logo) ?>">
+                                                    <img class="skill-tile__logo<?= $logo_class($logo) ?>" src="images/skills/<?= $h($logo) ?>.svg" alt="" width="28" height="28">
+                                                    <span class="skill-tile__name"><?= $h($name) ?></span><span class="visually-hidden"> (opens in a new tab)</span>
+                                                </a>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </section>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
 
                     <dl class="facts">
                         <div class="facts__row">
-                            <dt>Concepts and practices</dt>
+                            <dt>Software engineering</dt>
                             <dd>
                                 <ul class="inline-list">
-                                    <li>Algorithms</li><li>Data Structures</li><li>OOP</li><li>UCI Protocol</li><li>Networking</li>
-                                    <li>System Hardening</li><li>Video Codecs</li><li>LLM Integration</li><li>Digital Signage</li><li>Build Systems</li>
+                                    <li>Object Oriented Programming</li><li>Data Structures &amp; Algorithms</li><li>Software Architecture</li><li>REST APIs</li>
+                                    <li>Full Stack Development</li><li>Backend Development</li><li>Database Design</li><li>Testing</li><li>CI/CD</li>
+                                    <li>Build Systems</li><li>UCI Protocol</li>
                                 </ul>
                             </dd>
                         </div>
                         <div class="facts__row">
-                            <dt>Currently learning</dt>
+                            <dt>AI and data</dt>
                             <dd>
                                 <ul class="inline-list">
-                                    <li>JavaScript</li><li>PHP</li><li>React</li><li>Node.js</li><li>Git</li>
+                                    <li>Large Language Models</li><li>LLM Integration</li><li>AI APIs</li><li>Data Processing</li><li>Data Analysis</li>
+                                </ul>
+                            </dd>
+                        </div>
+                        <div class="facts__row">
+                            <dt>Security and systems</dt>
+                            <dd>
+                                <ul class="inline-list">
+                                    <li>Secure Software Development</li><li>Authentication &amp; Authorisation</li><li>Role Based Access Control</li>
+                                    <li>Input Validation</li><li>Audit Logging</li><li>System Hardening</li><li>Networking</li><li>Video Codecs</li><li>Digital Signage</li>
                                 </ul>
                             </dd>
                         </div>

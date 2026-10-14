@@ -2191,13 +2191,27 @@ main {
     }
 }
 
-/* ---- Skills ---- */
+/* ---- Skills ----
+   A sphere of logos (mouse and eye candy, needs JavaScript) beside the
+   grouped logo links, which are the real content and work everywhere. */
+
+.skills-stage {
+    display: grid;
+    gap: var(--space-6);
+    align-items: center;
+    margin-bottom: var(--space-7);
+}
+
+@media (min-width: 60rem) {
+    .skills-stage {
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+        gap: var(--space-7);
+    }
+}
 
 .skill-groups {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-    gap: var(--space-6);
-    margin-bottom: var(--space-7);
+    gap: var(--space-5);
 }
 
 .skill-group {
@@ -2206,20 +2220,185 @@ main {
 }
 
 .skill-group__title {
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-3);
     font-size: var(--text-base);
 }
 
-.skill-group dl {
-    display: grid;
-    gap: var(--space-4);
+.skill-tiles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
 }
 
-.skill-group dt {
-    color: var(--ink-muted);
+.skill-tile {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border: var(--stroke) solid var(--rule);
+    border-radius: 999px;
+    background: var(--paper);
+    color: var(--ink);
     font-family: var(--font-display);
     font-size: var(--text-sm);
     font-weight: 600;
+    text-decoration: none;
+    transition: border-color var(--dur-1) var(--ease), transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
+}
+
+.skill-tile__logo {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex: none;
+    transition: transform var(--dur-2) var(--ease);
+}
+
+.skill-tile:hover,
+.skill-tile:focus-visible,
+.skill-tile.is-active {
+    border-color: var(--link);
+    box-shadow: var(--elevation);
+    transform: translateY(calc(-1 * var(--space-1)));
+}
+
+.skill-tile:hover .skill-tile__logo,
+.skill-tile:focus-visible .skill-tile__logo {
+    transform: scale(1.15) rotate(-8deg);
+}
+
+/* Single-colour dark logos turn white in dark mode */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) .skill-logo--mono {
+        filter: brightness(0) invert(1);
+    }
+}
+
+:root[data-theme="dark"] .skill-logo--mono {
+    filter: brightness(0) invert(1);
+}
+
+/* The sphere. js/site.js positions every item from the middle with
+   translate3d and scale; nearer items are larger, brighter and on top. */
+.skill-sphere {
+    display: none;
+}
+
+.js .skill-sphere {
+    display: block;
+    position: relative;
+    width: min(100%, 30rem);
+    aspect-ratio: 1;
+    margin-inline: auto;
+    touch-action: pan-y;
+    cursor: grab;
+    user-select: none;
+}
+
+.js .skill-sphere.is-dragging {
+    cursor: grabbing;
+}
+
+/* Faint orbit lines suggest the globe the logos sit on */
+.skill-sphere::before,
+.skill-sphere::after {
+    content: "";
+    position: absolute;
+    inset: 12%;
+    border: var(--stroke) dashed var(--rule);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.skill-sphere::after {
+    inset: 12% 34%;
+}
+
+.skill-sphere__item {
+    --size: 3.25rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--size);
+    height: var(--size);
+    margin: calc(var(--size) / -2) 0 0 calc(var(--size) / -2);
+    color: var(--ink);
+    text-decoration: none;
+    will-change: transform, opacity;
+}
+
+.skill-sphere__item.is-back {
+    pointer-events: none;
+}
+
+.skill-sphere__chip {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    border: var(--stroke) solid var(--rule);
+    border-radius: 50%;
+    background: var(--paper);
+    transition: border-color var(--dur-1) var(--ease), transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
+}
+
+.skill-sphere__logo {
+    width: 55%;
+    height: 55%;
+    pointer-events: none;
+}
+
+.skill-sphere__item:hover .skill-sphere__chip,
+.skill-sphere__item.is-active .skill-sphere__chip {
+    border-color: var(--link);
+    box-shadow: var(--elevation);
+    transform: scale(1.2);
+}
+
+/* Name tag under the logo on hover. It is generated content because the
+   whole sphere is decorative (aria-hidden) and the grid carries the names. */
+.skill-sphere__item::after {
+    content: attr(data-label);
+    position: absolute;
+    top: calc(100% + var(--space-3));
+    left: 50%;
+    padding: var(--space-1) var(--space-2);
+    border: var(--stroke) solid var(--island-edge);
+    border-radius: var(--radius);
+    background: var(--island-bg);
+    color: var(--island-fg);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translate(-50%, calc(-1 * var(--space-1)));
+    transition: opacity var(--dur-1) var(--ease), transform var(--dur-1) var(--ease);
+    pointer-events: none;
+}
+
+.skill-sphere__item:hover::after,
+.skill-sphere__item.is-active::after {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+@media (min-width: 40rem) {
+    .skill-sphere__item {
+        --size: 3.75rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .skill-tile:hover,
+    .skill-tile:focus-visible,
+    .skill-tile.is-active {
+        transform: none;
+    }
+
+    .skill-tile:hover .skill-tile__logo,
+    .skill-tile:focus-visible .skill-tile__logo {
+        transform: none;
+    }
 }
 
 /* ---- Contact ---- */

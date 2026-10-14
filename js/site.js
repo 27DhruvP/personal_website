@@ -17,6 +17,7 @@
 //   8. Folding role descriptions in the Experience timeline
 //   9. Projects: the pinned sideways sequence
 //  10. Scroll cue on the landing view
+//  11. Skills sphere: turns with the page scroll and by dragging
 // =====================
 
 (function () {
@@ -840,5 +841,210 @@
             ready = true;
             update();
         }, 7500);
+    })();
+
+    // ---------------------
+    // 11. Skills sphere
+    // The logos sit evenly on a sphere (a Fibonacci spiral). Scrolling the
+    // page turns it, dragging spins it, and hovering or focusing a skill in
+    // the grid brings that logo round to the front. The turn eases towards
+    // where it should be, so it glides rather than jumps. With reduced
+    // motion it stays still on scroll and moves straight to new positions.
+    // Only drawn while on screen.
+    // ---------------------
+    (function () {
+        var sphere = document.querySelector('[data-skill-sphere]');
+        if (!sphere) { return; }
+
+        var items = Array.prototype.slice.call(sphere.querySelectorAll('.skill-sphere__item'));
+        var tiles = document.querySelectorAll('.skill-tile[data-skill]');
+        var n = items.length;
+        var golden = Math.PI * (3 - Math.sqrt(5));
+
+        // Unit-sphere position of each item
+        var points = items.map(function (item, i) {
+            var y = 1 - (2 * (i + 0.5)) / n;
+            var ring = Math.sqrt(1 - y * y);
+            return { x: Math.cos(golden * i) * ring, y: y, z: Math.sin(golden * i) * ring };
+        });
+
+        var SCROLL_Y = 0.004;   // radians of spin per pixel scrolled
+        var SCROLL_X = 0.0012;  // and of tilt
+        var DRAG = 0.008;       // radians per pixel dragged
+        var TILT = -0.35;
+
+        var offY = 0;
+        var offX = 0;
+        var curY = 0;
+        var curX = 0;
+        var radius = 0;
+        var visible = false;
+        var frame = 0;
+
+        var targetY = function () { return (reduceMotion ? 0 : window.scrollY * SCROLL_Y) + offY; };
+        var targetX = function () { return TILT + (reduceMotion ? 0 : window.scrollY * SCROLL_X) + offX; };
+
+        var measure = function () {
+            radius = sphere.clientWidth / 2 - items[0].offsetWidth * 0.6;
+        };
+
+        var draw = function () {
+            var cy = Math.cos(curY), sy = Math.sin(curY);
+            var cx = Math.cos(curX), sx = Math.sin(curX);
+
+            points.forEach(function (p, i) {
+                // Turn about the vertical axis, then tilt about the horizontal one
+                var x1 = p.x * cy + p.z * sy;
+                var z1 = -p.x * sy + p.z * cy;
+                var y1 = p.y * cx - z1 * sx;
+                var z2 = p.y * sx + z1 * cx;
+                var near = (z2 + 1) / 2;   // 0 at the back, 1 at the front
+                var item = items[i];
+
+                item.style.transform = 'translate3d(' + (x1 * radius).toFixed(1) + 'px,' + (y1 * radius).toFixed(1) + 'px,0) scale(' + (0.55 + 0.45 * near).toFixed(3) + ')';
+                item.style.opacity = (0.2 + 0.8 * near).toFixed(3);
+                item.style.zIndex = Math.round(near * 100);
+                item.classList.toggle('is-back', near < 0.4);
+            });
+        };
+
+        var tick = function () {
+            frame = 0;
+            var ty = targetY();
+            var tx = targetX();
+
+            if (reduceMotion) {
+                curY = ty;
+                curX = tx;
+            } else {
+                curY += (ty - curY) * 0.1;
+                curX += (tx - curX) * 0.1;
+            }
+            draw();
+
+            if (visible && (Math.abs(ty - curY) > 0.0005 || Math.abs(tx - curX) > 0.0005)) {
+                frame = window.requestAnimationFrame(tick);
+            }
+        };
+
+        var request = function () {
+            if (visible && !frame) { frame = window.requestAnimationFrame(tick); }
+        };
+
+        // Shortest way round to an angle
+        var wrap = function (a) {
+            return a - 2 * Math.PI * Math.round(a / (2 * Math.PI));
+        };
+
+        // Turn so the named skill faces the visitor, and mark it
+        var face = function (skill) {
+            items.forEach(function (item, i) {
+                var match = item.getAttribute('data-skill') === skill;
+                item.classList.toggle('is-active', match);
+                if (match) {
+                    var p = points[i];
+                    var flat = Math.sqrt(p.x * p.x + p.z * p.z);
+                    offY += wrap(Math.atan2(-p.x, p.z) - targetY());
+                    offX += wrap(Math.atan2(p.y, flat) - targetX());
+                }
+            });
+            request();
+        };
+
+        var clearActive = function () {
+            items.forEach(function (item) { item.classList.remove('is-active'); });
+            tiles.forEach(function (tile) { tile.classList.remove('is-active'); });
+        };
+
+        tiles.forEach(function (tile) {
+            var skill = tile.getAttribute('data-skill');
+            tile.addEventListener('mouseenter', function () { face(skill); });
+            tile.addEventListener('focus', function () { face(skill); });
+            tile.addEventListener('mouseleave', clearActive);
+            tile.addEventListener('blur', clearActive);
+        });
+
+        // Hovering a logo on the sphere lights up its pill in the grid
+        items.forEach(function (item) {
+            var skill = item.getAttribute('data-skill');
+            item.addEventListener('mouseenter', function () {
+                tiles.forEach(function (tile) {
+                    tile.classList.toggle('is-active', tile.getAttribute('data-skill') === skill);
+                });
+            });
+            item.addEventListener('mouseleave', clearActive);
+        });
+
+        // Dragging. Pointer capture only starts once it is clearly a drag,
+        // so a plain click still opens the logo's link.
+        var drag = null;
+        var dragged = false;
+
+        sphere.addEventListener('pointerdown', function (event) {
+            if (event.button !== 0) { return; }
+            drag = { id: event.pointerId, x: event.clientX, y: event.clientY, moved: false };
+            dragged = false;
+        });
+
+        sphere.addEventListener('pointermove', function (event) {
+            if (!drag || event.pointerId !== drag.id) { return; }
+            var dx = event.clientX - drag.x;
+            var dy = event.clientY - drag.y;
+
+            if (!drag.moved) {
+                if (Math.abs(dx) + Math.abs(dy) < 6) { return; }
+                drag.moved = true;
+                sphere.setPointerCapture(event.pointerId);
+                sphere.classList.add('is-dragging');
+            }
+
+            offY += dx * DRAG;
+            offX -= dy * DRAG;
+            drag.x = event.clientX;
+            drag.y = event.clientY;
+            request();
+        });
+
+        var endDrag = function () {
+            if (drag && drag.moved) {
+                dragged = true;
+                sphere.classList.remove('is-dragging');
+            }
+            drag = null;
+        };
+
+        sphere.addEventListener('pointerup', endDrag);
+        sphere.addEventListener('pointercancel', endDrag);
+
+        // A drag that ends over a logo is not a click on it
+        sphere.addEventListener('click', function (event) {
+            if (dragged) {
+                event.preventDefault();
+                dragged = false;
+            }
+        }, true);
+
+        // Stop the browser dragging the link or image itself
+        sphere.addEventListener('dragstart', function (event) { event.preventDefault(); });
+
+        window.addEventListener('scroll', request, { passive: true });
+        window.addEventListener('resize', function () {
+            measure();
+            draw();
+        });
+
+        if ('IntersectionObserver' in window) {
+            new IntersectionObserver(function (entries) {
+                visible = entries[0].isIntersecting;
+                request();
+            }).observe(sphere);
+        } else {
+            visible = true;
+        }
+
+        measure();
+        curY = targetY();
+        curX = targetX();
+        draw();
     })();
 })();
